@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html lang="fr" class="h-full bg-slate-50">
+<html lang="fr" class="h-full">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AdminFlow Pro • Dashboard d'Administration</title>
-  <meta name="description" content="Dashboard d'administration moderne et professionnel pour la gestion de produits et de commandes.">
+  <title>AdminFlow Pro • Dashboard d'Administration (Dark / Light)</title>
+  <meta name="description" content="Dashboard d'administration moderne avec bascule Thème Sombre & Thème Clair pour la gestion des produits et commandes.">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS -->
+  <!-- Tailwind CSS with DarkMode support -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
@@ -43,18 +44,16 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- Custom Styles -->
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.25s ease, color 0.25s ease; }
     .font-outfit { font-family: 'Outfit', sans-serif; }
-    /* Scrollbar */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #f1f5f9; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.3); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.6); }
   </style>
 </head>
-<body class="h-full text-slate-800 antialiased selection:bg-blue-600 selection:text-white bg-slate-50">
+<body class="h-full antialiased selection:bg-blue-600 selection:text-white">
 
   <div id="root" class="h-full"></div>
 
@@ -62,20 +61,17 @@
   <script type="text/babel">
     const { useState, useEffect, useMemo } = React;
 
-    // =========================================================================
-    // DONNÉES FICTIVES INITIALES (10+ Produits & 15+ Commandes)
-    // =========================================================================
     const INITIAL_PRODUCTS = [
-      { id: "PRD-001", name: "Pack B1 TELC-Prüfung Deutsch (2026)", category: "Manuels B1", price: 235, originalPrice: 350, stock: 42, status: "in_stock", sales: 184, image: "assets/products/pack-b1.png", description: "Pack complet incluant les 25 Modelltests réels, corrigés et audios MP3." },
-      { id: "PRD-002", name: "Pack GOETHE - ÖSD B1 & B2 (25 Tests)", category: "Packs Complets", price: 235, originalPrice: 320, stock: 28, status: "in_stock", sales: 142, image: "assets/products/goethe-osd-b1-b2.jpg", description: "Préparation certifiée pour les examens Goethe et ÖSD avec transcription." },
-      { id: "PRD-003", name: "Pack B2 TELC-Prüfung Deutsch (Complet)", category: "Manuels B2", price: 260, originalPrice: 380, stock: 19, status: "in_stock", sales: 129, image: "assets/products/telc-real-collection.jpg", description: "Collection officielle complète pour le niveau B2 professionnel." },
-      { id: "PRD-004", name: "TELC Deutsch B1 - SPRECHEN (Expression Orale)", category: "Manuels B1", price: 120, originalPrice: 160, stock: 8, status: "low_stock", sales: 98, image: "assets/products/telc-b1-showcase.jpg", description: "Fiches thématiques et dialogues types pour réussir l'épreuve orale." },
-      { id: "PRD-005", name: "TELC Deutsch B2 - SPRACHBAUSTEINE", category: "Manuels B2", price: 130, originalPrice: 180, stock: 14, status: "in_stock", sales: 86, image: "assets/products/telc-b1-showcase.jpg", description: "Entraînement intensif à la grammaire en contexte et connecteurs B2." },
-      { id: "PRD-006", name: "GOETHE-ÖSD B1 (25 Modelltests)", category: "Manuels B1", price: 140, originalPrice: 190, stock: 3, status: "low_stock", sales: 74, image: "assets/products/goethe-osd-b1-b2.jpg", description: "25 tests réels d'entraînement complet pour l'examen Goethe B1." },
-      { id: "PRD-007", name: "GOETHE-ÖSD B2 (25 Modelltests)", category: "Manuels B2", price: 150, originalPrice: 200, stock: 0, status: "out_of_stock", sales: 65, image: "assets/products/goethe-osd-b1-b2.jpg", description: "Modelltests officiels de niveau avancé B2 avec barèmes détaillés." },
-      { id: "PRD-008", name: "Grammatik Aktiv A1-B1 (Pratique Allemand)", category: "Grammaire", price: 110, originalPrice: 140, stock: 22, status: "in_stock", sales: 53, image: "assets/products/pack-b1.png", description: "Cahier d'exercices progressifs et règles visuelles simplifiées." },
-      { id: "PRD-009", name: "Wortschatz B1/B2 (Vocabulaire Thématique)", category: "Vocabulaire", price: 95, originalPrice: 130, stock: 31, status: "in_stock", sales: 61, image: "assets/products/telc-b1-showcase.jpg", description: "3,000 mots et expressions incontournables classés par thème d'examen." },
-      { id: "PRD-010", name: "Dossier Modèles Schreiben B1/B2 (Rédaction)", category: "Rédaction", price: 85, originalPrice: 110, stock: 17, status: "in_stock", sales: 89, image: "assets/products/telc-real-collection.jpg", description: "50 lettres types, réclamations et courriels formels prêts à l'emploi." }
+      { id: "PRD-001", name: "Pack B1 TELC-Prüfung Deutsch (2026)", category: "Manuels B1", price: 235, originalPrice: 350, stock: 42, sales: 184, image: "assets/products/pack-b1.png", description: "Pack complet incluant les 25 Modelltests réels, corrigés et audios MP3." },
+      { id: "PRD-002", name: "Pack GOETHE - ÖSD B1 & B2 (25 Tests)", category: "Packs Complets", price: 235, originalPrice: 320, stock: 28, sales: 142, image: "assets/products/goethe-osd-b1-b2.jpg", description: "Préparation certifiée pour les examens Goethe et ÖSD avec transcription." },
+      { id: "PRD-003", name: "Pack B2 TELC-Prüfung Deutsch (Complet)", category: "Manuels B2", price: 260, originalPrice: 380, stock: 19, sales: 129, image: "assets/products/telc-real-collection.jpg", description: "Collection officielle complète pour le niveau B2 professionnel." },
+      { id: "PRD-004", name: "TELC Deutsch B1 - SPRECHEN (Expression Orale)", category: "Manuels B1", price: 120, originalPrice: 160, stock: 8, sales: 98, image: "assets/products/telc-b1-showcase.jpg", description: "Fiches thématiques et dialogues types pour réussir l'épreuve orale." },
+      { id: "PRD-005", name: "TELC Deutsch B2 - SPRACHBAUSTEINE", category: "Manuels B2", price: 130, originalPrice: 180, stock: 14, sales: 86, image: "assets/products/telc-b1-showcase.jpg", description: "Entraînement intensif à la grammaire en contexte et connecteurs B2." },
+      { id: "PRD-006", name: "GOETHE-ÖSD B1 (25 Modelltests)", category: "Manuels B1", price: 140, originalPrice: 190, stock: 3, sales: 74, image: "assets/products/goethe-osd-b1-b2.jpg", description: "25 tests réels d'entraînement complet pour l'examen Goethe B1." },
+      { id: "PRD-007", name: "GOETHE-ÖSD B2 (25 Modelltests)", category: "Manuels B2", price: 150, originalPrice: 200, stock: 0, sales: 65, image: "assets/products/goethe-osd-b1-b2.jpg", description: "Modelltests officiels de niveau avancé B2 avec barèmes détaillés." },
+      { id: "PRD-008", name: "Grammatik Aktiv A1-B1 (Pratique Allemand)", category: "Grammaire", price: 110, originalPrice: 140, stock: 22, sales: 53, image: "assets/products/pack-b1.png", description: "Cahier d'exercices progressifs et règles visuelles simplifiées." },
+      { id: "PRD-009", name: "Wortschatz B1/B2 (Vocabulaire Thématique)", category: "Vocabulaire", price: 95, originalPrice: 130, stock: 31, sales: 61, image: "assets/products/telc-b1-showcase.jpg", description: "3,000 mots et expressions incontournables classés par thème d'examen." },
+      { id: "PRD-010", name: "Dossier Modèles Schreiben B1/B2 (Rédaction)", category: "Rédaction", price: 85, originalPrice: 110, stock: 17, sales: 89, image: "assets/products/telc-real-collection.jpg", description: "50 lettres types, réclamations et courriels formels prêts à l'emploi." }
     ];
 
     const INITIAL_ORDERS = [
@@ -96,11 +92,13 @@
       { id: "CMD-2026-115", customer: "Walid Radi", email: "walid.radi@gmail.com", phone: "+212 6 62 99 00 11", city: "Tanger", address: "Val Fleuri, Rés. Jasmine Apt 3", date: "2026-08-26 18:15", items: [{ id: "PRD-005", name: "TELC B2 Sprachbausteine", qty: 1, price: 130 }], total: 130, status: "delivered", payment: "Paiement à la livraison (COD)" }
     ];
 
-    // =========================================================================
-    // APPLICATION PRINCIPALE REACT
-    // =========================================================================
     function App() {
-      const [currentTab, setCurrentTab] = useState("overview"); // overview, products, orders, clients, settings
+      // Theme State (Dark vs Light)
+      const [theme, setTheme] = useState(() => {
+        return localStorage.getItem("adminflow_theme") || "dark";
+      });
+
+      const [currentTab, setCurrentTab] = useState("overview");
       const [products, setProducts] = useState(() => {
         const local = localStorage.getItem("adminflow_products");
         return local ? JSON.parse(local) : INITIAL_PRODUCTS;
@@ -110,17 +108,28 @@
         return local ? JSON.parse(local) : INITIAL_ORDERS;
       });
 
-      // Modals State
       const [isProductModalOpen, setIsProductModalOpen] = useState(false);
       const [editingProduct, setEditingProduct] = useState(null);
       const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
       const [selectedOrderDetails, setSelectedOrderDetails] = useState(null);
       const [toastMessage, setToastMessage] = useState("");
-
-      // Global Search
       const [globalSearch, setGlobalSearch] = useState("");
 
-      // Save to localStorage
+      // Apply theme class to <html>
+      useEffect(() => {
+        const root = document.documentElement;
+        if (theme === "dark") {
+          root.classList.add("dark");
+        } else {
+          root.classList.remove("dark");
+        }
+        localStorage.setItem("adminflow_theme", theme);
+      }, [theme]);
+
+      const toggleTheme = () => {
+        setTheme(t => (t === "dark" ? "light" : "dark"));
+      };
+
       useEffect(() => {
         localStorage.setItem("adminflow_products", JSON.stringify(products));
       }, [products]);
@@ -129,7 +138,6 @@
         localStorage.setItem("adminflow_orders", JSON.stringify(orders));
       }, [orders]);
 
-      // Re-trigger Lucide Icons on DOM update
       useEffect(() => {
         if (window.lucide) {
           window.lucide.createIcons();
@@ -162,7 +170,6 @@
         }
       };
 
-      // Order Status Update
       const handleUpdateOrderStatus = (orderId, newStatus) => {
         setOrders(orders.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
         showToast("Statut de la commande mis à jour !");
@@ -176,10 +183,10 @@
       };
 
       return (
-        <div className="flex h-screen overflow-hidden bg-slate-50">
+        <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-[#090d16] text-slate-900 dark:text-slate-100 transition-colors duration-200">
           
           {/* ================= 1. SIDEBAR ================= */}
-          <aside className="w-64 bg-white border-r border-slate-200 flex flex-col justify-between hidden md:flex shrink-0 shadow-sm z-20">
+          <aside className="w-64 bg-white dark:bg-[#0e1422] border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between hidden md:flex shrink-0 shadow-sm z-20 transition-colors duration-200">
             <div className="p-6 space-y-7">
               
               {/* Brand Logo */}
@@ -188,10 +195,10 @@
                   AF
                 </div>
                 <div>
-                  <span className="font-outfit font-black text-lg text-slate-900 tracking-tight block leading-tight">
-                    Admin<span className="text-blue-600">Flow</span>
+                  <span className="font-outfit font-black text-lg text-slate-900 dark:text-white tracking-tight block leading-tight">
+                    Admin<span className="text-blue-600 dark:text-blue-400">Flow</span>
                   </span>
-                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Store Manager</span>
+                  <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">Store Manager</span>
                 </div>
               </div>
 
@@ -199,27 +206,27 @@
               <nav className="space-y-1.5">
                 <NavItem icon="layout-dashboard" label="Vue d'ensemble" active={currentTab === "overview"} onClick={() => setCurrentTab("overview")} />
                 <NavItem icon="package" label="Produits" count={products.length} active={currentTab === "products"} onClick={() => setCurrentTab("products")} />
-                <NavItem icon="shopping-cart" label="Commandes" count={orders.filter(o => o.status === "pending" || o.status === "processing").length} active={currentTab === "orders"} onClick={() => setCurrentTab("orders")} badgeColor="bg-amber-100 text-amber-700" />
+                <NavItem icon="shopping-cart" label="Commandes" count={orders.filter(o => o.status === "pending" || o.status === "processing").length} active={currentTab === "orders"} onClick={() => setCurrentTab("orders")} badgeColor="bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400" />
                 <NavItem icon="users" label="Clients" active={currentTab === "clients"} onClick={() => setCurrentTab("clients")} />
                 <NavItem icon="settings" label="Paramètres" active={currentTab === "settings"} onClick={() => setCurrentTab("settings")} />
               </nav>
 
             </div>
 
-            {/* User Profile & Store Link */}
-            <div className="p-5 border-t border-slate-100 space-y-3">
-              <a href="index.html" target="_blank" className="w-full py-2.5 px-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 font-semibold text-xs flex items-center justify-center gap-2 transition border border-slate-200">
+            {/* Bottom Profile & Actions */}
+            <div className="p-5 border-t border-slate-100 dark:border-slate-800/80 space-y-3">
+              <a href="index.html" target="_blank" className="w-full py-2.5 px-3 rounded-xl bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold text-xs flex items-center justify-center gap-2 transition border border-slate-200 dark:border-slate-800">
                 <i data-lucide="external-link" className="w-3.5 h-3.5"></i>
                 <span>Voir la Boutique</span>
               </a>
 
               <div className="flex items-center gap-3 pt-1">
-                <div className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-xs text-blue-600">
+                <div className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center font-bold text-xs text-blue-600 dark:text-blue-400">
                   SM
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-xs font-bold text-slate-800 truncate">Sarah Martin</h4>
-                  <p className="text-[10px] text-slate-400 truncate">Administrateur</p>
+                  <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">Sarah Martin</h4>
+                  <p className="text-[10px] text-slate-400 dark:text-slate-500 truncate">Administrateur</p>
                 </div>
               </div>
             </div>
@@ -229,7 +236,7 @@
           <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
             
             {/* Topbar Header */}
-            <header className="h-16 bg-white border-b border-slate-200 px-6 sm:px-8 flex items-center justify-between sticky top-0 z-10">
+            <header className="h-16 bg-white/90 dark:bg-[#0e1422]/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-6 sm:px-8 flex items-center justify-between sticky top-0 z-10 transition-colors duration-200">
               
               {/* Search Bar */}
               <div className="relative w-64 sm:w-80">
@@ -238,22 +245,42 @@
                   type="text" 
                   value={globalSearch}
                   onChange={(e) => setGlobalSearch(e.target.value)}
-                  placeholder="Recherche globale (produit, client...)" 
-                  className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white transition"
+                  placeholder="Recherche globale..." 
+                  className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white dark:focus:bg-slate-950 transition"
                 />
               </div>
 
-              {/* Action Tools */}
+              {/* Action Tools & Theme Switcher */}
               <div className="flex items-center gap-3">
+                
+                {/* ☀️ / 🌙 THEME TOGGLE BUTTON */}
+                <button 
+                  onClick={toggleTheme}
+                  className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-amber-400 font-bold text-xs flex items-center gap-1.5 transition shadow-xs"
+                  title={theme === 'dark' ? "Passer en Mode Clair" : "Passer en Mode Sombre"}
+                >
+                  {theme === "dark" ? (
+                    <>
+                      <i data-lucide="sun" className="w-4 h-4 text-amber-400"></i>
+                      <span className="hidden sm:inline text-xs text-slate-300">Clair</span>
+                    </>
+                  ) : (
+                    <>
+                      <i data-lucide="moon" className="w-4 h-4 text-slate-700"></i>
+                      <span className="hidden sm:inline text-xs text-slate-700">Sombre</span>
+                    </>
+                  )}
+                </button>
+
                 <button onClick={() => { setEditingProduct(null); setIsProductModalOpen(true); }} className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm shadow-blue-500/20 flex items-center gap-1.5 transition">
                   <i data-lucide="plus" className="w-4 h-4"></i>
                   <span className="hidden sm:inline">Ajouter Produit</span>
                 </button>
 
-                <div className="h-6 w-px bg-slate-200 mx-1"></div>
+                <div className="h-6 w-px bg-slate-200 dark:bg-slate-800 mx-1"></div>
 
                 <div className="relative">
-                  <button className="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition relative">
+                  <button className="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition relative">
                     <i data-lucide="bell" className="w-4 h-4"></i>
                     <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-600"></span>
                   </button>
@@ -262,13 +289,14 @@
 
             </header>
 
-            {/* Dynamic Content Panel */}
+            {/* Dynamic Content Panels */}
             <main className="p-6 sm:p-8 max-w-7xl w-full mx-auto space-y-8 flex-1">
               
               {currentTab === "overview" && (
                 <OverviewTab 
                   products={products} 
                   orders={orders} 
+                  theme={theme}
                   onViewOrders={() => setCurrentTab("orders")}
                   onSelectOrder={(ord) => setSelectedOrderDetails(ord)}
                 />
@@ -303,6 +331,8 @@
                 <SettingsTab 
                   products={products} 
                   orders={orders} 
+                  theme={theme}
+                  onToggleTheme={toggleTheme}
                   onReset={() => {
                     setProducts(INITIAL_PRODUCTS);
                     setOrders(INITIAL_ORDERS);
@@ -347,8 +377,8 @@
 
           {/* Toast Notification */}
           {toastMessage && (
-            <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-xl font-bold text-xs flex items-center gap-2.5 animate-bounce">
-              <i data-lucide="check-circle" className="w-4 h-4 text-emerald-400"></i>
+            <div className="fixed bottom-6 right-6 z-50 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-3 rounded-2xl shadow-2xl font-bold text-xs flex items-center gap-2.5 animate-bounce">
+              <i data-lucide="check-circle" className="w-4 h-4 text-emerald-500"></i>
               <span>{toastMessage}</span>
             </div>
           )}
@@ -357,21 +387,18 @@
       );
     }
 
-    // =========================================================================
-    // COMPOSANTS DE NAVIGATION & TABS
-    // =========================================================================
-    function NavItem({ icon, label, count, active, onClick, badgeColor = "bg-slate-100 text-slate-600" }) {
+    function NavItem({ icon, label, count, active, onClick, badgeColor = "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400" }) {
       return (
         <button 
           onClick={onClick}
           className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs transition ${
             active 
-              ? 'bg-blue-50 text-blue-700 font-bold border border-blue-100 shadow-sm' 
-              : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+              ? 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 font-bold border border-blue-100 dark:border-blue-800/60 shadow-xs' 
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/60'
           }`}
         >
           <div className="flex items-center gap-3">
-            <i data-lucide={icon} className={`w-4 h-4 ${active ? 'text-blue-600' : 'text-slate-400'}`}></i>
+            <i data-lucide={icon} className={`w-4 h-4 ${active ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}`}></i>
             <span>{label}</span>
           </div>
           {count !== undefined && (
@@ -384,9 +411,9 @@
     }
 
     // =========================================================================
-    // TAB 1 : VUE D'ENSEMBLE (DASHBOARD & KPIS)
+    // TAB 1 : VUE D'ENSEMBLE
     // =========================================================================
-    function OverviewTab({ products, orders, onViewOrders, onSelectOrder }) {
+    function OverviewTab({ products, orders, theme, onViewOrders, onSelectOrder }) {
       const totalRevenue = orders
         .filter(o => o.status !== "cancelled")
         .reduce((acc, o) => acc + o.total, 0);
@@ -394,20 +421,15 @@
       const totalOrdersCount = orders.length;
       const pendingOrdersCount = orders.filter(o => o.status === "pending" || o.status === "processing").length;
       const totalProductsCount = products.length;
-
-      // Top Selling Products
       const topProducts = [...products].sort((a, b) => b.sales - a.sales).slice(0, 5);
-
-      // Recent 5 Orders
       const recentOrders = [...orders].slice(0, 5);
 
       return (
         <div className="space-y-8">
           
-          {/* Header Title */}
           <div>
-            <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 tracking-tight">Vue d'ensemble</h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">Performances des ventes et activité récente du catalogue.</p>
+            <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 dark:text-white tracking-tight">Vue d'ensemble</h1>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Performances des ventes et activité récente du catalogue.</p>
           </div>
 
           {/* 4 Stat Cards */}
@@ -421,37 +443,34 @@
           {/* Sales Chart & Category Distribution */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             
-            {/* Sales Chart (SVG Interactive Area Spline) */}
-            <div className="lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+            {/* Sales Chart (Responsive SVG) */}
+            <div className="lg:col-span-8 bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-outfit font-bold text-base text-slate-900">Évolution des Ventes</h3>
+                  <h3 className="font-outfit font-bold text-base text-slate-900 dark:text-white">Évolution des Ventes</h3>
                   <p className="text-xs text-slate-400">Revenus hebdomadaires en DH</p>
                 </div>
-                <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 text-xs font-bold text-slate-600">
-                  <button className="px-2.5 py-1 rounded-lg bg-white shadow-xs text-slate-900">7 Jours</button>
-                  <button className="px-2.5 py-1 rounded-lg text-slate-500 hover:text-slate-900">30 Jours</button>
+                <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-600 dark:text-slate-300">
+                  <button className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-700 shadow-xs text-slate-900 dark:text-white">7 Jours</button>
+                  <button className="px-2.5 py-1 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">30 Jours</button>
                 </div>
               </div>
 
-              {/* Responsive SVG Chart */}
               <div className="h-64 w-full pt-4">
                 <svg className="w-full h-full overflow-visible" viewBox="0 0 700 200">
                   <defs>
-                    <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.25" />
+                    <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
                       <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0" />
                     </linearGradient>
                   </defs>
-                  {/* Grid Lines */}
-                  <line x1="0" y1="40" x2="700" y2="40" stroke="#f1f5f9" strokeWidth="1" />
-                  <line x1="0" y1="90" x2="700" y2="90" stroke="#f1f5f9" strokeWidth="1" />
-                  <line x1="0" y1="140" x2="700" y2="140" stroke="#f1f5f9" strokeWidth="1" />
-                  {/* Area */}
-                  <path d="M 50 160 Q 150 110 250 130 T 450 70 T 650 40 L 650 180 L 50 180 Z" fill="url(#blueGradient)" />
-                  {/* Line */}
-                  <path d="M 50 160 Q 150 110 250 130 T 450 70 T 650 40" fill="none" stroke="#2563eb" strokeWidth="3" />
-                  {/* Data Points */}
+                  <line x1="0" y1="40" x2="700" y2="40" stroke={theme === 'dark' ? "rgba(255,255,255,0.06)" : "#f1f5f9"} strokeWidth="1" />
+                  <line x1="0" y1="90" x2="700" y2="90" stroke={theme === 'dark' ? "rgba(255,255,255,0.06)" : "#f1f5f9"} strokeWidth="1" />
+                  <line x1="0" y1="140" x2="700" y2="140" stroke={theme === 'dark' ? "rgba(255,255,255,0.06)" : "#f1f5f9"} strokeWidth="1" />
+                  
+                  <path d="M 50 160 Q 150 110 250 130 T 450 70 T 650 40 L 650 180 L 50 180 Z" fill="url(#areaGradient)" />
+                  <path d="M 50 160 Q 150 110 250 130 T 450 70 T 650 40" fill="none" stroke="#3b82f6" strokeWidth="3" />
+                  
                   {[
                     { x: 50, y: 160, val: "470 DH", day: "Lun" },
                     { x: 150, y: 120, val: "705 DH", day: "Mar" },
@@ -462,9 +481,9 @@
                     { x: 650, y: 40, val: "2,350 DH", day: "Dim" }
                   ].map((pt, i) => (
                     <g key={i} className="cursor-pointer group">
-                      <circle cx={pt.x} cy={pt.y} r="5" fill="#ffffff" stroke="#2563eb" strokeWidth="3" className="group-hover:scale-125 transition" />
-                      <text x={pt.x} y="195" textAnchor="middle" fontSize="11" fill="#94a3b8" fontWeight="600">{pt.day}</text>
-                      <text x={pt.x} y={pt.y - 10} textAnchor="middle" fontSize="10" fill="#1e293b" fontWeight="bold" opacity="0" className="group-hover:opacity-100 transition">{pt.val}</text>
+                      <circle cx={pt.x} cy={pt.y} r="5" fill={theme === 'dark' ? "#0e1422" : "#ffffff"} stroke="#3b82f6" strokeWidth="3" className="group-hover:scale-125 transition" />
+                      <text x={pt.x} y="195" textAnchor="middle" fontSize="11" fill={theme === 'dark' ? "#64748b" : "#94a3b8"} fontWeight="600">{pt.day}</text>
+                      <text x={pt.x} y={pt.y - 10} textAnchor="middle" fontSize="10" fill={theme === 'dark' ? "#f8fafc" : "#1e293b"} fontWeight="bold" opacity="0" className="group-hover:opacity-100 transition">{pt.val}</text>
                     </g>
                   ))}
                 </svg>
@@ -472,9 +491,9 @@
             </div>
 
             {/* Top Products Card */}
-            <div className="lg:col-span-4 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
+            <div className="lg:col-span-4 bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
               <div>
-                <h3 className="font-outfit font-bold text-base text-slate-900">Produits les Plus Vendus</h3>
+                <h3 className="font-outfit font-bold text-base text-slate-900 dark:text-white">Produits les Plus Vendus</h3>
                 <p className="text-xs text-slate-400">Classement par volume de commandes</p>
               </div>
 
@@ -482,15 +501,15 @@
                 {topProducts.map((p, idx) => (
                   <div key={p.id} className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-700 font-bold flex items-center justify-center text-[10px] shrink-0">{idx + 1}</span>
-                      <span className="font-semibold text-slate-800 truncate">{p.name}</span>
+                      <span className="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold flex items-center justify-center text-[10px] shrink-0">{idx + 1}</span>
+                      <span className="font-semibold text-slate-800 dark:text-slate-200 truncate">{p.name}</span>
                     </div>
-                    <span className="font-bold text-blue-600 shrink-0 ml-2">{p.sales} vus</span>
+                    <span className="font-bold text-blue-600 dark:text-blue-400 shrink-0 ml-2">{p.sales} vus</span>
                   </div>
                 ))}
               </div>
 
-              <div className="p-3 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-between text-xs text-blue-800 font-bold">
+              <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/50 flex items-center justify-between text-xs text-blue-800 dark:text-blue-300 font-bold">
                 <span>Total Ventes :</span>
                 <span>{products.reduce((s, p) => s + p.sales, 0)} exemplaires</span>
               </div>
@@ -499,13 +518,13 @@
           </div>
 
           {/* Recent Orders Table */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
-                <h3 className="font-outfit font-bold text-base text-slate-900">Dernières Commandes</h3>
+                <h3 className="font-outfit font-bold text-base text-slate-900 dark:text-white">Dernières Commandes</h3>
                 <p className="text-xs text-slate-400">Suivi des 5 dernières commandes passées</p>
               </div>
-              <button onClick={onViewOrders} className="text-xs text-blue-600 hover:text-blue-700 font-bold flex items-center gap-1">
+              <button onClick={onViewOrders} className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-bold flex items-center gap-1">
                 <span>Voir tout ({orders.length})</span>
                 <i data-lucide="arrow-right" className="w-3.5 h-3.5"></i>
               </button>
@@ -513,7 +532,7 @@
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="text-slate-400 uppercase font-bold text-[10px] border-b border-slate-100">
+                <thead className="text-slate-400 uppercase font-bold text-[10px] border-b border-slate-100 dark:border-slate-800">
                   <tr>
                     <th className="pb-3">N° Commande</th>
                     <th className="pb-3">Client</th>
@@ -523,19 +542,19 @@
                     <th className="pb-3 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-50 font-medium">
+                <tbody className="divide-y divide-slate-50 dark:divide-slate-800/60 font-medium">
                   {recentOrders.map(o => (
-                    <tr key={o.id} className="hover:bg-slate-50/80 transition">
-                      <td className="py-3.5 font-mono font-bold text-slate-800">{o.id}</td>
+                    <tr key={o.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
+                      <td className="py-3.5 font-mono font-bold text-slate-800 dark:text-slate-200">{o.id}</td>
                       <td className="py-3.5">
-                        <div className="font-bold text-slate-900">{o.customer}</div>
+                        <div className="font-bold text-slate-900 dark:text-white">{o.customer}</div>
                         <div className="text-[10px] text-slate-400">{o.city}</div>
                       </td>
-                      <td className="py-3.5 text-slate-500">{o.date.split(' ')[0]}</td>
-                      <td className="py-3.5 font-bold text-slate-900">{o.total} DH</td>
+                      <td className="py-3.5 text-slate-500 dark:text-slate-400">{o.date.split(' ')[0]}</td>
+                      <td className="py-3.5 font-bold text-slate-900 dark:text-white">{o.total} DH</td>
                       <td className="py-3.5"><StatusBadge status={o.status} /></td>
                       <td className="py-3.5 text-right">
-                        <button onClick={() => onSelectOrder(o)} className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-bold transition">
+                        <button onClick={() => onSelectOrder(o)} className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/40 text-slate-700 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-300 font-bold transition">
                           Détails
                         </button>
                       </td>
@@ -552,26 +571,26 @@
 
     function KpiCard({ title, value, trend, trendPositive, icon, color, subtitle, alert }) {
       const colors = {
-        blue: "bg-blue-50 text-blue-600",
-        emerald: "bg-emerald-50 text-emerald-600",
-        purple: "bg-purple-50 text-purple-600",
-        amber: "bg-amber-50 text-amber-600"
+        blue: "bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400",
+        emerald: "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400",
+        purple: "bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400",
+        amber: "bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400"
       };
 
       return (
-        <div className={`bg-white border ${alert ? 'border-amber-300 ring-2 ring-amber-100' : 'border-slate-200'} rounded-2xl p-6 shadow-sm space-y-3`}>
+        <div className={`bg-white dark:bg-[#0e1422] border ${alert ? 'border-amber-300 dark:border-amber-500/50 ring-2 ring-amber-100 dark:ring-amber-900/30' : 'border-slate-200 dark:border-slate-800'} rounded-2xl p-6 shadow-sm space-y-3`}>
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">{title}</span>
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{title}</span>
             <div className={`w-10 h-10 rounded-xl ${colors[color]} flex items-center justify-center font-bold`}>
               <i data-lucide={icon} className="w-5 h-5"></i>
             </div>
           </div>
           <div className="space-y-1">
-            <div className="font-outfit font-black text-2xl text-slate-900">{value}</div>
+            <div className="font-outfit font-black text-2xl text-slate-900 dark:text-white">{value}</div>
             <div className="flex items-center justify-between text-xs">
-              <span className="text-slate-400 text-[11px]">{subtitle}</span>
+              <span className="text-slate-400 dark:text-slate-500 text-[11px]">{subtitle}</span>
               {trend && (
-                <span className={`font-bold ${trendPositive ? 'text-emerald-600' : 'text-red-500'}`}>
+                <span className={`font-bold ${trendPositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'}`}>
                   {trend}
                 </span>
               )}
@@ -582,7 +601,7 @@
     }
 
     // =========================================================================
-    // TAB 2 : GESTION DES PRODUITS (CRUD)
+    // TAB 2 : GESTION DES PRODUITS
     // =========================================================================
     function ProductsTab({ products, globalSearch, onAddProduct, onEditProduct, onDeleteProduct }) {
       const [categoryFilter, setCategoryFilter] = useState("all");
@@ -596,7 +615,6 @@
         return ["all", ...Array.from(set)];
       }, [products]);
 
-      // Filtering Logic
       const filtered = useMemo(() => {
         return products.filter(p => {
           const q = (searchQuery || globalSearch).toLowerCase();
@@ -610,18 +628,16 @@
         });
       }, [products, categoryFilter, statusFilter, searchQuery, globalSearch]);
 
-      // Pagination
       const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
       const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
       return (
         <div className="space-y-6">
           
-          {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 tracking-tight">Catalogue des Produits</h1>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">Gérez vos articles, prix, descriptions et niveaux de stock.</p>
+              <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 dark:text-white tracking-tight">Catalogue des Produits</h1>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Gérez vos articles, prix, descriptions et niveaux de stock.</p>
             </div>
             <button onClick={onAddProduct} className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20 flex items-center gap-2 transition self-start sm:self-auto">
               <i data-lucide="plus" className="w-4 h-4"></i>
@@ -629,10 +645,8 @@
             </button>
           </div>
 
-          {/* Search & Filters Bar */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
+          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
             
-            {/* Search Input */}
             <div className="relative w-full md:w-80">
               <i data-lucide="search" className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
               <input 
@@ -640,16 +654,15 @@
                 placeholder="Rechercher par nom, référence..." 
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500"
               />
             </div>
 
-            {/* Filter Dropdowns */}
             <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
               <select 
                 value={categoryFilter} 
                 onChange={(e) => { setCategoryFilter(e.target.value); setCurrentPage(1); }}
-                className="p-2 rounded-xl bg-slate-50 border border-slate-200 font-semibold text-slate-700 focus:outline-none"
+                className="p-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-semibold text-slate-700 dark:text-slate-200 focus:outline-none"
               >
                 <option value="all">Toutes Catégories</option>
                 {categories.filter(c => c !== "all").map(c => <option key={c} value={c}>{c}</option>)}
@@ -658,22 +671,21 @@
               <select 
                 value={statusFilter} 
                 onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-                className="p-2 rounded-xl bg-slate-50 border border-slate-200 font-semibold text-slate-700 focus:outline-none"
+                className="p-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-semibold text-slate-700 dark:text-slate-200 focus:outline-none"
               >
                 <option value="all">Tous Statuts</option>
                 <option value="in_stock">🟢 En Stock (&gt; 10)</option>
                 <option value="low_stock">🟡 Stock Faible (1 - 10)</option>
-                <option value="out_of_stock">🔴 Rupture de Stock (0)</option>
+                <option value="out_of_stock">🔴 Rupture (0)</option>
               </select>
             </div>
 
           </div>
 
-          {/* Products Table */}
-          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50/80 text-slate-500 uppercase font-bold text-[10px] border-b border-slate-200">
+                <thead className="bg-slate-50/80 dark:bg-slate-900/60 text-slate-500 dark:text-slate-400 uppercase font-bold text-[10px] border-b border-slate-200 dark:border-slate-800">
                   <tr>
                     <th className="p-4">Produit</th>
                     <th className="p-4">Catégorie</th>
@@ -683,53 +695,53 @@
                     <th className="p-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                   {paginated.length === 0 ? (
                     <tr>
                       <td colSpan="6" className="p-8 text-center text-slate-400">Aucun produit ne correspond à votre recherche.</td>
                     </tr>
                   ) : (
                     paginated.map(p => (
-                      <tr key={p.id} className="hover:bg-slate-50/80 transition">
+                      <tr key={p.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
                         <td className="p-4">
                           <div className="flex items-center gap-3">
-                            <img src={p.image} alt={p.name} className="w-11 h-11 rounded-xl object-contain bg-slate-100 p-1 border border-slate-200 shrink-0" />
+                            <img src={p.image} alt={p.name} className="w-11 h-11 rounded-xl object-contain bg-slate-100 dark:bg-slate-800 p-1 border border-slate-200 dark:border-slate-700 shrink-0" />
                             <div>
-                              <h4 className="font-bold text-slate-900 leading-snug line-clamp-1">{p.name}</h4>
+                              <h4 className="font-bold text-slate-900 dark:text-white leading-snug line-clamp-1">{p.name}</h4>
                               <span className="text-[10px] text-slate-400 font-mono">{p.id}</span>
                             </div>
                           </div>
                         </td>
                         <td className="p-4">
-                          <span className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-semibold text-[11px]">
+                          <span className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-[11px]">
                             {p.category}
                           </span>
                         </td>
                         <td className="p-4">
-                          <span className="font-bold text-slate-900 text-sm">{p.price} DH</span>
+                          <span className="font-bold text-slate-900 dark:text-white text-sm">{p.price} DH</span>
                           {p.originalPrice && <span className="text-[10px] text-slate-400 line-through block">{p.originalPrice} DH</span>}
                         </td>
                         <td className="p-4">
                           <div className="flex items-center gap-2">
-                            <span className="font-bold text-slate-900">{p.stock}</span>
+                            <span className="font-bold text-slate-900 dark:text-white">{p.stock}</span>
                             <span className="text-[10px] text-slate-400">unités</span>
                           </div>
                         </td>
                         <td className="p-4">
                           {p.stock > 10 ? (
-                            <span className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">✓ En Stock</span>
+                            <span className="px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 font-bold text-[10px]">✓ En Stock</span>
                           ) : p.stock > 0 ? (
-                            <span className="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200 font-bold text-[10px]">⚠️ Faible ({p.stock})</span>
+                            <span className="px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800 font-bold text-[10px]">⚠️ Faible ({p.stock})</span>
                           ) : (
-                            <span className="px-2.5 py-1 rounded-full bg-red-50 text-red-700 border border-red-200 font-bold text-[10px]">✕ Rupture</span>
+                            <span className="px-2.5 py-1 rounded-full bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800 font-bold text-[10px]">✕ Rupture</span>
                           )}
                         </td>
                         <td className="p-4 text-right">
                           <div className="flex items-center justify-end gap-1.5">
-                            <button onClick={() => onEditProduct(p)} className="p-2 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition" title="Modifier">
+                            <button onClick={() => onEditProduct(p)} className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/40 text-slate-600 dark:text-slate-300 hover:text-blue-600 transition" title="Modifier">
                               <i data-lucide="edit-2" className="w-3.5 h-3.5"></i>
                             </button>
-                            <button onClick={() => onDeleteProduct(p.id)} className="p-2 rounded-lg bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-600 transition" title="Supprimer">
+                            <button onClick={() => onDeleteProduct(p.id)} className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-900/40 text-slate-600 dark:text-slate-300 hover:text-red-600 transition" title="Supprimer">
                               <i data-lucide="trash-2" className="w-3.5 h-3.5"></i>
                             </button>
                           </div>
@@ -741,25 +753,12 @@
               </table>
             </div>
 
-            {/* Pagination Toolbar */}
-            <div className="p-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <div className="p-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
               <span>Affichage de {(currentPage - 1) * itemsPerPage + 1} à {Math.min(currentPage * itemsPerPage, filtered.length)} sur {filtered.length} produits</span>
               <div className="flex items-center gap-1">
-                <button 
-                  disabled={currentPage === 1}
-                  onClick={() => setCurrentPage(p => p - 1)}
-                  className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50 font-bold"
-                >
-                  Précédent
-                </button>
-                <span className="px-3 py-1.5 font-bold text-slate-800">{currentPage} / {totalPages}</span>
-                <button 
-                  disabled={currentPage === totalPages}
-                  onClick={() => setCurrentPage(p => p + 1)}
-                  className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50 font-bold"
-                >
-                  Suivant
-                </button>
+                <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)} className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-50 font-bold">Précédent</button>
+                <span className="px-3 py-1.5 font-bold text-slate-800 dark:text-white">{currentPage} / {totalPages}</span>
+                <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)} className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-50 font-bold">Suivant</button>
               </div>
             </div>
 
@@ -795,8 +794,8 @@
           
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 tracking-tight">Suivi des Commandes</h1>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">Gérez le traitement, la livraison et le statut des commandes clients.</p>
+              <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 dark:text-white tracking-tight">Suivi des Commandes</h1>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Gérez le traitement, la livraison et le statut des commandes clients.</p>
             </div>
             <button onClick={onNewOrder} className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-500/20 flex items-center gap-2 transition self-start sm:self-auto">
               <i data-lucide="plus" className="w-4 h-4"></i>
@@ -804,8 +803,7 @@
             </button>
           </div>
 
-          {/* Filters Bar */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
+          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
             
             <div className="relative w-full md:w-80">
               <i data-lucide="search" className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
@@ -814,11 +812,10 @@
                 placeholder="Rechercher par N° commande, client..." 
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500"
               />
             </div>
 
-            {/* Status Pills */}
             <div className="flex flex-wrap items-center gap-1.5 w-full md:w-auto">
               {[
                 { id: "all", label: "Toutes" },
@@ -834,7 +831,7 @@
                   className={`px-3 py-1.5 rounded-xl font-bold transition ${
                     statusFilter === s.id 
                       ? 'bg-blue-600 text-white shadow-xs' 
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                   }`}
                 >
                   {s.label}
@@ -844,11 +841,10 @@
 
           </div>
 
-          {/* Orders Table */}
-          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50/80 text-slate-500 uppercase font-bold text-[10px] border-b border-slate-200">
+                <thead className="bg-slate-50/80 dark:bg-slate-900/60 text-slate-500 dark:text-slate-400 uppercase font-bold text-[10px] border-b border-slate-200 dark:border-slate-800">
                   <tr>
                     <th className="p-4">N° Commande</th>
                     <th className="p-4">Client & Ville</th>
@@ -859,30 +855,30 @@
                     <th className="p-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                   {paginated.length === 0 ? (
                     <tr>
                       <td colSpan="7" className="p-8 text-center text-slate-400">Aucune commande trouvée.</td>
                     </tr>
                   ) : (
                     paginated.map(o => (
-                      <tr key={o.id} className="hover:bg-slate-50/80 transition">
-                        <td className="p-4 font-mono font-bold text-slate-900">{o.id}</td>
+                      <tr key={o.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
+                        <td className="p-4 font-mono font-bold text-slate-900 dark:text-white">{o.id}</td>
                         <td className="p-4">
-                          <div className="font-bold text-slate-900">{o.customer}</div>
+                          <div className="font-bold text-slate-900 dark:text-white">{o.customer}</div>
                           <div className="text-[10px] text-slate-400">{o.city} • {o.phone}</div>
                         </td>
-                        <td className="p-4 text-slate-500 whitespace-nowrap">{o.date}</td>
+                        <td className="p-4 text-slate-500 dark:text-slate-400 whitespace-nowrap">{o.date}</td>
                         <td className="p-4">
-                          <span className="text-slate-700 font-medium block truncate max-w-xs">{o.items.map(i => i.name).join(", ")}</span>
-                          <span className="text-[10px] text-blue-600 font-bold">{o.items.length} article(s)</span>
+                          <span className="text-slate-700 dark:text-slate-300 font-medium block truncate max-w-xs">{o.items.map(i => i.name).join(", ")}</span>
+                          <span className="text-[10px] text-blue-600 dark:text-blue-400 font-bold">{o.items.length} article(s)</span>
                         </td>
-                        <td className="p-4 font-bold text-slate-900 text-sm whitespace-nowrap">{o.total} DH</td>
+                        <td className="p-4 font-bold text-slate-900 dark:text-white text-sm whitespace-nowrap">{o.total} DH</td>
                         <td className="p-4">
                           <select 
                             value={o.status}
                             onChange={(e) => onUpdateStatus(o.id, e.target.value)}
-                            className="p-1.5 rounded-lg border border-slate-200 bg-white font-bold text-xs focus:outline-none"
+                            className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold text-xs focus:outline-none text-slate-800 dark:text-slate-200"
                           >
                             <option value="pending">🟡 En attente</option>
                             <option value="processing">🔵 En cours</option>
@@ -893,10 +889,10 @@
                         </td>
                         <td className="p-4 text-right whitespace-nowrap">
                           <div className="flex items-center justify-end gap-1.5">
-                            <button onClick={() => onViewDetails(o)} className="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold transition">
+                            <button onClick={() => onViewDetails(o)} className="px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 hover:bg-blue-100 font-bold transition">
                               Détails
                             </button>
-                            <button onClick={() => onDeleteOrder(o.id)} className="p-2 rounded-lg bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-600 transition" title="Supprimer">
+                            <button onClick={() => onDeleteOrder(o.id)} className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-900/40 text-slate-600 dark:text-slate-300 hover:text-red-600 transition" title="Supprimer">
                               <i data-lucide="trash-2" className="w-3.5 h-3.5"></i>
                             </button>
                           </div>
@@ -908,12 +904,11 @@
               </table>
             </div>
 
-            {/* Pagination */}
-            <div className="p-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <div className="p-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
               <span>Page {currentPage} sur {totalPages}</span>
               <div className="flex items-center gap-1">
-                <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)} className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50 font-bold">Précédent</button>
-                <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)} className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50 font-bold">Suivant</button>
+                <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)} className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 disabled:opacity-50 font-bold">Précédent</button>
+                <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)} className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 disabled:opacity-50 font-bold">Suivant</button>
               </div>
             </div>
 
@@ -951,14 +946,14 @@
       return (
         <div className="space-y-6">
           <div>
-            <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 tracking-tight">Répertoire Clients (CRM)</h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">Historique des commandes et coordonnées des candidats acheteurs.</p>
+            <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 dark:text-white tracking-tight">Répertoire Clients (CRM)</h1>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Historique des commandes et coordonnées des candidats acheteurs.</p>
           </div>
 
-          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 text-slate-500 uppercase font-bold text-[10px] border-b border-slate-200">
+                <thead className="bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-400 uppercase font-bold text-[10px] border-b border-slate-200 dark:border-slate-800">
                   <tr>
                     <th className="p-4">Nom du Client</th>
                     <th className="p-4">Téléphone / WhatsApp</th>
@@ -968,26 +963,26 @@
                     <th className="p-4 text-right">Contacter</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                   {clients.map((c, i) => (
-                    <tr key={i} className="hover:bg-slate-50/80 transition">
+                    <tr key={i} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
                       <td className="p-4">
-                        <div className="font-bold text-slate-900">{c.name}</div>
+                        <div className="font-bold text-slate-900 dark:text-white">{c.name}</div>
                         <div className="text-[10px] text-slate-400">{c.email}</div>
                       </td>
-                      <td className="p-4 font-mono text-slate-700 font-semibold">{c.phone}</td>
-                      <td className="p-4 text-slate-600">{c.city}</td>
+                      <td className="p-4 font-mono text-slate-700 dark:text-slate-300 font-semibold">{c.phone}</td>
+                      <td className="p-4 text-slate-600 dark:text-slate-400">{c.city}</td>
                       <td className="p-4">
-                        <span className="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 font-bold text-[10px]">
+                        <span className="px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 font-bold text-[10px]">
                           {c.ordersCount} commande(s)
                         </span>
                       </td>
-                      <td className="p-4 font-bold text-slate-900 text-sm">{c.totalSpent} DH</td>
+                      <td className="p-4 font-bold text-slate-900 dark:text-white text-sm">{c.totalSpent} DH</td>
                       <td className="p-4 text-right">
                         <a 
                           href={`https://api.whatsapp.com/send?phone=${c.phone.replace(/[^0-9]/g, '')}&text=Bonjour%20${encodeURIComponent(c.name)},%20suivi%20de%20votre%20commande%20chez%20Pr%C3%BCfungStore.`}
                           target="_blank"
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-bold transition"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 font-bold transition"
                         >
                           <span>💬 WhatsApp</span>
                         </a>
@@ -1003,9 +998,9 @@
     }
 
     // =========================================================================
-    // TAB 5 : PARAMÈTRES & EXPORT
+    // TAB 5 : PARAMÈTRES (AVEC GESTION DU THÈME)
     // =========================================================================
-    function SettingsTab({ products, orders, onReset, showToast }) {
+    function SettingsTab({ products, orders, theme, onToggleTheme, onReset, showToast }) {
       const [whatsapp, setWhatsapp] = useState("212632017446");
       const [storeName, setStoreName] = useState("PrüfungStore Pro");
 
@@ -1035,21 +1030,61 @@
       return (
         <div className="space-y-6 max-w-3xl">
           <div>
-            <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 tracking-tight">Paramètres & Configuration</h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">Gérez les informations générales de la boutique et la sauvegarde des données.</p>
+            <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 dark:text-white tracking-tight">Paramètres & Thème</h1>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Gérez le mode d'affichage, les coordonnées et la sauvegarde des données.</p>
+          </div>
+
+          {/* Theme Selection Card */}
+          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
+            <h3 className="font-outfit font-bold text-base text-slate-900 dark:text-white">Apparence de l'Interface</h3>
+            <div className="grid grid-cols-2 gap-4 pt-1">
+              <button 
+                onClick={() => { if (theme !== "light") onToggleTheme(); }}
+                className={`p-4 rounded-2xl border text-left flex items-center gap-3.5 transition ${
+                  theme === "light" 
+                    ? 'border-blue-600 bg-blue-50/50 ring-2 ring-blue-500/20' 
+                    : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60'
+                }`}
+              >
+                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
+                  ☀️
+                </div>
+                <div>
+                  <h4 className="font-bold text-xs text-slate-900 dark:text-white">Thème Clair</h4>
+                  <p className="text-[10px] text-slate-400">Fond blanc et contrastes lumineux</p>
+                </div>
+              </button>
+
+              <button 
+                onClick={() => { if (theme !== "dark") onToggleTheme(); }}
+                className={`p-4 rounded-2xl border text-left flex items-center gap-3.5 transition ${
+                  theme === "dark" 
+                    ? 'border-blue-500 bg-blue-950/40 ring-2 ring-blue-500/30' 
+                    : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60'
+                }`}
+              >
+                <div className="w-10 h-10 rounded-xl bg-slate-800 text-amber-400 flex items-center justify-center font-bold">
+                  🌙
+                </div>
+                <div>
+                  <h4 className="font-bold text-xs text-slate-900 dark:text-white">Thème Sombre</h4>
+                  <p className="text-[10px] text-slate-400">Fond sombre haute lisibilité</p>
+                </div>
+              </button>
+            </div>
           </div>
 
           {/* Store Info Card */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
-            <h3 className="font-outfit font-bold text-base text-slate-900">Coordonnées du Magasin</h3>
+          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
+            <h3 className="font-outfit font-bold text-base text-slate-900 dark:text-white">Coordonnées de Réception</h3>
             <div className="space-y-3 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Nom de la Boutique :</label>
-                <input type="text" value={storeName} onChange={(e) => setStoreName(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none focus:border-blue-500" />
+                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Nom de la Boutique :</label>
+                <input type="text" value={storeName} onChange={(e) => setStoreName(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 font-bold focus:outline-none focus:border-blue-500" />
               </div>
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Numéro WhatsApp Réception Commandes :</label>
-                <input type="text" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none focus:border-blue-500" />
+                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Numéro WhatsApp Récepteur :</label>
+                <input type="text" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 font-bold focus:outline-none focus:border-blue-500" />
               </div>
             </div>
             <button onClick={() => showToast("Coordonnées enregistrées !")} className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition">
@@ -1058,20 +1093,20 @@
           </div>
 
           {/* Export & Reset */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
-            <h3 className="font-outfit font-bold text-base text-slate-900">Exportation & Sauvegarde</h3>
-            <p className="text-xs text-slate-500">Téléchargez vos données pour Excel ou effectuez une sauvegarde intégrale.</p>
+          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
+            <h3 className="font-outfit font-bold text-base text-slate-900 dark:text-white">Exportation & Sauvegarde</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Téléchargez vos données pour Excel ou effectuez une sauvegarde intégrale.</p>
             
             <div className="flex flex-wrap gap-3 pt-2">
-              <button onClick={exportOrdersCSV} className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center gap-2 border border-slate-200 transition">
+              <button onClick={exportOrdersCSV} className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs flex items-center gap-2 border border-slate-200 dark:border-slate-700 transition">
                 <i data-lucide="download" className="w-4 h-4"></i>
                 <span>Exporter Commandes (CSV/Excel)</span>
               </button>
-              <button onClick={exportJSON} className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center gap-2 border border-slate-200 transition">
+              <button onClick={exportJSON} className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs flex items-center gap-2 border border-slate-200 dark:border-slate-700 transition">
                 <i data-lucide="file-json" className="w-4 h-4"></i>
                 <span>Sauvegarder en JSON</span>
               </button>
-              <button onClick={onReset} className="px-4 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs flex items-center gap-2 border border-red-200 transition">
+              <button onClick={onReset} className="px-4 py-2 rounded-xl bg-red-50 dark:bg-red-950/40 hover:bg-red-100 text-red-600 dark:text-red-400 font-bold text-xs flex items-center gap-2 border border-red-200 dark:border-red-900/40 transition">
                 <i data-lucide="refresh-cw" className="w-4 h-4"></i>
                 <span>Réinitialiser Données Fictives</span>
               </button>
@@ -1083,7 +1118,7 @@
     }
 
     // =========================================================================
-    // MODALS : ADD/EDIT PRODUCT & ORDER DETAILS
+    // MODALS
     // =========================================================================
     function ProductModal({ product, onClose, onSave }) {
       const [name, setName] = useState(product ? product.name : "");
@@ -1109,26 +1144,26 @@
 
       return (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-slate-200 p-6 sm:p-8 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="font-outfit font-black text-lg text-slate-900">
+          <div className="bg-white dark:bg-[#121827] rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-2xl space-y-5 text-slate-800 dark:text-slate-100">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+              <h3 className="font-outfit font-black text-lg text-slate-900 dark:text-white">
                 {product ? "Modifier le Produit" : "Ajouter un Nouveau Produit"}
               </h3>
-              <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100">
+              <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800">
                 <i data-lucide="x" className="w-5 h-5"></i>
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Nom du Produit / Manuel :</label>
-                <input type="text" required value={name} onChange={(e) => setName(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none focus:border-blue-500" />
+                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Nom du Produit / Manuel :</label>
+                <input type="text" required value={name} onChange={(e) => setName(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-bold focus:outline-none focus:border-blue-500" />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Catégorie :</label>
-                  <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 font-semibold focus:outline-none">
+                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Catégorie :</label>
+                  <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-semibold focus:outline-none">
                     <option value="Manuels B1">Manuels B1</option>
                     <option value="Manuels B2">Manuels B2</option>
                     <option value="Packs Complets">Packs Complets</option>
@@ -1138,34 +1173,34 @@
                   </select>
                 </div>
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Quantité en Stock :</label>
-                  <input type="number" required value={stock} onChange={(e) => setStock(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none focus:border-blue-500" />
+                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Quantité en Stock :</label>
+                  <input type="number" required value={stock} onChange={(e) => setStock(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-bold focus:outline-none focus:border-blue-500" />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Prix (DH) :</label>
-                  <input type="number" required value={price} onChange={(e) => setPrice(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none focus:border-blue-500" />
+                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Prix (DH) :</label>
+                  <input type="number" required value={price} onChange={(e) => setPrice(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-bold focus:outline-none focus:border-blue-500" />
                 </div>
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Prix Barré (Optionnel) :</label>
-                  <input type="number" value={originalPrice || ""} onChange={(e) => setOriginalPrice(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 text-slate-400 focus:outline-none" />
+                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Prix Barré (Optionnel) :</label>
+                  <input type="number" value={originalPrice || ""} onChange={(e) => setOriginalPrice(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-400 focus:outline-none" />
                 </div>
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Chemin Image / Fichier :</label>
-                <input type="text" value={image} onChange={(e) => setImage(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 focus:outline-none" />
+                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Chemin Image :</label>
+                <input type="text" value={image} onChange={(e) => setImage(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white focus:outline-none" />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Description courte :</label>
-                <textarea rows="2" value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 focus:outline-none"></textarea>
+                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Description courte :</label>
+                <textarea rows="2" value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white focus:outline-none"></textarea>
               </div>
 
-              <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100">
-                <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold">Annuler</button>
+              <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
+                <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 font-bold">Annuler</button>
                 <button type="submit" className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-md shadow-blue-500/20">Enregistrer</button>
               </div>
             </form>
@@ -1177,57 +1212,53 @@
     function OrderDetailsModal({ order, onClose, onUpdateStatus }) {
       return (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full border border-slate-200 p-6 sm:p-8 shadow-2xl space-y-6">
+          <div className="bg-white dark:bg-[#121827] rounded-3xl max-w-lg w-full border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-2xl space-y-6 text-slate-800 dark:text-slate-100">
             
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <span className="font-mono text-[11px] text-slate-400 font-bold block">{order.id}</span>
-                <h3 className="font-outfit font-black text-lg text-slate-900">Détails de la Commande</h3>
+                <h3 className="font-outfit font-black text-lg text-slate-900 dark:text-white">Détails de la Commande</h3>
               </div>
-              <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100">
+              <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800">
                 <i data-lucide="x" className="w-5 h-5"></i>
               </button>
             </div>
 
             <div className="space-y-4 text-xs">
               
-              {/* Customer Box */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 space-y-2">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Coordonnées Client</span>
-                <div className="font-bold text-slate-900 text-sm">{order.customer}</div>
-                <div className="text-slate-600 font-medium">📞 {order.phone} • ✉️ {order.email}</div>
-                <div className="text-slate-600">📍 {order.address}, <strong>{order.city}</strong></div>
+                <div className="font-bold text-slate-900 dark:text-white text-sm">{order.customer}</div>
+                <div className="text-slate-600 dark:text-slate-400 font-medium">📞 {order.phone} • ✉️ {order.email}</div>
+                <div className="text-slate-600 dark:text-slate-400">📍 {order.address}, <strong>{order.city}</strong></div>
               </div>
 
-              {/* Items List */}
               <div className="space-y-2">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Articles Commandés</span>
-                <div className="divide-y divide-slate-100 border border-slate-100 rounded-xl overflow-hidden">
+                <div className="divide-y divide-slate-100 dark:divide-slate-800 border border-slate-100 dark:border-slate-800 rounded-xl overflow-hidden">
                   {order.items.map((it, idx) => (
-                    <div key={idx} className="p-3 flex items-center justify-between bg-white">
+                    <div key={idx} className="p-3 flex items-center justify-between bg-white dark:bg-slate-900/40">
                       <div>
-                        <span className="font-bold text-slate-800">{it.name}</span>
+                        <span className="font-bold text-slate-800 dark:text-slate-200">{it.name}</span>
                         <span className="text-slate-400 block text-[11px]">Quantité : {it.qty}</span>
                       </div>
-                      <span className="font-bold text-slate-900">{it.price * it.qty} DH</span>
+                      <span className="font-bold text-slate-900 dark:text-white">{it.price * it.qty} DH</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Total & Payment */}
-              <div className="flex justify-between items-center p-3.5 rounded-xl bg-blue-50 text-blue-900 font-bold">
+              <div className="flex justify-between items-center p-3.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-900 dark:text-blue-300 font-bold">
                 <span>Total à Encaisser (COD) :</span>
-                <span className="font-outfit font-black text-lg text-blue-700">{order.total} DH</span>
+                <span className="font-outfit font-black text-lg text-blue-700 dark:text-blue-400">{order.total} DH</span>
               </div>
 
-              {/* Status Change */}
               <div className="pt-2 flex items-center justify-between">
-                <label className="font-bold text-slate-700">Changer Statut :</label>
+                <label className="font-bold text-slate-700 dark:text-slate-300">Changer Statut :</label>
                 <select 
                   value={order.status}
                   onChange={(e) => { onUpdateStatus(order.id, e.target.value); onClose(); }}
-                  className="p-2 rounded-xl border border-slate-200 font-bold bg-white focus:outline-none"
+                  className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 font-bold bg-white dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none"
                 >
                   <option value="pending">🟡 En attente</option>
                   <option value="processing">🔵 En cours</option>
@@ -1239,8 +1270,8 @@
 
             </div>
 
-            <div className="pt-3 border-t border-slate-100 flex items-center justify-end">
-              <button onClick={onClose} className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs">
+            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end">
+              <button onClick={onClose} className="px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-xs">
                 Fermer
               </button>
             </div>
@@ -1278,47 +1309,47 @@
 
       return (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full border border-slate-200 p-6 sm:p-8 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="font-outfit font-black text-lg text-slate-900">Nouvelle Commande Manuelle</h3>
-              <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100">
+          <div className="bg-white dark:bg-[#121827] rounded-3xl max-w-md w-full border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-2xl space-y-5 text-slate-800 dark:text-slate-100">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+              <h3 className="font-outfit font-black text-lg text-slate-900 dark:text-white">Nouvelle Commande Manuelle</h3>
+              <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800">
                 <i data-lucide="x" className="w-5 h-5"></i>
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Nom du Client :</label>
-                <input type="text" required value={customer} onChange={(e) => setCustomer(e.target.value)} placeholder="ex: Mohammed Alami" className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none focus:border-blue-500" />
+                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Nom du Client :</label>
+                <input type="text" required value={customer} onChange={(e) => setCustomer(e.target.value)} placeholder="ex: Mohammed Alami" className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-bold focus:outline-none focus:border-blue-500" />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Téléphone :</label>
-                  <input type="text" required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 6..." className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none focus:border-blue-500" />
+                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Téléphone :</label>
+                  <input type="text" required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 6..." className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-bold focus:outline-none focus:border-blue-500" />
                 </div>
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Ville :</label>
-                  <input type="text" required value={city} onChange={(e) => setCity(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none focus:border-blue-500" />
+                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Ville :</label>
+                  <input type="text" required value={city} onChange={(e) => setCity(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-bold focus:outline-none focus:border-blue-500" />
                 </div>
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Adresse de Livraison :</label>
-                <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Quartier, Rue, N°..." className="w-full p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500" />
+                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Adresse de Livraison :</label>
+                <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Quartier, Rue, N°..." className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white focus:outline-none" />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Produit Commandé :</label>
-                <select value={selectedProdId} onChange={(e) => setSelectedProdId(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none">
+                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Produit Commandé :</label>
+                <select value={selectedProdId} onChange={(e) => setSelectedProdId(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-bold focus:outline-none">
                   {products.map(p => (
                     <option key={p.id} value={p.id}>{p.name} ({p.price} DH)</option>
                   ))}
                 </select>
               </div>
 
-              <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100">
-                <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold">Annuler</button>
+              <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
+                <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 font-bold">Annuler</button>
                 <button type="submit" className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-md shadow-emerald-500/20">Créer</button>
               </div>
             </form>
@@ -1329,17 +1360,17 @@
 
     function StatusBadge({ status }) {
       const map = {
-        pending: { label: "🟡 En attente", cls: "bg-amber-50 text-amber-700 border-amber-200" },
-        processing: { label: "🔵 En cours", cls: "bg-blue-50 text-blue-700 border-blue-200" },
-        shipped: { label: "🟣 Expédiée", cls: "bg-purple-50 text-purple-700 border-purple-200" },
-        delivered: { label: "🟢 Livrée", cls: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-        cancelled: { label: "🔴 Annulée", cls: "bg-red-50 text-red-700 border-red-200" }
+        pending: { label: "🟡 En attente", cls: "bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-900/60" },
+        processing: { label: "🔵 En cours", cls: "bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-900/60" },
+        shipped: { label: "🟣 Expédiée", cls: "bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-400 border-purple-200 dark:border-purple-900/60" },
+        delivered: { label: "🟢 Livrée", cls: "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900/60" },
+        cancelled: { label: "🔴 Annulée", cls: "bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-400 border-red-200 dark:border-red-900/60" }
       };
       const st = map[status] || map.pending;
       return <span className={`px-2.5 py-0.5 rounded-full border text-[10px] font-bold ${st.cls}`}>{st.label}</span>;
     }
 
-    // Render Root
+    // Render App
     ReactDOM.createRoot(document.getElementById("root")).render(<App />);
   </script>
 </body>
