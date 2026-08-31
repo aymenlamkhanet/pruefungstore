@@ -3,73 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Espace Administrateur • PrüfungStore Pro</title>
+  <title>Administration Pro • PrüfungStore & ABDEUTSCH CENTER</title>
   <meta name="robots" content="noindex, nofollow">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Universal Tailwind CSS -->
+  <!-- Universal Tailwind CSS & Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     body {
-      background-color: #08080b;
+      background-color: #08080c;
       color: #f1f5f9;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
+    .font-outfit { font-family: 'Outfit', sans-serif; }
+    
+    .glass-sidebar {
+      background: #0c0c12;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-header {
+      background: rgba(12, 12, 18, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
     .frosted-panel {
-      background: rgba(18, 18, 24, 0.85);
+      background: rgba(18, 18, 26, 0.75);
       backdrop-filter: blur(25px);
       border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.25s ease;
     }
+    .frosted-panel:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    
     ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+    ::-webkit-scrollbar-track { background: #08080c; }
     ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(245, 158, 11, 0.5); }
   </style>
 </head>
-<body class="min-h-screen flex antialiased bg-[#08080b]">
+<body class="min-h-screen flex antialiased bg-[#08080c]">
 
-  <!-- ================= AUTHENTICATION GATEWAY (LOGIN OVERLAY) ================= -->
-  <div id="admin-auth-overlay" class="fixed inset-0 z-50 bg-[#08080b]/95 backdrop-blur-2xl flex items-center justify-center p-4">
-    <div class="frosted-panel rounded-3xl p-8 max-w-md w-full shadow-2xl border border-amber-500/30 text-center space-y-6">
+  <!-- ================= AUTHENTICATION OVERLAY ================= -->
+  <div id="admin-auth-overlay" class="fixed inset-0 z-50 bg-[#08080c]/95 backdrop-blur-2xl flex items-center justify-center p-4">
+    <div class="frosted-panel rounded-3xl p-8 sm:p-10 max-w-md w-full shadow-2xl border border-amber-500/30 text-center space-y-6">
       
-      <div class="w-16 h-16 rounded-3xl bg-amber-500/15 border border-amber-500/30 text-amber-400 mx-auto flex items-center justify-center font-outfit font-black text-2xl shadow-lg">
-        🔒
+      <div class="relative w-16 h-16 mx-auto">
+        <div class="w-16 h-16 rounded-3xl bg-gradient-to-tr from-amber-500/20 to-amber-500/10 border border-amber-500/40 text-amber-400 flex items-center justify-center font-outfit font-black text-2xl shadow-xl">
+          🔐
+        </div>
       </div>
 
-      <div>
+      <div class="space-y-1">
         <h2 class="font-outfit font-black text-2xl text-white">Espace Administrateur</h2>
-        <p class="text-xs text-slate-400 mt-1">Accès privé et réservé à l'administrateur du centre</p>
+        <p class="text-xs text-slate-400">Authentification requise pour gérer les produits et commandes</p>
       </div>
 
       <form onsubmit="handleAdminLogin(event)" class="space-y-4 text-left">
         <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1.5">Mot de passe Administrateur :</label>
-          <div class="relative">
-            <input 
-              id="admin-pass-input" 
-              type="password" 
-              required 
-              placeholder="Entrez votre mot de passe..." 
-              class="w-full p-3.5 rounded-2xl bg-black/60 border border-white/15 text-white font-bold text-sm focus:border-amber-500 focus:outline-none placeholder-slate-600 transition"
-            >
-          </div>
+          <label class="block text-xs font-bold text-slate-300 mb-1.5">Mot de passe de sécurité :</label>
+          <input 
+            id="admin-pass-input" 
+            type="password" 
+            required 
+            placeholder="Entrez votre mot de passe..." 
+            class="w-full p-3.5 rounded-2xl bg-black/60 border border-white/15 text-white font-bold text-sm focus:border-amber-500 focus:outline-none placeholder-slate-600 transition"
+          >
           <span id="auth-error-msg" class="text-xs text-red-400 font-bold hidden pt-2 block">
-            ⚠️ Mot de passe incorrect.
+            ⚠️ Mot de passe incorrect. (Par défaut: admin2026)
           </span>
         </div>
 
         <button 
           type="submit" 
-          class="w-full py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-extrabold text-sm shadow-xl transition transform active:scale-95"
+          class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-outfit font-black text-sm shadow-xl transition transform active:scale-95"
         >
-          Déverrouiller le Dashboard
+          Déverrouiller le Dashboard ➔
         </button>
       </form>
 
@@ -81,30 +97,31 @@
   </div>
 
   <!-- ================= SIDEBAR NAVIGATION ================= -->
-  <aside id="admin-sidebar" class="w-64 bg-[#0d0d12] border-r border-white/10 flex flex-col justify-between hidden md:flex shrink-0">
+  <aside id="admin-sidebar" class="w-72 glass-sidebar flex flex-col justify-between hidden md:flex shrink-0">
     <div class="p-6 space-y-8">
       
       <!-- Brand Logo -->
-      <a href="index.html" class="flex items-center gap-3 group">
-        <img src="assets/logo.jpg" alt="Logo" class="w-9 h-9 rounded-xl object-cover border border-amber-500/40">
+      <a href="index.html" class="flex items-center gap-3.5 group">
+        <img src="assets/logo.jpg" alt="Logo" class="w-11 h-11 rounded-2xl object-cover border border-amber-500/40 shadow-lg">
         <div>
           <span class="font-outfit font-black text-base text-white tracking-tight block">
             Prüfung<span class="text-amber-400">Store</span>
           </span>
-          <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest block">ADMIN SECURE</span>
+          <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest block">ADMIN PORTAL 2026</span>
         </div>
       </a>
 
       <!-- Navigation Tabs -->
       <nav class="space-y-1.5">
+        
         <button onclick="switchTab('overview')" data-tab="overview" class="nav-tab-btn active w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-amber-500/15 text-amber-300 font-bold border border-amber-500/30 text-xs transition">
           <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-          <span>Vue d'ensemble</span>
+          <span>Vue d'ensemble (KPIs)</span>
         </button>
 
         <button onclick="switchTab('products')" data-tab="products" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 font-semibold text-xs transition">
           <i data-lucide="book-open" class="w-4 h-4"></i>
-          <span>Gestion des Produits</span>
+          <span>Catalogue & Stocks (7)</span>
         </button>
 
         <button onclick="switchTab('orders')" data-tab="orders" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 font-semibold text-xs transition">
@@ -114,33 +131,42 @@
 
         <button onclick="switchTab('clients')" data-tab="clients" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 font-semibold text-xs transition">
           <i data-lucide="users" class="w-4 h-4"></i>
-          <span>Clients & WhatsApp</span>
+          <span>Clients & WhatsApp CRM</span>
+        </button>
+
+        <button onclick="switchTab('evaluations')" data-tab="evaluations" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 font-semibold text-xs transition">
+          <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
+          <span>Évaluations Étudiants</span>
         </button>
 
         <button onclick="switchTab('settings')" data-tab="settings" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 font-semibold text-xs transition">
           <i data-lucide="settings" class="w-4 h-4"></i>
-          <span>Paramètres & Export</span>
+          <span>Paramètres & Sauvegarde</span>
         </button>
 
-        <a href="student-assessment.html" target="_blank" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-amber-300 hover:text-white hover:bg-amber-500/10 font-bold text-xs transition border border-amber-500/20 bg-amber-500/5">
-          <i data-lucide="bar-chart-2" class="w-4 h-4 text-amber-400"></i>
-          <span>Évaluations Étudiants 📊</span>
-        </a>
       </nav>
 
     </div>
 
-    <!-- Bottom Actions -->
+    <!-- Bottom Profile & Logout -->
     <div class="p-6 border-t border-white/10 space-y-3">
-      <a href="index.html" target="_blank" class="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center justify-center gap-2 transition">
-        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-        <span>Voir la Boutique</span>
-      </a>
+      <div class="flex items-center justify-between p-3 rounded-2xl bg-white/5 border border-white/5">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs">AD</div>
+          <div>
+            <span class="text-xs font-bold text-white block">Admin Principal</span>
+            <span class="text-[10px] text-emerald-400 font-medium">● Connecté</span>
+          </div>
+        </div>
+        <button onclick="handleAdminLogout()" class="p-2 rounded-xl bg-white/10 hover:bg-red-500/20 hover:text-red-400 text-slate-400 transition" title="Déconnexion">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+        </button>
+      </div>
 
-      <button onclick="handleAdminLogout()" class="w-full py-2 px-4 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 font-bold text-xs flex items-center justify-center gap-2 transition">
-        <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
-        <span>Déconnexion</span>
-      </button>
+      <a href="index.html" target="_blank" class="w-full py-2.5 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-bold text-xs flex items-center justify-center gap-2 transition border border-white/10">
+        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+        <span>Ouvrir la Boutique Client</span>
+      </a>
     </div>
   </aside>
 
@@ -148,7 +174,7 @@
   <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
     
     <!-- Top Header Bar -->
-    <header class="h-16 bg-[#0d0d12]/90 border-b border-white/10 px-6 flex items-center justify-between sticky top-0 z-30 backdrop-blur-md">
+    <header class="h-20 glass-header px-6 sm:px-8 flex items-center justify-between sticky top-0 z-30">
       
       <!-- Search Input -->
       <div class="relative w-72 sm:w-96">
@@ -156,85 +182,127 @@
         <input 
           id="admin-global-search" 
           type="text" 
-          placeholder="Rechercher un livre, client, commande..." 
-          class="w-full pl-10 pr-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition"
+          placeholder="Rechercher un manuel, client, ville, commande..." 
+          class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-black/50 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition"
         >
       </div>
 
-      <!-- Quick Actions -->
+      <!-- Quick Action Buttons -->
       <div class="flex items-center gap-3">
-        <button onclick="openProductModal()" class="px-4 py-2 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-outfit font-extrabold text-xs flex items-center gap-1.5 shadow-lg transition">
-          <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-          <span>Nouveau Produit</span>
+        <button onclick="openProductModal()" class="px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black text-xs flex items-center gap-2 shadow-lg transition">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">Nouveau Manuel</span>
         </button>
 
-        <button onclick="openNewOrderModal()" class="px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-outfit font-extrabold text-xs flex items-center gap-1.5 shadow-lg transition">
-          <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>
-          <span>Nouvelle Commande</span>
+        <button onclick="openNewOrderModal()" class="px-4 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-outfit font-black text-xs flex items-center gap-2 shadow-lg transition">
+          <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">Nouvelle Commande</span>
         </button>
       </div>
     </header>
 
-    <!-- Content Panels Container -->
+    <!-- Main Container Panels -->
     <main class="p-6 sm:p-8 space-y-8 flex-1 max-w-7xl w-full mx-auto">
       
       <!-- ================= 1. TAB OVERVIEW ================= -->
       <div id="panel-overview" class="dashboard-tab-panel space-y-8">
         
+        <!-- Welcome Header -->
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 class="font-outfit font-black text-2xl sm:text-3xl text-white">Tableau de Bord & Activité</h1>
+            <h1 class="font-outfit font-black text-2xl sm:text-3xl text-white">Tableau de Bord & Activité Commerciale</h1>
             <p class="text-xs sm:text-sm text-slate-400">Suivi en temps réel des ventes, commandes et niveaux de stock.</p>
           </div>
-          <span class="px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold flex items-center gap-2">
+          <span class="px-3.5 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-            WhatsApp: +212 632-017446
+            WhatsApp : +212 632-017446
           </span>
         </div>
 
-        <!-- KPI Cards Grid -->
+        <!-- 4 KPI Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          
           <div class="frosted-panel rounded-3xl p-6 relative overflow-hidden">
-            <div class="flex items-center justify-between mb-3"><span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Chiffre d'Affaires</span><div class="p-2.5 rounded-2xl bg-amber-500/15 text-amber-400"><i data-lucide="coins" class="w-5 h-5"></i></div></div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Chiffre d'Affaires</span>
+              <div class="p-2.5 rounded-2xl bg-amber-500/15 text-amber-400">
+                <i data-lucide="coins" class="w-5 h-5"></i>
+              </div>
+            </div>
             <span id="kpi-total-revenue" class="font-outfit font-black text-3xl text-white block">0 DH</span>
             <span class="text-[11px] text-emerald-400 font-bold pt-1 block">✓ Commandes validées</span>
           </div>
 
           <div class="frosted-panel rounded-3xl p-6 relative overflow-hidden">
-            <div class="flex items-center justify-between mb-3"><span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Commandes</span><div class="p-2.5 rounded-2xl bg-blue-500/15 text-blue-400"><i data-lucide="shopping-bag" class="w-5 h-5"></i></div></div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Commandes</span>
+              <div class="p-2.5 rounded-2xl bg-blue-500/15 text-blue-400">
+                <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+              </div>
+            </div>
             <span id="kpi-total-orders" class="font-outfit font-black text-3xl text-white block">0</span>
             <span class="text-[11px] text-slate-400 font-medium pt-1 block">Toutes périodes</span>
           </div>
 
           <div class="frosted-panel rounded-3xl p-6 relative overflow-hidden">
-            <div class="flex items-center justify-between mb-3"><span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Nouvelles Commandes</span><div class="p-2.5 rounded-2xl bg-emerald-500/15 text-emerald-400"><i data-lucide="bell" class="w-5 h-5"></i></div></div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Nouvelles Commandes</span>
+              <div class="p-2.5 rounded-2xl bg-emerald-500/15 text-emerald-400">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+              </div>
+            </div>
             <span id="kpi-new-orders" class="font-outfit font-black text-3xl text-emerald-400 block">0</span>
-            <span class="text-[11px] text-amber-400 font-bold pt-1 block">À préparer / traiter</span>
+            <span class="text-[11px] text-amber-400 font-bold pt-1 block">À préparer / expédier</span>
           </div>
 
           <div class="frosted-panel rounded-3xl p-6 relative overflow-hidden">
-            <div class="flex items-center justify-between mb-3"><span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Alertes Stock</span><div class="p-2.5 rounded-2xl bg-red-500/15 text-red-400"><i data-lucide="alert-triangle" class="w-5 h-5"></i></div></div>
-            <span id="kpi-low-stock" class="font-outfit font-black text-3xl text-red-400 block">0</span>
-            <span class="text-[11px] text-slate-400 font-medium pt-1 block">&lt; 5 exemplaires</span>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Panier Moyen</span>
+              <div class="p-2.5 rounded-2xl bg-purple-500/15 text-purple-400">
+                <i data-lucide="trending-up" class="w-5 h-5"></i>
+              </div>
+            </div>
+            <span id="kpi-avg-order" class="font-outfit font-black text-3xl text-purple-400 block">0 DH</span>
+            <span class="text-[11px] text-slate-400 font-medium pt-1 block">Par candidat</span>
           </div>
+
         </div>
 
         <!-- Charts Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div class="lg:col-span-8 frosted-panel rounded-3xl p-6 space-y-4">
-            <div class="flex items-center justify-between"><div><h3 class="font-outfit font-bold text-lg text-white">Évolution des Ventes</h3><p class="text-xs text-slate-400">Revenus hebdomadaires en DH</p></div></div>
-            <div class="h-64 relative"><canvas id="chartRevenue"></canvas></div>
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="font-outfit font-bold text-base text-white">Évolution des Ventes (DH)</h3>
+                <p class="text-xs text-slate-400">Revenus hebdomadaires générés au Maroc</p>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-white/10 text-slate-300 font-bold text-[10px]">Semaine en cours</span>
+            </div>
+            <div class="h-64 relative">
+              <canvas id="chartRevenue"></canvas>
+            </div>
           </div>
 
           <div class="lg:col-span-4 frosted-panel rounded-3xl p-6 space-y-4 flex flex-col justify-between">
-            <div><h3 class="font-outfit font-bold text-lg text-white">Répartition Niveaux</h3><p class="text-xs text-slate-400">Manuels B1 vs B2</p></div>
-            <div class="h-48 relative flex items-center justify-center"><canvas id="chartLevels"></canvas></div>
+            <div>
+              <h3 class="font-outfit font-bold text-base text-white">Répartition par Niveau</h3>
+              <p class="text-xs text-slate-400">Proportion des ventes B1 vs B2</p>
+            </div>
+            <div class="h-48 relative flex items-center justify-center">
+              <canvas id="chartLevels"></canvas>
+            </div>
           </div>
         </div>
 
-        <!-- Recent Orders Feed -->
+        <!-- Recent Activity Feed -->
         <div class="frosted-panel rounded-3xl p-6 space-y-4">
-          <div class="flex items-center justify-between"><div><h3 class="font-outfit font-bold text-lg text-white">Dernières Commandes Reçues</h3><p class="text-xs text-slate-400">Commandes WhatsApp en temps réel</p></div><button onclick="switchTab('orders')" class="text-xs text-amber-400 hover:underline font-bold">Voir toutes →</button></div>
+          <div class="flex items-center justify-between border-b border-white/5 pb-3">
+            <div>
+              <h3 class="font-outfit font-bold text-base text-white">Dernières Commandes Reçues</h3>
+              <p class="text-xs text-slate-400">Commandes WhatsApp en temps réel</p>
+            </div>
+            <button onclick="switchTab('orders')" class="text-xs text-amber-400 hover:underline font-bold">Voir toutes les commandes →</button>
+          </div>
           <div id="recent-orders-list" class="space-y-3"></div>
         </div>
 
@@ -243,122 +311,334 @@
       <!-- ================= 2. TAB PRODUCTS ================= -->
       <div id="panel-products" class="dashboard-tab-panel hidden space-y-6">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div><h2 class="font-outfit font-black text-2xl text-white">Catalogue des Manuels & Packs</h2><p class="text-xs text-slate-400">Gérez les prix, stocks et descriptions.</p></div>
-          <button onclick="openProductModal()" class="px-5 py-2.5 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-outfit font-extrabold text-xs flex items-center gap-2 shadow-lg transition"><i data-lucide="plus" class="w-4 h-4"></i><span>Ajouter un Produit</span></button>
+          <div>
+            <h2 class="font-outfit font-black text-2xl text-white">Catalogue des Manuels & Packs</h2>
+            <p class="text-xs text-slate-400">Ajustez les prix, les remises et les stocks de vos livres.</p>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <!-- Filter Pills -->
+            <button onclick="filterProductsByLevel('all')" data-filter="all" class="prod-filter-btn px-3 py-1.5 rounded-xl bg-amber-500 text-black font-bold text-xs shadow-md transition">Tous</button>
+            <button onclick="filterProductsByLevel('pack')" data-filter="pack" class="prod-filter-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-medium text-xs transition">Packs</button>
+            <button onclick="filterProductsByLevel('B1')" data-filter="B1" class="prod-filter-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-medium text-xs transition">B1</button>
+            <button onclick="filterProductsByLevel('B2')" data-filter="B2" class="prod-filter-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-medium text-xs transition">B2</button>
+            
+            <button onclick="openProductModal()" class="ml-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black text-xs flex items-center gap-1.5 shadow-lg transition">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              <span>Ajouter</span>
+            </button>
+          </div>
         </div>
+
         <div class="frosted-panel rounded-3xl overflow-hidden shadow-2xl">
-          <div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead class="bg-black/60 text-slate-400 font-bold uppercase tracking-wider border-b border-white/10"><tr><th class="p-4">Manuel / Pack</th><th class="p-4">Niveau</th><th class="p-4">Prix</th><th class="p-4">Stock</th><th class="p-4">Type</th><th class="p-4 text-right">Actions</th></tr></thead><tbody id="products-table-body"></tbody></table></div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-black/60 text-slate-400 font-bold uppercase tracking-wider border-b border-white/10">
+                <tr>
+                  <th class="p-4">Manuel / Pack</th>
+                  <th class="p-4">Niveau</th>
+                  <th class="p-4">Prix</th>
+                  <th class="p-4">Stock Restant</th>
+                  <th class="p-4">Type</th>
+                  <th class="p-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="products-table-body" class="divide-y divide-white/5"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
       <!-- ================= 3. TAB ORDERS ================= -->
       <div id="panel-orders" class="dashboard-tab-panel hidden space-y-6">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div><h2 class="font-outfit font-black text-2xl text-white">Gestion des Commandes</h2><p class="text-xs text-slate-400">Suivez le statut de préparation et de livraison partout au Maroc.</p></div>
-          <div class="flex items-center gap-2">
-            <button onclick="exportOrdersCSV()" class="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition"><i data-lucide="download" class="w-3.5 h-3.5"></i><span>Export CSV (Excel)</span></button>
-            <button onclick="openNewOrderModal()" class="px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-outfit font-extrabold text-xs flex items-center gap-1.5 transition"><i data-lucide="plus" class="w-3.5 h-3.5"></i><span>Nouvelle Commande</span></button>
+          <div>
+            <h2 class="font-outfit font-black text-2xl text-white">Gestion des Commandes & Expéditions</h2>
+            <p class="text-xs text-slate-400">Suivi des livraisons partout au Maroc avec encaissement COD.</p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="filterOrdersByStatus('all')" data-status="all" class="order-filter-btn px-3 py-1.5 rounded-xl bg-amber-500 text-black font-bold text-xs shadow-md transition">Toutes</button>
+            <button onclick="filterOrdersByStatus('nouveau')" data-status="nouveau" class="order-filter-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-medium text-xs transition">🟡 Nouvelles</button>
+            <button onclick="filterOrdersByStatus('preparation')" data-status="preparation" class="order-filter-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-medium text-xs transition">🔵 Préparation</button>
+            <button onclick="filterOrdersByStatus('expedie')" data-status="expedie" class="order-filter-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-medium text-xs transition">🟣 Expédiées</button>
+            <button onclick="filterOrdersByStatus('livre')" data-status="livre" class="order-filter-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-medium text-xs transition">🟢 Livrées</button>
+
+            <button onclick="exportOrdersCSV()" class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 border border-white/10 transition">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i>
+              <span>Export CSV</span>
+            </button>
           </div>
         </div>
+
         <div class="frosted-panel rounded-3xl overflow-hidden shadow-2xl">
-          <div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead class="bg-black/60 text-slate-400 font-bold uppercase tracking-wider border-b border-white/10"><tr><th class="p-4">ID & Date</th><th class="p-4">Client & Ville</th><th class="p-4">Articles</th><th class="p-4">Total</th><th class="p-4">Statut</th><th class="p-4 text-right">Actions</th></tr></thead><tbody id="orders-table-body"></tbody></table></div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-black/60 text-slate-400 font-bold uppercase tracking-wider border-b border-white/10">
+                <tr>
+                  <th class="p-4">ID & Date</th>
+                  <th class="p-4">Client & Ville</th>
+                  <th class="p-4">Articles Commandés</th>
+                  <th class="p-4">Total</th>
+                  <th class="p-4">Statut Commande</th>
+                  <th class="p-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="orders-table-body" class="divide-y divide-white/5"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
       <!-- ================= 4. TAB CLIENTS ================= -->
       <div id="panel-clients" class="dashboard-tab-panel hidden space-y-6">
-        <div><h2 class="font-outfit font-black text-2xl text-white">Contacts & Clients WhatsApp</h2><p class="text-xs text-slate-400">Historique des commandes et relance en 1 clic.</p></div>
+        <div>
+          <h2 class="font-outfit font-black text-2xl text-white">Contacts & Clients WhatsApp CRM</h2>
+          <p class="text-xs text-slate-400">Historique des candidats et relance instantanée sur WhatsApp.</p>
+        </div>
+
         <div class="frosted-panel rounded-3xl overflow-hidden shadow-2xl">
-          <div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead class="bg-black/60 text-slate-400 font-bold uppercase tracking-wider border-b border-white/10"><tr><th class="p-4">Nom & Téléphone</th><th class="p-4">Ville</th><th class="p-4">Historique</th><th class="p-4">Total Acheté</th><th class="p-4 text-right">Relance</th></tr></thead><tbody id="clients-table-body"></tbody></table></div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-black/60 text-slate-400 font-bold uppercase tracking-wider border-b border-white/10">
+                <tr>
+                  <th class="p-4">Nom & Téléphone</th>
+                  <th class="p-4">Ville</th>
+                  <th class="p-4">Commandes</th>
+                  <th class="p-4">Total Dépensé</th>
+                  <th class="p-4 text-right">Relance WhatsApp</th>
+                </tr>
+              </thead>
+              <tbody id="clients-table-body" class="divide-y divide-white/5"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
-      <!-- ================= 5. TAB SETTINGS ================= -->
+      <!-- ================= 5. TAB EVALUATIONS ================= -->
+      <div id="panel-evaluations" class="dashboard-tab-panel hidden space-y-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="font-outfit font-black text-2xl text-white">Évaluations & Performances Candidats</h2>
+            <p class="text-xs text-slate-400">Suivi modulaire par compétence (Lesen, Hören, Schreiben, Sprechen).</p>
+          </div>
+          <a href="student-assessment.html" target="_blank" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black text-xs flex items-center gap-1.5 shadow-lg transition">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            <span>Ouvrir en Plein Écran 📊</span>
+          </a>
+        </div>
+
+        <div class="frosted-panel rounded-3xl overflow-hidden shadow-2xl">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-black/60 text-slate-400 font-bold uppercase tracking-wider border-b border-white/10">
+                <tr>
+                  <th class="p-4">Candidat & Ville</th>
+                  <th class="p-4">Niveau / Examen</th>
+                  <th class="p-4 text-center">Lesen</th>
+                  <th class="p-4 text-center">Hören</th>
+                  <th class="p-4 text-center">Schreiben</th>
+                  <th class="p-4 text-center">Sprechen</th>
+                  <th class="p-4 text-center">Moyenne</th>
+                  <th class="p-4">Statut</th>
+                  <th class="p-4 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="evaluations-table-body" class="divide-y divide-white/5"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 6. TAB SETTINGS ================= -->
       <div id="panel-settings" class="dashboard-tab-panel hidden space-y-8 max-w-3xl">
-        <div><h2 class="font-outfit font-black text-2xl text-white">Paramètres & Données</h2><p class="text-xs text-slate-400">Configuration et sauvegarde.</p></div>
-        
-        <!-- Change Password Section -->
+        <div>
+          <h2 class="font-outfit font-black text-2xl text-white">Paramètres & Sécurité</h2>
+          <p class="text-xs text-slate-400">Configuration générale de la boutique et mot de passe.</p>
+        </div>
+
+        <!-- Security: Change Password Form -->
         <form onsubmit="changeAdminPassword(event)" class="frosted-panel rounded-3xl p-6 sm:p-8 space-y-4">
           <h3 class="font-outfit font-bold text-base text-white flex items-center gap-2">
-            <span>🔐 Sécurité : Modifier le Mot de Passe Admin</span>
+            <span>🔐 Modifier le Mot de Passe Administrateur</span>
           </h3>
           <div class="space-y-3 text-xs">
             <div>
               <label class="block font-bold text-slate-300 mb-1">Nouveau Mot de Passe :</label>
               <input id="new-admin-pass" type="password" required placeholder="Entrez le nouveau mot de passe" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
             </div>
-            <button type="submit" class="px-5 py-2.5 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs">
-              Mettre à jour le mot de passe
+            <button type="submit" class="px-5 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black text-xs shadow-lg transition">
+              Enregistrer le Nouveau Mot de Passe
             </button>
           </div>
         </form>
 
         <!-- WhatsApp Settings -->
         <form onsubmit="saveSettingsForm(event)" class="frosted-panel rounded-3xl p-6 sm:p-8 space-y-6">
-          <h3 class="font-outfit font-bold text-lg text-white">Coordonnées de Réception</h3>
+          <h3 class="font-outfit font-bold text-base text-white">Coordonnées de Réception</h3>
           <div class="space-y-4 text-xs">
-            <div><label class="block font-bold text-slate-300 mb-1.5">Numéro WhatsApp Récepteur :</label><input id="set-whatsapp" type="text" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none"><span class="text-[11px] text-slate-500 pt-1 block">Format international: 212632017446</span></div>
-            <div><label class="block font-bold text-slate-300 mb-1.5">Nom de la Boutique :</label><input id="set-store-name" type="text" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none"></div>
+            <div>
+              <label class="block font-bold text-slate-300 mb-1.5">Numéro WhatsApp Récepteur :</label>
+              <input id="set-whatsapp" type="text" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
+              <span class="text-[11px] text-slate-500 pt-1 block">Format international (ex: 212632017446)</span>
+            </div>
+            <div>
+              <label class="block font-bold text-slate-300 mb-1.5">Nom de la Boutique :</label>
+              <input id="set-store-name" type="text" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
+            </div>
           </div>
-          <button type="submit" class="px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-outfit font-extrabold text-xs shadow-lg transition">Enregistrer</button>
+          <button type="submit" class="px-5 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black text-xs shadow-lg transition">
+            Enregistrer les Coordonnées
+          </button>
         </form>
 
+        <!-- Backup & Reset -->
         <div class="frosted-panel rounded-3xl p-6 sm:p-8 space-y-4">
-          <h3 class="font-outfit font-bold text-lg text-white">Sauvegarde & Restauration</h3>
+          <h3 class="font-outfit font-bold text-base text-white">Sauvegarde & Restauration</h3>
+          <p class="text-xs text-slate-400">Téléchargez une sauvegarde de votre catalogue et de vos commandes.</p>
           <div class="flex flex-wrap gap-3 pt-2">
-            <button onclick="exportDataJSON()" class="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-2 transition"><i data-lucide="download" class="w-4 h-4"></i><span>Sauvegarder JSON</span></button>
-            <button onclick="resetAllData()" class="px-5 py-2.5 rounded-full bg-red-500/10 hover:bg-red-500/20 text-red-400 font-bold text-xs flex items-center gap-2 transition"><i data-lucide="refresh-cw" class="w-4 h-4"></i><span>Réinitialiser Données</span></button>
+            <button onclick="exportDataJSON()" class="px-5 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-2 border border-white/10 transition">
+              <i data-lucide="download" class="w-4 h-4"></i>
+              <span>Sauvegarder JSON</span>
+            </button>
+            <button onclick="resetAllData()" class="px-5 py-2.5 rounded-2xl bg-red-500/10 hover:bg-red-500/20 text-red-400 font-bold text-xs flex items-center gap-2 border border-red-500/20 transition">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+              <span>Réinitialiser Données</span>
+            </button>
           </div>
         </div>
+
       </div>
 
     </main>
   </div>
 
-  <!-- MODALS -->
+  <!-- ================= MODALS ================= -->
+  <!-- Product Modal -->
   <div id="product-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-[#121218] rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto border border-white/15 p-6 sm:p-8 relative shadow-2xl space-y-6">
-      <div class="flex items-center justify-between pb-4 border-b border-white/10"><h3 id="product-modal-title" class="font-outfit font-black text-xl text-white">Produit</h3><button onclick="closeProductModal()" class="p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+    <div class="bg-[#12121a] rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto border border-white/15 p-6 sm:p-8 relative shadow-2xl space-y-6">
+      <div class="flex items-center justify-between pb-4 border-b border-white/10">
+        <h3 id="product-modal-title" class="font-outfit font-black text-xl text-white">Produit</h3>
+        <button onclick="closeProductModal()" class="p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
       <form onsubmit="saveProductFromForm(event)" class="space-y-4 text-xs">
         <input type="hidden" id="prod-id">
-        <div><label class="block font-bold text-slate-300 mb-1">Titre du Manuel / Pack :</label><input id="prod-title" type="text" required class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none"></div>
-        <div><label class="block font-bold text-slate-300 mb-1">Sous-titre :</label><input id="prod-subtitle" type="text" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white focus:border-amber-500 focus:outline-none"></div>
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Titre du Manuel / Pack :</label>
+          <input id="prod-title" type="text" required class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Sous-titre :</label>
+          <input id="prod-subtitle" type="text" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white focus:border-amber-500 focus:outline-none">
+        </div>
         <div class="grid grid-cols-2 gap-3">
-          <div><label class="block font-bold text-slate-300 mb-1">Niveau :</label><select id="prod-level" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none"><option value="B1">B1</option><option value="B2">B2</option><option value="B1 & B2">B1 & B2</option></select></div>
-          <div><label class="block font-bold text-slate-300 mb-1">Examen :</label><select id="prod-exam" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none"><option value="telc">telc</option><option value="Goethe">Goethe / ÖSD</option></select></div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Niveau :</label>
+            <select id="prod-level" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
+              <option value="B1">B1</option>
+              <option value="B2">B2</option>
+              <option value="B1 & B2">B1 & B2</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Examen :</label>
+            <select id="prod-exam" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
+              <option value="telc">telc</option>
+              <option value="Goethe">Goethe / ÖSD</option>
+            </select>
+          </div>
         </div>
         <div class="grid grid-cols-3 gap-3">
-          <div><label class="block font-bold text-slate-300 mb-1">Prix (DH) :</label><input id="prod-price" type="number" required class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none"></div>
-          <div><label class="block font-bold text-slate-300 mb-1">Prix Barré :</label><input id="prod-orig-price" type="number" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-slate-400 focus:border-amber-500 focus:outline-none"></div>
-          <div><label class="block font-bold text-slate-300 mb-1">Stock :</label><input id="prod-stock" type="number" required class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none"></div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Prix (DH) :</label>
+            <input id="prod-price" type="number" required class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Prix Barré :</label>
+            <input id="prod-orig-price" type="number" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-slate-400 focus:border-amber-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Stock :</label>
+            <input id="prod-stock" type="number" required class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
+          </div>
         </div>
-        <div><label class="block font-bold text-slate-300 mb-1">Format physique :</label><input id="prod-format" type="text" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white focus:border-amber-500 focus:outline-none"></div>
-        <div><label class="block font-bold text-slate-300 mb-1">Image :</label><input id="prod-image" type="text" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white focus:border-amber-500 focus:outline-none"></div>
-        <div class="pt-4 flex items-center justify-end gap-3"><button type="button" onclick="closeProductModal()" class="px-5 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold">Annuler</button><button type="submit" class="px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-outfit font-extrabold shadow-lg">Enregistrer</button></div>
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Format :</label>
+          <input id="prod-format" type="text" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white focus:border-amber-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Chemin Image :</label>
+          <input id="prod-image" type="text" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white focus:border-amber-500 focus:outline-none">
+        </div>
+        <div class="pt-4 flex items-center justify-end gap-3">
+          <button type="button" onclick="closeProductModal()" class="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold">Annuler</button>
+          <button type="submit" class="px-6 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black shadow-lg">Enregistrer</button>
+        </div>
       </form>
     </div>
   </div>
 
+  <!-- Order Modal -->
   <div id="new-order-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-[#121218] rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto border border-white/15 p-6 sm:p-8 relative shadow-2xl space-y-6">
-      <div class="flex items-center justify-between pb-4 border-b border-white/10"><h3 class="font-outfit font-black text-xl text-white">Enregistrer une Commande</h3><button onclick="closeNewOrderModal()" class="p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+    <div class="bg-[#12121a] rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto border border-white/15 p-6 sm:p-8 relative shadow-2xl space-y-6">
+      <div class="flex items-center justify-between pb-4 border-b border-white/10">
+        <h3 class="font-outfit font-black text-xl text-white">Enregistrer une Commande</h3>
+        <button onclick="closeNewOrderModal()" class="p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
       <form onsubmit="saveNewOrder(event)" class="space-y-4 text-xs">
-        <div><label class="block font-bold text-slate-300 mb-1">Nom du Client :</label><input id="order-client-name" type="text" required placeholder="ex: Mohammed Alami" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none"></div>
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="block font-bold text-slate-300 mb-1">Téléphone :</label><input id="order-client-phone" type="text" required placeholder="+212 6..." class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none"></div>
-          <div><label class="block font-bold text-slate-300 mb-1">Ville :</label><input id="order-client-city" type="text" required placeholder="Casablanca, Rabat..." class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none"></div>
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Nom du Client :</label>
+          <input id="order-client-name" type="text" required placeholder="ex: Mohammed Alami" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
         </div>
-        <div><label class="block font-bold text-slate-300 mb-1">Adresse :</label><input id="order-client-address" type="text" placeholder="Quartier, Rue..." class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white focus:border-amber-500 focus:outline-none"></div>
-        <div><label class="block font-bold text-slate-300 mb-1">Livre / Pack Commandé :</label><select id="order-book-select" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none"><option value="pack-b1-telc-2026">Pack B1 TELC (2026) — 235 DH</option><option value="pack-goethe-osd-b1-b2">Pack GOETHE - ÖSD B1 & B2 (25 Tests) — 235 DH</option><option value="pack-b2-telc-complet">Pack B2 TELC Collection — 260 DH</option><option value="telc-b1-sprechen-solo">TELC B1 Sprechen — 120 DH</option><option value="telc-b2-sprachbausteine-app">TELC B2 Sprachbausteine — 130 DH</option><option value="goethe-b1-25-modelltests">Goethe B1 25 Tests — 140 DH</option><option value="goethe-b2-25-modelltests">Goethe B2 25 Tests — 150 DH</option></select></div>
-        <div><label class="block font-bold text-slate-300 mb-1">Notes :</label><textarea id="order-notes" rows="2" placeholder="Remarques..." class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white focus:border-amber-500 focus:outline-none"></textarea></div>
-        <div class="pt-4 flex items-center justify-end gap-3"><button type="button" onclick="closeNewOrderModal()" class="px-5 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold">Annuler</button><button type="submit" class="px-6 py-3 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-outfit font-extrabold shadow-lg">Créer la Commande</button></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Téléphone WhatsApp :</label>
+            <input id="order-client-phone" type="text" required placeholder="+212 6..." class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Ville :</label>
+            <input id="order-client-city" type="text" required placeholder="Casablanca, Rabat..." class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Adresse :</label>
+          <input id="order-client-address" type="text" placeholder="Quartier, Rue..." class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white focus:border-amber-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Manuel / Pack :</label>
+          <select id="order-book-select" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
+            <option value="pack-b1-telc-2026">Pack B1 TELC (2026) — 235 DH</option>
+            <option value="pack-goethe-osd-b1-b2">Pack GOETHE - ÖSD B1 & B2 (25 Tests) — 235 DH</option>
+            <option value="pack-b2-telc-complet">Pack B2 TELC Collection — 260 DH</option>
+            <option value="telc-b1-sprechen-solo">TELC B1 Sprechen — 120 DH</option>
+            <option value="telc-b2-sprachbausteine-app">TELC B2 Sprachbausteine — 130 DH</option>
+            <option value="goethe-b1-25-modelltests">Goethe B1 25 Tests — 140 DH</option>
+            <option value="goethe-b2-25-modelltests">Goethe B2 25 Tests — 150 DH</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Notes :</label>
+          <textarea id="order-notes" rows="2" placeholder="Remarques..." class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white focus:border-amber-500 focus:outline-none"></textarea>
+        </div>
+        <div class="pt-4 flex items-center justify-end gap-3">
+          <button type="button" onclick="closeNewOrderModal()" class="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold">Annuler</button>
+          <button type="submit" class="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-outfit font-black shadow-lg">Créer la Commande</button>
+        </div>
       </form>
     </div>
   </div>
 
+  <!-- Toast Notification -->
   <div id="admin-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
-    <div class="bg-amber-500 text-black px-6 py-3.5 rounded-2xl shadow-2xl font-outfit font-extrabold text-xs flex items-center gap-2.5 border border-amber-400">
-      <i data-lucide="check-circle" class="w-4 h-4"></i><span id="admin-toast-msg">Action effectuée</span>
+    <div class="bg-amber-500 text-black px-6 py-3.5 rounded-2xl shadow-2xl font-outfit font-black text-xs flex items-center gap-2.5 border border-amber-400">
+      <i data-lucide="check-circle" class="w-4 h-4"></i>
+      <span id="admin-toast-msg">Action effectuée</span>
     </div>
   </div>
 
@@ -403,7 +683,7 @@
         return;
       }
       localStorage.setItem("pruefung_admin_password", newPass);
-      showToast("Mot de passe administrateur modifié avec succès !");
+      showToast("Mot de passe modifié avec succès !");
       document.getElementById("new-admin-pass").value = "";
     }
 
