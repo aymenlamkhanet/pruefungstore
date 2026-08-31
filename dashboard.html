@@ -156,10 +156,10 @@
       </form>
 
       <div class="pt-2 border-t border-white/10 text-center">
-        <a href="index.html" class="text-xs text-slate-400 hover:text-white transition inline-flex items-center gap-1.5 font-semibold">
+        <button onclick="goToStoreAndLock()" class="text-xs text-slate-400 hover:text-white transition inline-flex items-center gap-1.5 font-semibold">
           <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
           <span>Retourner à la boutique publique</span>
-        </a>
+        </button>
       </div>
 
     </div>
@@ -238,10 +238,10 @@
       </div>
 
       <div class="p-5 border-t border-white/10 space-y-3">
-        <a href="index.html" target="_blank" class="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-semibold text-xs flex items-center justify-center gap-2 transition border border-white/10">
+        <button onclick="goToStoreAndLock()" class="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-semibold text-xs flex items-center justify-center gap-2 transition border border-white/10">
           <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
           <span>Voir la Boutique</span>
-        </a>
+        </button>
 
         <div class="flex items-center justify-between p-2 rounded-xl bg-black/40 border border-white/10">
           <div class="flex items-center gap-2.5 min-w-0">
@@ -639,11 +639,11 @@
             </h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div>
-                <label className="block font-bold text-slate-300 mb-1">Nom d'utilisateur :</label>
+                <label class="block font-bold text-slate-300 mb-1">Nom d'utilisateur :</label>
                 <input id="settings-username" type="text" required class="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold focus:outline-none focus:border-amber-500">
               </div>
               <div>
-                <label className="block font-bold text-slate-300 mb-1">Nouveau Mot de Passe :</label>
+                <label class="block font-bold text-slate-300 mb-1">Nouveau Mot de Passe :</label>
                 <input id="settings-password" type="password" placeholder="Laisser vide si inchangé..." class="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold focus:outline-none focus:border-amber-500">
               </div>
             </div>
@@ -714,7 +714,7 @@
         <input type="hidden" id="prod-form-id">
         <input type="hidden" id="prod-form-image" value="assets/products/pack-b1.png">
 
-        <!-- ================= PHOTO DU PRODUIT (UPLOAD & PREVIEW) ================= -->
+        <!-- PHOTO DU PRODUIT -->
         <div>
           <label class="block font-bold text-slate-300 mb-2 flex items-center justify-between">
             <span>📷 Photo du Manuel / Pack :</span>
@@ -722,14 +722,11 @@
           </label>
 
           <div class="p-4 rounded-2xl bg-black/50 border border-white/15 space-y-3.5">
-            
             <div class="flex items-center gap-4">
-              <!-- Live Image Thumbnail -->
               <div class="w-20 h-20 rounded-2xl bg-black/80 border-2 border-amber-500/40 p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-lg relative group">
                 <img id="prod-image-preview" src="assets/products/pack-b1.png" alt="Aperçu" class="w-full h-full object-contain">
               </div>
 
-              <!-- Upload Actions -->
               <div class="flex-1 space-y-2">
                 <div class="flex flex-wrap items-center gap-2">
                   <label class="cursor-pointer px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition transform active:scale-95">
@@ -747,9 +744,9 @@
               </div>
             </div>
 
-            <!-- Quick Presets Carousel -->
+            <!-- Quick Presets -->
             <div id="presets-gallery-container" class="hidden pt-2 border-t border-white/10 space-y-2">
-              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Sélection rapide parmi les couvertures officielles :</span>
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Sélection rapide :</span>
               <div class="grid grid-cols-4 gap-2">
                 <div onclick="selectPresetImage('assets/products/pack-b1.png')" class="preset-choice-item cursor-pointer p-1.5 rounded-xl bg-black/60 hover:bg-amber-500/20 border border-white/10 hover:border-amber-500/50 flex flex-col items-center gap-1 transition">
                   <img src="assets/products/pack-b1.png" alt="Pack B1" class="w-10 h-10 object-contain">
@@ -975,6 +972,9 @@
 
     // Initialize Application
     function initApp() {
+      // Clear session auth on fresh visit so login is always strictly prompted
+      sessionStorage.removeItem("pruefung_is_authenticated");
+
       const savedAuth = localStorage.getItem("pruefung_auth_creds");
       if (savedAuth) {
         try { state.auth = JSON.parse(savedAuth); } catch(e) {}
@@ -996,12 +996,8 @@
         saveOrders();
       }
 
-      const isAuth = sessionStorage.getItem("pruefung_is_authenticated");
-      if (isAuth === "true") {
-        showDashboard();
-      } else {
-        showLogin();
-      }
+      // Display login view systematically
+      showLogin();
 
       if (window.lucide) window.lucide.createIcons();
     }
@@ -1022,6 +1018,7 @@
     function showLogin() {
       document.getElementById("login-view").classList.remove("hidden");
       document.getElementById("dashboard-view").classList.add("hidden");
+      document.getElementById("login-password").value = "";
     }
 
     function showDashboard() {
@@ -1069,6 +1066,11 @@
       sessionStorage.removeItem("pruefung_is_authenticated");
       showLogin();
       showToast("Session clôturée.");
+    }
+
+    function goToStoreAndLock() {
+      sessionStorage.removeItem("pruefung_is_authenticated");
+      window.location.href = "index.html";
     }
 
     function handleSaveCredentials(e) {
