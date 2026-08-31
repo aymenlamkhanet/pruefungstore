@@ -1,0 +1,21 @@
+{
+  "name": "pruefungstore-pro",
+  "version": "1.0.0",
+  "description": "Plateforme E-commerce & Dashboard Admin pour manuels d'examen d'allemand B1/B2",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "german",
+    "exam",
+    "store",
+    "telc",
+    "goethe",
+    "dashboard",
+    "admin"
+  ],
+  "author": "ABDEUTSCH CENTER",
+  "license": "ISC"
+}

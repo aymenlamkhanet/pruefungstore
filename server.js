@@ -2,8 +2,8 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = 3000;
-const PUBLIC_DIR = path.join('C:', 'Users', 'HP', '.gemini', 'antigravity', 'scratch', 'german-exam-store');
+const PORT = process.env.PORT || 3000;
+const PUBLIC_DIR = __dirname;
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -14,13 +14,14 @@ const MIME_TYPES = {
   '.jpeg': 'image/jpeg',
   '.png': 'image/png',
   '.svg': 'image/svg+xml',
-  '.ico': 'image/x-icon'
+  '.ico': 'image/x-icon',
+  '.webp': 'image/webp'
 };
 
 const server = http.createServer((req, res) => {
   let reqPath = req.url.split('?')[0];
   if (reqPath === '/' || reqPath === '') reqPath = '/index.html';
-  const filePath = path.join(PUBLIC_DIR, reqPath);
+  const filePath = path.join(PUBLIC_DIR, decodeURIComponent(reqPath));
 
   fs.stat(filePath, (err, stats) => {
     if (err || !stats.isFile()) {
@@ -42,5 +43,11 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running at http://localhost:${PORT}/`);
+  console.log('\n=============================================================');
+  console.log('  🇩🇪  PrüfungStore Pro • ABDEUTSCH CENTER (Serveur Actif)  ');
+  console.log('=============================================================');
+  console.log('  🛍️  Boutique Publique : http://localhost:' + PORT + '/');
+  console.log('  🔐  Espace Admin     : http://localhost:' + PORT + '/admin.html');
+  console.log('  📊  Dashboard BI     : http://localhost:' + PORT + '/student-assessment.html');
+  console.log('=============================================================\n');
 });
