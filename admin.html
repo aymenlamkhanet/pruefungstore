@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Administration • PrüfungStore Pro (Theme Germany)</title>
-  <meta name="description" content="Dashboard d'administration pour PrüfungStore avec arrière-plan thématique Allemagne et design moderne.">
+  <title>Administration Pro • PrüfungStore & ABDEUTSCH</title>
+  <meta name="description" content="Dashboard d'administration pour la gestion des manuels et des commandes avec arrière-plan Allemagne.">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS with DarkMode support -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -21,20 +21,6 @@
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
             outfit: ['"Outfit"', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              50: '#eff6ff',
-              100: '#dbeafe',
-              500: '#3b82f6',
-              600: '#2563eb',
-              700: '#1d4ed8',
-            },
-            germany: {
-              gold: '#f59e0b',
-              red: '#ef4444',
-              black: '#0a0a0f'
-            }
           }
         }
       }
@@ -50,29 +36,24 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    body { 
-      font-family: 'Plus Jakarta Sans', sans-serif; 
-      transition: background-color 0.25s ease, color 0.25s ease;
-    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
     .font-outfit { font-family: 'Outfit', sans-serif; }
     
-    /* Germany Flag Accent Bar */
     .germany-ribbon {
       height: 3px;
       background: linear-gradient(90deg, #18181b 0%, #18181b 33.3%, #dc2626 33.3%, #dc2626 66.6%, #f59e0b 66.6%, #f59e0b 100%);
     }
 
-    /* Glassmorphism Panels with Germany Backdrop */
     .glass-dark {
-      background: rgba(14, 20, 34, 0.88);
+      background: rgba(14, 20, 34, 0.85);
       backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
     
-    .glass-light {
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(226, 232, 240, 0.8);
+    .glass-card {
+      background: rgba(18, 24, 38, 0.75);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -81,7 +62,7 @@
     ::-webkit-scrollbar-thumb:hover { background: rgba(245, 158, 11, 0.5); }
   </style>
 </head>
-<body class="h-full antialiased selection:bg-amber-500 selection:text-black bg-slate-900 text-slate-100">
+<body class="h-full antialiased selection:bg-amber-500 selection:text-black bg-[#080c14] text-slate-100">
 
   <div id="root" class="h-full"></div>
 
@@ -135,10 +116,6 @@
         return local ? JSON.parse(local) : DEFAULT_AUTH;
       });
 
-      const [theme, setTheme] = useState(() => {
-        return localStorage.getItem("adminflow_theme") || "dark";
-      });
-
       const [currentTab, setCurrentTab] = useState("overview");
       const [products, setProducts] = useState(() => {
         const local = localStorage.getItem("adminflow_products");
@@ -155,20 +132,6 @@
       const [selectedOrderDetails, setSelectedOrderDetails] = useState(null);
       const [toastMessage, setToastMessage] = useState("");
       const [globalSearch, setGlobalSearch] = useState("");
-
-      useEffect(() => {
-        const root = document.documentElement;
-        if (theme === "dark") {
-          root.classList.add("dark");
-        } else {
-          root.classList.remove("dark");
-        }
-        localStorage.setItem("adminflow_theme", theme);
-      }, [theme]);
-
-      const toggleTheme = () => {
-        setTheme(t => (t === "dark" ? "light" : "dark"));
-      };
 
       useEffect(() => {
         localStorage.setItem("adminflow_products", JSON.stringify(products));
@@ -202,7 +165,7 @@
       const handleLogout = () => {
         sessionStorage.removeItem("adminflow_auth");
         setIsAuthenticated(false);
-        showToast("Session clôturée avec succès.");
+        showToast("Session clôturée.");
       };
 
       const handleUpdateCredentials = (newUsername, newPassword) => {
@@ -244,39 +207,36 @@
       };
 
       // =========================================================================
-      // LOGIN PAGE AVEC ARRIÈRE-PLAN ALLEMAGNE (BERLIN BRANDENBURG GATE)
+      // VÉRIFICATION LOGIN
       // =========================================================================
       if (!isAuthenticated) {
         return (
           <LoginPage 
             authCredentials={authCredentials} 
-            theme={theme}
-            onToggleTheme={toggleTheme}
             onLoginSuccess={handleLoginSuccess}
           />
         );
       }
 
       // =========================================================================
-      // DASHBOARD ADMINISTRATEUR (THEME GERMANY & GLASSMORPHISM)
+      // DASHBOARD ACTIF
       // =========================================================================
       return (
-        <div className="relative flex h-screen overflow-hidden bg-slate-950 text-slate-100">
+        <div className="relative flex h-screen overflow-hidden bg-[#080c14] text-slate-100">
           
-          {/* Germany City Wallpaper Backdrop */}
+          {/* Germany Background Backdrop */}
           <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-20 pointer-events-none filter blur-[2px] transform scale-105"
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-20 pointer-events-none filter blur-[1px] transform scale-105"
             style={{ backgroundImage: "url('assets/germany_bg.jpg')" }}
           ></div>
 
-          {/* ================= 1. SIDEBAR ================= */}
+          {/* Sidebar */}
           <aside className="w-64 glass-dark border-r border-white/10 flex flex-col justify-between hidden md:flex shrink-0 shadow-2xl z-20">
             <div className="p-6 space-y-7">
               
-              {/* Brand Logo with Germany Colors Badge */}
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-400 text-black flex items-center justify-center font-outfit font-black text-lg shadow-lg shadow-amber-500/20">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500 text-black flex items-center justify-center font-outfit font-black text-lg shadow-lg">
                     🇩🇪
                   </div>
                   <div>
@@ -289,7 +249,6 @@
                 <div className="germany-ribbon rounded-full"></div>
               </div>
 
-              {/* Navigation Items */}
               <nav className="space-y-1.5">
                 <NavItem icon="layout-dashboard" label="Vue d'ensemble" active={currentTab === "overview"} onClick={() => setCurrentTab("overview")} />
                 <NavItem icon="book-open" label="Manuels & Stocks" count={products.length} active={currentTab === "products"} onClick={() => setCurrentTab("products")} />
@@ -300,7 +259,6 @@
 
             </div>
 
-            {/* Bottom Profile & Logout */}
             <div className="p-5 border-t border-white/10 space-y-3">
               <a href="index.html" target="_blank" className="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-semibold text-xs flex items-center justify-center gap-2 transition border border-white/10">
                 <i data-lucide="external-link" className="w-3.5 h-3.5"></i>
@@ -314,7 +272,7 @@
                   </div>
                   <div className="min-w-0">
                     <h4 className="text-xs font-bold text-white truncate">{authCredentials.username}</h4>
-                    <p className="text-[10px] text-emerald-400 font-medium truncate">● En ligne (Admin)</p>
+                    <p className="text-[10px] text-emerald-400 font-medium truncate">● En ligne</p>
                   </div>
                 </div>
                 <button onClick={handleLogout} className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition" title="Se déconnecter">
@@ -324,13 +282,11 @@
             </div>
           </aside>
 
-          {/* ================= 2. MAIN WORKSPACE ================= */}
+          {/* Main Area */}
           <div className="flex-1 flex flex-col min-w-0 overflow-y-auto z-10 relative">
             
-            {/* Topbar Header */}
+            {/* Header */}
             <header className="h-16 glass-dark border-b border-white/10 px-6 sm:px-8 flex items-center justify-between sticky top-0 z-20">
-              
-              {/* Search Bar */}
               <div className="relative w-64 sm:w-80">
                 <i data-lucide="search" className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
                 <input 
@@ -342,28 +298,7 @@
                 />
               </div>
 
-              {/* Action Tools & Theme Switcher */}
               <div className="flex items-center gap-3">
-                
-                {/* ☀️ / 🌙 THEME TOGGLE BUTTON */}
-                <button 
-                  onClick={toggleTheme}
-                  className="p-2 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-amber-400 font-bold text-xs flex items-center gap-1.5 transition"
-                  title={theme === 'dark' ? "Passer en Mode Clair" : "Passer en Mode Sombre"}
-                >
-                  {theme === "dark" ? (
-                    <>
-                      <i data-lucide="sun" className="w-4 h-4 text-amber-400"></i>
-                      <span className="hidden sm:inline text-xs text-slate-300">Clair</span>
-                    </>
-                  ) : (
-                    <>
-                      <i data-lucide="moon" className="w-4 h-4 text-slate-300"></i>
-                      <span className="hidden sm:inline text-xs text-slate-300">Sombre</span>
-                    </>
-                  )}
-                </button>
-
                 <button onClick={() => { setEditingProduct(null); setIsProductModalOpen(true); }} className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black text-xs shadow-lg shadow-amber-500/20 flex items-center gap-1.5 transition">
                   <i data-lucide="plus" className="w-4 h-4"></i>
                   <span className="hidden sm:inline">Ajouter Manuel</span>
@@ -371,23 +306,19 @@
 
                 <div className="h-6 w-px bg-white/15 mx-1"></div>
 
-                <div className="relative">
-                  <button onClick={handleLogout} className="p-2 rounded-xl text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition" title="Déconnexion">
-                    <i data-lucide="log-out" className="w-4 h-4"></i>
-                  </button>
-                </div>
+                <button onClick={handleLogout} className="p-2 rounded-xl text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition" title="Déconnexion">
+                  <i data-lucide="log-out" className="w-4 h-4"></i>
+                </button>
               </div>
-
             </header>
 
-            {/* Dynamic Content Panels */}
+            {/* Panels */}
             <main className="p-6 sm:p-8 max-w-7xl w-full mx-auto space-y-8 flex-1">
               
               {currentTab === "overview" && (
                 <OverviewTab 
                   products={products} 
                   orders={orders} 
-                  theme={theme}
                   onViewOrders={() => setCurrentTab("orders")}
                   onSelectOrder={(ord) => setSelectedOrderDetails(ord)}
                 />
@@ -422,10 +353,8 @@
                 <SettingsTab 
                   products={products} 
                   orders={orders} 
-                  theme={theme}
                   authCredentials={authCredentials}
                   onUpdateCredentials={handleUpdateCredentials}
-                  onToggleTheme={toggleTheme}
                   onReset={() => {
                     setProducts(INITIAL_PRODUCTS);
                     setOrders(INITIAL_ORDERS);
@@ -439,7 +368,7 @@
 
           </div>
 
-          {/* ================= 3. MODALS ================= */}
+          {/* Modals */}
           {isProductModalOpen && (
             <ProductModal 
               product={editingProduct} 
@@ -468,7 +397,6 @@
             />
           )}
 
-          {/* Toast Notification */}
           {toastMessage && (
             <div className="fixed bottom-6 right-6 z-50 bg-amber-500 text-black px-5 py-3 rounded-2xl shadow-2xl font-outfit font-black text-xs flex items-center gap-2.5 animate-bounce">
               <i data-lucide="check-circle" className="w-4 h-4"></i>
@@ -481,9 +409,9 @@
     }
 
     // =========================================================================
-    // LOGIN PAGE (AVEC FOND ALLEMAGNE BERLIN BRANDENBURG GATE)
+    // LOGIN PAGE
     // =========================================================================
-    function LoginPage({ authCredentials, theme, onToggleTheme, onLoginSuccess }) {
+    function LoginPage({ authCredentials, onLoginSuccess }) {
       const [usernameInput, setUsernameInput] = useState("");
       const [passwordInput, setPasswordInput] = useState("");
       const [showPassword, setShowPassword] = useState(false);
@@ -505,36 +433,30 @@
             setErrorMsg("Nom d'utilisateur ou mot de passe incorrect.");
             setIsLoading(false);
           }
-        }, 300);
+        }, 150);
       };
 
       return (
         <div className="min-h-screen w-full flex flex-col justify-center items-center p-4 relative overflow-hidden bg-slate-950 text-white">
           
-          {/* Photorealistic Germany Background Generated by Gemini */}
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 transform scale-105 filter brightness-75 contrast-105"
             style={{ backgroundImage: "url('assets/germany_bg.jpg')" }}
           ></div>
 
-          {/* Dark Glass Overlay with German Glow */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-slate-950/60 backdrop-blur-[6px] z-0"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-950/60 backdrop-blur-[6px] z-0"></div>
 
-          {/* Top Controls */}
           <div className="absolute top-6 right-6 z-10 flex items-center gap-3">
-            <span className="px-3 py-1.5 rounded-full bg-black/60 border border-white/15 text-amber-400 text-xs font-bold flex items-center gap-2 backdrop-blur-md">
+            <span className="px-3.5 py-1.5 rounded-full bg-black/60 border border-white/15 text-amber-400 text-xs font-bold flex items-center gap-2 backdrop-blur-md">
               <span>🇩🇪</span>
               <span className="hidden sm:inline">PrüfungStore Germany Edition</span>
             </span>
           </div>
 
-          {/* Center Login Glass Card */}
           <div className="relative z-10 w-full max-w-md bg-[#0e1422]/90 backdrop-blur-2xl border border-amber-500/30 rounded-3xl p-8 sm:p-10 shadow-2xl space-y-6">
             
-            {/* German Flag Decorative Ribbon */}
             <div className="germany-ribbon rounded-full -mt-2 mb-2"></div>
 
-            {/* Header Brand */}
             <div className="text-center space-y-2">
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500/20 to-amber-400/10 border border-amber-500/40 text-amber-400 flex items-center justify-center font-outfit font-black text-2xl mx-auto shadow-xl mb-3">
                 🔐
@@ -547,7 +469,6 @@
               </p>
             </div>
 
-            {/* Error Alert */}
             {errorMsg && (
               <div className="p-3.5 rounded-2xl bg-red-500/20 border border-red-500/40 text-red-300 text-xs font-bold flex items-center gap-2">
                 <i data-lucide="alert-circle" className="w-4 h-4 shrink-0"></i>
@@ -555,10 +476,8 @@
               </div>
             )}
 
-            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">
               
-              {/* Username Input */}
               <div className="space-y-1.5">
                 <label className="block font-bold text-slate-300">
                   Nom d'utilisateur :
@@ -570,13 +489,12 @@
                     required 
                     value={usernameInput}
                     onChange={(e) => setUsernameInput(e.target.value)}
-                    placeholder="Nom d'utilisateur (ex: admin)" 
+                    placeholder="ex: admin" 
                     className="w-full pl-10 pr-4 py-3.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold text-xs focus:outline-none focus:border-amber-500 transition"
                   />
                 </div>
               </div>
 
-              {/* Password Input */}
               <div className="space-y-1.5">
                 <label className="block font-bold text-slate-300">
                   Mot de passe :
@@ -601,12 +519,10 @@
                 </div>
               </div>
 
-              {/* Helper */}
               <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-300 font-medium">
                 💡 <strong>Accès direct :</strong> User: <code className="font-mono font-bold">admin</code> | Pass: <code className="font-mono font-bold">admin2026</code>
               </div>
 
-              {/* Submit Button */}
               <button 
                 type="submit" 
                 disabled={isLoading}
@@ -660,10 +576,7 @@
       );
     }
 
-    // =========================================================================
-    // TAB 1 : VUE D'ENSEMBLE
-    // =========================================================================
-    function OverviewTab({ products, orders, theme, onViewOrders, onSelectOrder }) {
+    function OverviewTab({ products, orders, onViewOrders, onSelectOrder }) {
       const totalRevenue = orders
         .filter(o => o.status !== "cancelled")
         .reduce((acc, o) => acc + o.total, 0);
@@ -688,7 +601,6 @@
             </span>
           </div>
 
-          {/* 4 Stat Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             <KpiCard title="Chiffre d'Affaires" value={totalRevenue.toLocaleString() + " DH"} trend="+14.2%" trendPositive={true} icon="coins" color="amber" subtitle="Toutes commandes valides" />
             <KpiCard title="Total Commandes" value={totalOrdersCount} trend="+8.5%" trendPositive={true} icon="shopping-bag" color="blue" subtitle="Ce mois-ci" />
@@ -696,15 +608,12 @@
             <KpiCard title="Commandes en Attente" value={pendingOrdersCount} icon="clock" color="red" subtitle="À expédier en priorité" alert={pendingOrdersCount > 0} />
           </div>
 
-          {/* Sales Chart & Category Distribution */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            
-            {/* Sales Chart (Responsive SVG) */}
             <div className="lg:col-span-8 glass-dark rounded-3xl p-6 shadow-xl space-y-4">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-outfit font-bold text-base text-white">Évolution des Ventes (DH)</h3>
-                  <p className="text-xs text-slate-400">Revenus hebdomadaires générés au Maroc</p>
+                  <p className="text-xs text-slate-400">Revenus hebdomadaires au Maroc</p>
                 </div>
                 <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/40 text-xs font-bold text-slate-300 border border-white/10">
                   <button className="px-2.5 py-1 rounded-lg bg-amber-500 text-black shadow-xs">7 Jours</button>
@@ -746,7 +655,6 @@
               </div>
             </div>
 
-            {/* Top Products Card */}
             <div className="lg:col-span-4 glass-dark rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between">
               <div>
                 <h3 className="font-outfit font-bold text-base text-white">Manuels les Plus Vendus</h3>
@@ -770,10 +678,8 @@
                 <span>{products.reduce((s, p) => s + p.sales, 0)} exemplaires</span>
               </div>
             </div>
-
           </div>
 
-          {/* Recent Orders Table */}
           <div className="glass-dark rounded-3xl p-6 shadow-xl space-y-4">
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div>
@@ -856,9 +762,6 @@
       );
     }
 
-    // =========================================================================
-    // TAB 2 : GESTION DES PRODUITS
-    // =========================================================================
     function ProductsTab({ products, globalSearch, onAddProduct, onEditProduct, onDeleteProduct }) {
       const [categoryFilter, setCategoryFilter] = useState("all");
       const [statusFilter, setStatusFilter] = useState("all");
@@ -1024,9 +927,6 @@
       );
     }
 
-    // =========================================================================
-    // TAB 3 : GESTION DES COMMANDES
-    // =========================================================================
     function OrdersTab({ orders, globalSearch, onUpdateStatus, onDeleteOrder, onViewDetails, onNewOrder }) {
       const [statusFilter, setStatusFilter] = useState("all");
       const [searchQuery, setSearchQuery] = useState("");
@@ -1175,9 +1075,6 @@
       );
     }
 
-    // =========================================================================
-    // TAB 4 : CLIENTS (CRM)
-    // =========================================================================
     function ClientsTab({ orders }) {
       const clients = useMemo(() => {
         const map = {};
@@ -1254,10 +1151,7 @@
       );
     }
 
-    // =========================================================================
-    // TAB 5 : PARAMÈTRES
-    // =========================================================================
-    function SettingsTab({ products, orders, theme, authCredentials, onUpdateCredentials, onToggleTheme, onReset, showToast }) {
+    function SettingsTab({ products, orders, authCredentials, onUpdateCredentials, onReset, showToast }) {
       const [whatsapp, setWhatsapp] = useState("212632017446");
       const [storeName, setStoreName] = useState("PrüfungStore Pro");
       const [newUsername, setNewUsername] = useState(authCredentials.username);
@@ -1300,10 +1194,9 @@
         <div className="space-y-6 max-w-3xl">
           <div>
             <h1 className="font-outfit font-black text-2xl sm:text-3xl text-white tracking-tight">Paramètres & Sécurité</h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">Gérez vos identifiants de connexion, l'apparence et les sauvegardes.</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">Gérez vos identifiants de connexion, coordonnées et sauvegardes.</p>
           </div>
 
-          {/* Security & Credentials Card */}
           <form onSubmit={handleSaveCreds} className="glass-dark rounded-3xl p-6 shadow-xl space-y-4">
             <h3 className="font-outfit font-bold text-base text-white flex items-center gap-2">
               <i data-lucide="shield-check" className="w-5 h-5 text-amber-400"></i>
@@ -1315,7 +1208,7 @@
                 <input type="text" required value={newUsername} onChange={(e) => setNewUsername(e.target.value)} className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold focus:outline-none focus:border-amber-500" />
               </div>
               <div>
-                <label className="block font-bold text-slate-300 mb-1">Nouveau Mot de Passe (Laisser vide si inchangé) :</label>
+                <label className="block font-bold text-slate-300 mb-1">Nouveau Mot de Passe (Optionnel) :</label>
                 <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Nouveau mot de passe..." className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold focus:outline-none focus:border-amber-500" />
               </div>
             </div>
@@ -1324,7 +1217,6 @@
             </button>
           </form>
 
-          {/* Store Info Card */}
           <div className="glass-dark rounded-3xl p-6 shadow-xl space-y-4">
             <h3 className="font-outfit font-bold text-base text-white">Coordonnées de Réception</h3>
             <div className="space-y-3 text-xs">
@@ -1342,7 +1234,6 @@
             </button>
           </div>
 
-          {/* Export & Reset */}
           <div className="glass-dark rounded-3xl p-6 shadow-xl space-y-4">
             <h3 className="font-outfit font-bold text-base text-white">Exportation & Sauvegarde</h3>
             <p className="text-xs text-slate-400">Téléchargez vos données pour Excel ou effectuez une sauvegarde intégrale.</p>
@@ -1367,9 +1258,6 @@
       );
     }
 
-    // =========================================================================
-    // MODALS
-    // =========================================================================
     function ProductModal({ product, onClose, onSave }) {
       const [name, setName] = useState(product ? product.name : "");
       const [category, setCategory] = useState(product ? product.category : "Manuels B1");
