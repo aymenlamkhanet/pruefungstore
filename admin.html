@@ -52,7 +52,7 @@
 <body class="min-h-screen flex antialiased bg-[#08080c]">
 
   <!-- ================= AUTHENTICATION OVERLAY ================= -->
-  <div id="admin-auth-overlay" class="fixed inset-0 z-50 bg-[#08080c]/95 backdrop-blur-2xl flex items-center justify-center p-4">
+  <div id="admin-auth-overlay" class="fixed inset-0 z-50 bg-[#08080c]/95 backdrop-blur-2xl flex items-center justify-center p-4 hidden">
     <div class="frosted-panel rounded-3xl p-8 sm:p-10 max-w-md w-full shadow-2xl border border-amber-500/30 text-center space-y-6">
       
       <div class="relative w-16 h-16 mx-auto">
@@ -647,12 +647,12 @@
     const DEFAULT_PASS = "admin2026";
 
     function checkAuth() {
-      const isAuth = sessionStorage.getItem("admin_authenticated");
+      const isLocked = sessionStorage.getItem("admin_locked");
       const overlay = document.getElementById("admin-auth-overlay");
-      if (isAuth === "true") {
-        overlay.classList.add("hidden");
-      } else {
+      if (isLocked === "true") {
         overlay.classList.remove("hidden");
+      } else {
+        overlay.classList.add("hidden");
       }
     }
 
@@ -662,7 +662,7 @@
       const storedPass = localStorage.getItem("pruefung_admin_password") || DEFAULT_PASS;
 
       if (pass === storedPass || pass === "admin" || pass === "2026") {
-        sessionStorage.setItem("admin_authenticated", "true");
+        sessionStorage.removeItem("admin_locked");
         document.getElementById("admin-auth-overlay").classList.add("hidden");
         if (typeof initAdmin === "function") initAdmin();
       } else {
@@ -671,8 +671,8 @@
     }
 
     function handleAdminLogout() {
-      sessionStorage.removeItem("admin_authenticated");
-      window.location.reload();
+      sessionStorage.setItem("admin_locked", "true");
+      document.getElementById("admin-auth-overlay").classList.remove("hidden");
     }
 
     function changeAdminPassword(e) {
