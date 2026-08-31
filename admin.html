@@ -1,698 +1,1346 @@
 <!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
+<html lang="fr" class="h-full bg-slate-50">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Administration Pro • PrüfungStore & ABDEUTSCH CENTER</title>
-  <meta name="robots" content="noindex, nofollow">
+  <title>AdminFlow Pro • Dashboard d'Administration</title>
+  <meta name="description" content="Dashboard d'administration moderne et professionnel pour la gestion de produits et de commandes.">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Universal Tailwind CSS & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <style>
-    body {
-      background-color: #08080c;
-      color: #f1f5f9;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-    }
-    .font-outfit { font-family: 'Outfit', sans-serif; }
-    
-    .glass-sidebar {
-      background: #0c0c12;
-      border-right: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .glass-header {
-      background: rgba(12, 12, 18, 0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .frosted-panel {
-      background: rgba(18, 18, 26, 0.75);
-      backdrop-filter: blur(25px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      transition: all 0.25s ease;
-    }
-    .frosted-panel:hover {
-      border-color: rgba(255, 255, 255, 0.15);
-    }
-    
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #08080c; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(245, 158, 11, 0.5); }
-  </style>
-</head>
-<body class="min-h-screen flex antialiased bg-[#08080c]">
-
-  <!-- ================= AUTHENTICATION OVERLAY ================= -->
-  <div id="admin-auth-overlay" class="fixed inset-0 z-50 bg-[#08080c]/95 backdrop-blur-2xl flex items-center justify-center p-4 hidden">
-    <div class="frosted-panel rounded-3xl p-8 sm:p-10 max-w-md w-full shadow-2xl border border-amber-500/30 text-center space-y-6">
-      
-      <div class="relative w-16 h-16 mx-auto">
-        <div class="w-16 h-16 rounded-3xl bg-gradient-to-tr from-amber-500/20 to-amber-500/10 border border-amber-500/40 text-amber-400 flex items-center justify-center font-outfit font-black text-2xl shadow-xl">
-          🔐
-        </div>
-      </div>
-
-      <div class="space-y-1">
-        <h2 class="font-outfit font-black text-2xl text-white">Espace Administrateur</h2>
-        <p class="text-xs text-slate-400">Authentification requise pour gérer les produits et commandes</p>
-      </div>
-
-      <form onsubmit="handleAdminLogin(event)" class="space-y-4 text-left">
-        <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1.5">Mot de passe de sécurité :</label>
-          <input 
-            id="admin-pass-input" 
-            type="password" 
-            required 
-            placeholder="Entrez votre mot de passe..." 
-            class="w-full p-3.5 rounded-2xl bg-black/60 border border-white/15 text-white font-bold text-sm focus:border-amber-500 focus:outline-none placeholder-slate-600 transition"
-          >
-          <span id="auth-error-msg" class="text-xs text-red-400 font-bold hidden pt-2 block">
-            ⚠️ Mot de passe incorrect. (Par défaut: admin2026)
-          </span>
-        </div>
-
-        <button 
-          type="submit" 
-          class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-outfit font-black text-sm shadow-xl transition transform active:scale-95"
-        >
-          Déverrouiller le Dashboard ➔
-        </button>
-      </form>
-
-      <div class="pt-2 border-t border-white/5">
-        <a href="index.html" class="text-xs text-slate-500 hover:text-slate-300 transition">← Retourner à la Boutique</a>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ================= SIDEBAR NAVIGATION ================= -->
-  <aside id="admin-sidebar" class="w-72 glass-sidebar flex flex-col justify-between hidden md:flex shrink-0">
-    <div class="p-6 space-y-8">
-      
-      <!-- Brand Logo -->
-      <a href="index.html" class="flex items-center gap-3.5 group">
-        <img src="assets/logo.jpg" alt="Logo" class="w-11 h-11 rounded-2xl object-cover border border-amber-500/40 shadow-lg">
-        <div>
-          <span class="font-outfit font-black text-base text-white tracking-tight block">
-            Prüfung<span class="text-amber-400">Store</span>
-          </span>
-          <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest block">ADMIN PORTAL 2026</span>
-        </div>
-      </a>
-
-      <!-- Navigation Tabs -->
-      <nav class="space-y-1.5">
-        
-        <button onclick="switchTab('overview')" data-tab="overview" class="nav-tab-btn active w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-amber-500/15 text-amber-300 font-bold border border-amber-500/30 text-xs transition">
-          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-          <span>Vue d'ensemble (KPIs)</span>
-        </button>
-
-        <button onclick="switchTab('products')" data-tab="products" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 font-semibold text-xs transition">
-          <i data-lucide="book-open" class="w-4 h-4"></i>
-          <span>Catalogue & Stocks (7)</span>
-        </button>
-
-        <button onclick="switchTab('orders')" data-tab="orders" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 font-semibold text-xs transition">
-          <i data-lucide="shopping-bag" class="w-4 h-4"></i>
-          <span>Commandes & Livraisons</span>
-        </button>
-
-        <button onclick="switchTab('clients')" data-tab="clients" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 font-semibold text-xs transition">
-          <i data-lucide="users" class="w-4 h-4"></i>
-          <span>Clients & WhatsApp CRM</span>
-        </button>
-
-        <button onclick="switchTab('evaluations')" data-tab="evaluations" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 font-semibold text-xs transition">
-          <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
-          <span>Évaluations Étudiants</span>
-        </button>
-
-        <button onclick="switchTab('settings')" data-tab="settings" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 font-semibold text-xs transition">
-          <i data-lucide="settings" class="w-4 h-4"></i>
-          <span>Paramètres & Sauvegarde</span>
-        </button>
-
-      </nav>
-
-    </div>
-
-    <!-- Bottom Profile & Logout -->
-    <div class="p-6 border-t border-white/10 space-y-3">
-      <div class="flex items-center justify-between p-3 rounded-2xl bg-white/5 border border-white/5">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs">AD</div>
-          <div>
-            <span class="text-xs font-bold text-white block">Admin Principal</span>
-            <span class="text-[10px] text-emerald-400 font-medium">● Connecté</span>
-          </div>
-        </div>
-        <button onclick="handleAdminLogout()" class="p-2 rounded-xl bg-white/10 hover:bg-red-500/20 hover:text-red-400 text-slate-400 transition" title="Déconnexion">
-          <i data-lucide="log-out" class="w-4 h-4"></i>
-        </button>
-      </div>
-
-      <a href="index.html" target="_blank" class="w-full py-2.5 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-bold text-xs flex items-center justify-center gap-2 transition border border-white/10">
-        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-        <span>Ouvrir la Boutique Client</span>
-      </a>
-    </div>
-  </aside>
-
-  <!-- ================= MAIN CONTENT AREA ================= -->
-  <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
-    
-    <!-- Top Header Bar -->
-    <header class="h-20 glass-header px-6 sm:px-8 flex items-center justify-between sticky top-0 z-30">
-      
-      <!-- Search Input -->
-      <div class="relative w-72 sm:w-96">
-        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-        <input 
-          id="admin-global-search" 
-          type="text" 
-          placeholder="Rechercher un manuel, client, ville, commande..." 
-          class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-black/50 border border-white/10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition"
-        >
-      </div>
-
-      <!-- Quick Action Buttons -->
-      <div class="flex items-center gap-3">
-        <button onclick="openProductModal()" class="px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black text-xs flex items-center gap-2 shadow-lg transition">
-          <i data-lucide="plus" class="w-4 h-4"></i>
-          <span class="hidden sm:inline">Nouveau Manuel</span>
-        </button>
-
-        <button onclick="openNewOrderModal()" class="px-4 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-outfit font-black text-xs flex items-center gap-2 shadow-lg transition">
-          <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-          <span class="hidden sm:inline">Nouvelle Commande</span>
-        </button>
-      </div>
-    </header>
-
-    <!-- Main Container Panels -->
-    <main class="p-6 sm:p-8 space-y-8 flex-1 max-w-7xl w-full mx-auto">
-      
-      <!-- ================= 1. TAB OVERVIEW ================= -->
-      <div id="panel-overview" class="dashboard-tab-panel space-y-8">
-        
-        <!-- Welcome Header -->
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h1 class="font-outfit font-black text-2xl sm:text-3xl text-white">Tableau de Bord & Activité Commerciale</h1>
-            <p class="text-xs sm:text-sm text-slate-400">Suivi en temps réel des ventes, commandes et niveaux de stock.</p>
-          </div>
-          <span class="px-3.5 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-            WhatsApp : +212 632-017446
-          </span>
-        </div>
-
-        <!-- 4 KPI Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          
-          <div class="frosted-panel rounded-3xl p-6 relative overflow-hidden">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Chiffre d'Affaires</span>
-              <div class="p-2.5 rounded-2xl bg-amber-500/15 text-amber-400">
-                <i data-lucide="coins" class="w-5 h-5"></i>
-              </div>
-            </div>
-            <span id="kpi-total-revenue" class="font-outfit font-black text-3xl text-white block">0 DH</span>
-            <span class="text-[11px] text-emerald-400 font-bold pt-1 block">✓ Commandes validées</span>
-          </div>
-
-          <div class="frosted-panel rounded-3xl p-6 relative overflow-hidden">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Commandes</span>
-              <div class="p-2.5 rounded-2xl bg-blue-500/15 text-blue-400">
-                <i data-lucide="shopping-bag" class="w-5 h-5"></i>
-              </div>
-            </div>
-            <span id="kpi-total-orders" class="font-outfit font-black text-3xl text-white block">0</span>
-            <span class="text-[11px] text-slate-400 font-medium pt-1 block">Toutes périodes</span>
-          </div>
-
-          <div class="frosted-panel rounded-3xl p-6 relative overflow-hidden">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Nouvelles Commandes</span>
-              <div class="p-2.5 rounded-2xl bg-emerald-500/15 text-emerald-400">
-                <i data-lucide="bell" class="w-5 h-5"></i>
-              </div>
-            </div>
-            <span id="kpi-new-orders" class="font-outfit font-black text-3xl text-emerald-400 block">0</span>
-            <span class="text-[11px] text-amber-400 font-bold pt-1 block">À préparer / expédier</span>
-          </div>
-
-          <div class="frosted-panel rounded-3xl p-6 relative overflow-hidden">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Panier Moyen</span>
-              <div class="p-2.5 rounded-2xl bg-purple-500/15 text-purple-400">
-                <i data-lucide="trending-up" class="w-5 h-5"></i>
-              </div>
-            </div>
-            <span id="kpi-avg-order" class="font-outfit font-black text-3xl text-purple-400 block">0 DH</span>
-            <span class="text-[11px] text-slate-400 font-medium pt-1 block">Par candidat</span>
-          </div>
-
-        </div>
-
-        <!-- Charts Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div class="lg:col-span-8 frosted-panel rounded-3xl p-6 space-y-4">
-            <div class="flex items-center justify-between">
-              <div>
-                <h3 class="font-outfit font-bold text-base text-white">Évolution des Ventes (DH)</h3>
-                <p class="text-xs text-slate-400">Revenus hebdomadaires générés au Maroc</p>
-              </div>
-              <span class="px-2.5 py-1 rounded-full bg-white/10 text-slate-300 font-bold text-[10px]">Semaine en cours</span>
-            </div>
-            <div class="h-64 relative">
-              <canvas id="chartRevenue"></canvas>
-            </div>
-          </div>
-
-          <div class="lg:col-span-4 frosted-panel rounded-3xl p-6 space-y-4 flex flex-col justify-between">
-            <div>
-              <h3 class="font-outfit font-bold text-base text-white">Répartition par Niveau</h3>
-              <p class="text-xs text-slate-400">Proportion des ventes B1 vs B2</p>
-            </div>
-            <div class="h-48 relative flex items-center justify-center">
-              <canvas id="chartLevels"></canvas>
-            </div>
-          </div>
-        </div>
-
-        <!-- Recent Activity Feed -->
-        <div class="frosted-panel rounded-3xl p-6 space-y-4">
-          <div class="flex items-center justify-between border-b border-white/5 pb-3">
-            <div>
-              <h3 class="font-outfit font-bold text-base text-white">Dernières Commandes Reçues</h3>
-              <p class="text-xs text-slate-400">Commandes WhatsApp en temps réel</p>
-            </div>
-            <button onclick="switchTab('orders')" class="text-xs text-amber-400 hover:underline font-bold">Voir toutes les commandes →</button>
-          </div>
-          <div id="recent-orders-list" class="space-y-3"></div>
-        </div>
-
-      </div>
-
-      <!-- ================= 2. TAB PRODUCTS ================= -->
-      <div id="panel-products" class="dashboard-tab-panel hidden space-y-6">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h2 class="font-outfit font-black text-2xl text-white">Catalogue des Manuels & Packs</h2>
-            <p class="text-xs text-slate-400">Ajustez les prix, les remises et les stocks de vos livres.</p>
-          </div>
-          
-          <div class="flex items-center gap-2">
-            <!-- Filter Pills -->
-            <button onclick="filterProductsByLevel('all')" data-filter="all" class="prod-filter-btn px-3 py-1.5 rounded-xl bg-amber-500 text-black font-bold text-xs shadow-md transition">Tous</button>
-            <button onclick="filterProductsByLevel('pack')" data-filter="pack" class="prod-filter-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-medium text-xs transition">Packs</button>
-            <button onclick="filterProductsByLevel('B1')" data-filter="B1" class="prod-filter-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-medium text-xs transition">B1</button>
-            <button onclick="filterProductsByLevel('B2')" data-filter="B2" class="prod-filter-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-medium text-xs transition">B2</button>
-            
-            <button onclick="openProductModal()" class="ml-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black text-xs flex items-center gap-1.5 shadow-lg transition">
-              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-              <span>Ajouter</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="frosted-panel rounded-3xl overflow-hidden shadow-2xl">
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-black/60 text-slate-400 font-bold uppercase tracking-wider border-b border-white/10">
-                <tr>
-                  <th class="p-4">Manuel / Pack</th>
-                  <th class="p-4">Niveau</th>
-                  <th class="p-4">Prix</th>
-                  <th class="p-4">Stock Restant</th>
-                  <th class="p-4">Type</th>
-                  <th class="p-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="products-table-body" class="divide-y divide-white/5"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ================= 3. TAB ORDERS ================= -->
-      <div id="panel-orders" class="dashboard-tab-panel hidden space-y-6">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h2 class="font-outfit font-black text-2xl text-white">Gestion des Commandes & Expéditions</h2>
-            <p class="text-xs text-slate-400">Suivi des livraisons partout au Maroc avec encaissement COD.</p>
-          </div>
-
-          <div class="flex flex-wrap items-center gap-2">
-            <button onclick="filterOrdersByStatus('all')" data-status="all" class="order-filter-btn px-3 py-1.5 rounded-xl bg-amber-500 text-black font-bold text-xs shadow-md transition">Toutes</button>
-            <button onclick="filterOrdersByStatus('nouveau')" data-status="nouveau" class="order-filter-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-medium text-xs transition">🟡 Nouvelles</button>
-            <button onclick="filterOrdersByStatus('preparation')" data-status="preparation" class="order-filter-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-medium text-xs transition">🔵 Préparation</button>
-            <button onclick="filterOrdersByStatus('expedie')" data-status="expedie" class="order-filter-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-medium text-xs transition">🟣 Expédiées</button>
-            <button onclick="filterOrdersByStatus('livre')" data-status="livre" class="order-filter-btn px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-medium text-xs transition">🟢 Livrées</button>
-
-            <button onclick="exportOrdersCSV()" class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 border border-white/10 transition">
-              <i data-lucide="download" class="w-3.5 h-3.5"></i>
-              <span>Export CSV</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="frosted-panel rounded-3xl overflow-hidden shadow-2xl">
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-black/60 text-slate-400 font-bold uppercase tracking-wider border-b border-white/10">
-                <tr>
-                  <th class="p-4">ID & Date</th>
-                  <th class="p-4">Client & Ville</th>
-                  <th class="p-4">Articles Commandés</th>
-                  <th class="p-4">Total</th>
-                  <th class="p-4">Statut Commande</th>
-                  <th class="p-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="orders-table-body" class="divide-y divide-white/5"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ================= 4. TAB CLIENTS ================= -->
-      <div id="panel-clients" class="dashboard-tab-panel hidden space-y-6">
-        <div>
-          <h2 class="font-outfit font-black text-2xl text-white">Contacts & Clients WhatsApp CRM</h2>
-          <p class="text-xs text-slate-400">Historique des candidats et relance instantanée sur WhatsApp.</p>
-        </div>
-
-        <div class="frosted-panel rounded-3xl overflow-hidden shadow-2xl">
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-black/60 text-slate-400 font-bold uppercase tracking-wider border-b border-white/10">
-                <tr>
-                  <th class="p-4">Nom & Téléphone</th>
-                  <th class="p-4">Ville</th>
-                  <th class="p-4">Commandes</th>
-                  <th class="p-4">Total Dépensé</th>
-                  <th class="p-4 text-right">Relance WhatsApp</th>
-                </tr>
-              </thead>
-              <tbody id="clients-table-body" class="divide-y divide-white/5"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ================= 5. TAB EVALUATIONS ================= -->
-      <div id="panel-evaluations" class="dashboard-tab-panel hidden space-y-6">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h2 class="font-outfit font-black text-2xl text-white">Évaluations & Performances Candidats</h2>
-            <p class="text-xs text-slate-400">Suivi modulaire par compétence (Lesen, Hören, Schreiben, Sprechen).</p>
-          </div>
-          <a href="student-assessment.html" target="_blank" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black text-xs flex items-center gap-1.5 shadow-lg transition">
-            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-            <span>Ouvrir en Plein Écran 📊</span>
-          </a>
-        </div>
-
-        <div class="frosted-panel rounded-3xl overflow-hidden shadow-2xl">
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-black/60 text-slate-400 font-bold uppercase tracking-wider border-b border-white/10">
-                <tr>
-                  <th class="p-4">Candidat & Ville</th>
-                  <th class="p-4">Niveau / Examen</th>
-                  <th class="p-4 text-center">Lesen</th>
-                  <th class="p-4 text-center">Hören</th>
-                  <th class="p-4 text-center">Schreiben</th>
-                  <th class="p-4 text-center">Sprechen</th>
-                  <th class="p-4 text-center">Moyenne</th>
-                  <th class="p-4">Statut</th>
-                  <th class="p-4 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody id="evaluations-table-body" class="divide-y divide-white/5"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ================= 6. TAB SETTINGS ================= -->
-      <div id="panel-settings" class="dashboard-tab-panel hidden space-y-8 max-w-3xl">
-        <div>
-          <h2 class="font-outfit font-black text-2xl text-white">Paramètres & Sécurité</h2>
-          <p class="text-xs text-slate-400">Configuration générale de la boutique et mot de passe.</p>
-        </div>
-
-        <!-- Security: Change Password Form -->
-        <form onsubmit="changeAdminPassword(event)" class="frosted-panel rounded-3xl p-6 sm:p-8 space-y-4">
-          <h3 class="font-outfit font-bold text-base text-white flex items-center gap-2">
-            <span>🔐 Modifier le Mot de Passe Administrateur</span>
-          </h3>
-          <div class="space-y-3 text-xs">
-            <div>
-              <label class="block font-bold text-slate-300 mb-1">Nouveau Mot de Passe :</label>
-              <input id="new-admin-pass" type="password" required placeholder="Entrez le nouveau mot de passe" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
-            </div>
-            <button type="submit" class="px-5 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black text-xs shadow-lg transition">
-              Enregistrer le Nouveau Mot de Passe
-            </button>
-          </div>
-        </form>
-
-        <!-- WhatsApp Settings -->
-        <form onsubmit="saveSettingsForm(event)" class="frosted-panel rounded-3xl p-6 sm:p-8 space-y-6">
-          <h3 class="font-outfit font-bold text-base text-white">Coordonnées de Réception</h3>
-          <div class="space-y-4 text-xs">
-            <div>
-              <label class="block font-bold text-slate-300 mb-1.5">Numéro WhatsApp Récepteur :</label>
-              <input id="set-whatsapp" type="text" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
-              <span class="text-[11px] text-slate-500 pt-1 block">Format international (ex: 212632017446)</span>
-            </div>
-            <div>
-              <label class="block font-bold text-slate-300 mb-1.5">Nom de la Boutique :</label>
-              <input id="set-store-name" type="text" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
-            </div>
-          </div>
-          <button type="submit" class="px-5 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black text-xs shadow-lg transition">
-            Enregistrer les Coordonnées
-          </button>
-        </form>
-
-        <!-- Backup & Reset -->
-        <div class="frosted-panel rounded-3xl p-6 sm:p-8 space-y-4">
-          <h3 class="font-outfit font-bold text-base text-white">Sauvegarde & Restauration</h3>
-          <p class="text-xs text-slate-400">Téléchargez une sauvegarde de votre catalogue et de vos commandes.</p>
-          <div class="flex flex-wrap gap-3 pt-2">
-            <button onclick="exportDataJSON()" class="px-5 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-2 border border-white/10 transition">
-              <i data-lucide="download" class="w-4 h-4"></i>
-              <span>Sauvegarder JSON</span>
-            </button>
-            <button onclick="resetAllData()" class="px-5 py-2.5 rounded-2xl bg-red-500/10 hover:bg-red-500/20 text-red-400 font-bold text-xs flex items-center gap-2 border border-red-500/20 transition">
-              <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-              <span>Réinitialiser Données</span>
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-    </main>
-  </div>
-
-  <!-- ================= MODALS ================= -->
-  <!-- Product Modal -->
-  <div id="product-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-[#12121a] rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto border border-white/15 p-6 sm:p-8 relative shadow-2xl space-y-6">
-      <div class="flex items-center justify-between pb-4 border-b border-white/10">
-        <h3 id="product-modal-title" class="font-outfit font-black text-xl text-white">Produit</h3>
-        <button onclick="closeProductModal()" class="p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <form onsubmit="saveProductFromForm(event)" class="space-y-4 text-xs">
-        <input type="hidden" id="prod-id">
-        <div>
-          <label class="block font-bold text-slate-300 mb-1">Titre du Manuel / Pack :</label>
-          <input id="prod-title" type="text" required class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
-        </div>
-        <div>
-          <label class="block font-bold text-slate-300 mb-1">Sous-titre :</label>
-          <input id="prod-subtitle" type="text" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white focus:border-amber-500 focus:outline-none">
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block font-bold text-slate-300 mb-1">Niveau :</label>
-            <select id="prod-level" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
-              <option value="B1">B1</option>
-              <option value="B2">B2</option>
-              <option value="B1 & B2">B1 & B2</option>
-            </select>
-          </div>
-          <div>
-            <label class="block font-bold text-slate-300 mb-1">Examen :</label>
-            <select id="prod-exam" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
-              <option value="telc">telc</option>
-              <option value="Goethe">Goethe / ÖSD</option>
-            </select>
-          </div>
-        </div>
-        <div class="grid grid-cols-3 gap-3">
-          <div>
-            <label class="block font-bold text-slate-300 mb-1">Prix (DH) :</label>
-            <input id="prod-price" type="number" required class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
-          </div>
-          <div>
-            <label class="block font-bold text-slate-300 mb-1">Prix Barré :</label>
-            <input id="prod-orig-price" type="number" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-slate-400 focus:border-amber-500 focus:outline-none">
-          </div>
-          <div>
-            <label class="block font-bold text-slate-300 mb-1">Stock :</label>
-            <input id="prod-stock" type="number" required class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
-          </div>
-        </div>
-        <div>
-          <label class="block font-bold text-slate-300 mb-1">Format :</label>
-          <input id="prod-format" type="text" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white focus:border-amber-500 focus:outline-none">
-        </div>
-        <div>
-          <label class="block font-bold text-slate-300 mb-1">Chemin Image :</label>
-          <input id="prod-image" type="text" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white focus:border-amber-500 focus:outline-none">
-        </div>
-        <div class="pt-4 flex items-center justify-end gap-3">
-          <button type="button" onclick="closeProductModal()" class="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold">Annuler</button>
-          <button type="submit" class="px-6 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black shadow-lg">Enregistrer</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Order Modal -->
-  <div id="new-order-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-[#12121a] rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto border border-white/15 p-6 sm:p-8 relative shadow-2xl space-y-6">
-      <div class="flex items-center justify-between pb-4 border-b border-white/10">
-        <h3 class="font-outfit font-black text-xl text-white">Enregistrer une Commande</h3>
-        <button onclick="closeNewOrderModal()" class="p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <form onsubmit="saveNewOrder(event)" class="space-y-4 text-xs">
-        <div>
-          <label class="block font-bold text-slate-300 mb-1">Nom du Client :</label>
-          <input id="order-client-name" type="text" required placeholder="ex: Mohammed Alami" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block font-bold text-slate-300 mb-1">Téléphone WhatsApp :</label>
-            <input id="order-client-phone" type="text" required placeholder="+212 6..." class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
-          </div>
-          <div>
-            <label class="block font-bold text-slate-300 mb-1">Ville :</label>
-            <input id="order-client-city" type="text" required placeholder="Casablanca, Rabat..." class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
-          </div>
-        </div>
-        <div>
-          <label class="block font-bold text-slate-300 mb-1">Adresse :</label>
-          <input id="order-client-address" type="text" placeholder="Quartier, Rue..." class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white focus:border-amber-500 focus:outline-none">
-        </div>
-        <div>
-          <label class="block font-bold text-slate-300 mb-1">Manuel / Pack :</label>
-          <select id="order-book-select" class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white font-bold focus:border-amber-500 focus:outline-none">
-            <option value="pack-b1-telc-2026">Pack B1 TELC (2026) — 235 DH</option>
-            <option value="pack-goethe-osd-b1-b2">Pack GOETHE - ÖSD B1 & B2 (25 Tests) — 235 DH</option>
-            <option value="pack-b2-telc-complet">Pack B2 TELC Collection — 260 DH</option>
-            <option value="telc-b1-sprechen-solo">TELC B1 Sprechen — 120 DH</option>
-            <option value="telc-b2-sprachbausteine-app">TELC B2 Sprachbausteine — 130 DH</option>
-            <option value="goethe-b1-25-modelltests">Goethe B1 25 Tests — 140 DH</option>
-            <option value="goethe-b2-25-modelltests">Goethe B2 25 Tests — 150 DH</option>
-          </select>
-        </div>
-        <div>
-          <label class="block font-bold text-slate-300 mb-1">Notes :</label>
-          <textarea id="order-notes" rows="2" placeholder="Remarques..." class="w-full p-3 rounded-2xl bg-black/60 border border-white/15 text-white focus:border-amber-500 focus:outline-none"></textarea>
-        </div>
-        <div class="pt-4 flex items-center justify-end gap-3">
-          <button type="button" onclick="closeNewOrderModal()" class="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold">Annuler</button>
-          <button type="submit" class="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-outfit font-black shadow-lg">Créer la Commande</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Toast Notification -->
-  <div id="admin-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
-    <div class="bg-amber-500 text-black px-6 py-3.5 rounded-2xl shadow-2xl font-outfit font-black text-xs flex items-center gap-2.5 border border-amber-400">
-      <i data-lucide="check-circle" class="w-4 h-4"></i>
-      <span id="admin-toast-msg">Action effectuée</span>
-    </div>
-  </div>
-
-  <!-- Security & Authentication Script -->
   <script>
-    const DEFAULT_PASS = "admin2026";
-
-    function checkAuth() {
-      const isLocked = sessionStorage.getItem("admin_locked");
-      const overlay = document.getElementById("admin-auth-overlay");
-      if (isLocked === "true") {
-        overlay.classList.remove("hidden");
-      } else {
-        overlay.classList.add("hidden");
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            outfit: ['"Outfit"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            }
+          }
+        }
       }
     }
-
-    function handleAdminLogin(e) {
-      e.preventDefault();
-      const pass = document.getElementById("admin-pass-input").value;
-      const storedPass = localStorage.getItem("pruefung_admin_password") || DEFAULT_PASS;
-
-      if (pass === storedPass || pass === "admin" || pass === "2026") {
-        sessionStorage.removeItem("admin_locked");
-        document.getElementById("admin-auth-overlay").classList.add("hidden");
-        if (typeof initAdmin === "function") initAdmin();
-      } else {
-        document.getElementById("auth-error-msg").classList.remove("hidden");
-      }
-    }
-
-    function handleAdminLogout() {
-      sessionStorage.setItem("admin_locked", "true");
-      document.getElementById("admin-auth-overlay").classList.remove("hidden");
-    }
-
-    function changeAdminPassword(e) {
-      e.preventDefault();
-      const newPass = document.getElementById("new-admin-pass").value;
-      if (newPass.length < 4) {
-        alert("Le mot de passe doit comporter au moins 4 caractères.");
-        return;
-      }
-      localStorage.setItem("pruefung_admin_password", newPass);
-      showToast("Mot de passe modifié avec succès !");
-      document.getElementById("new-admin-pass").value = "";
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      checkAuth();
-    });
   </script>
 
-  <script src="src/data/books.js"></script>
-  <script src="src/admin.js"></script>
+  <!-- React 18, ReactDOM & Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Styles -->
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-outfit { font-family: 'Outfit', sans-serif; }
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="h-full text-slate-800 antialiased selection:bg-blue-600 selection:text-white bg-slate-50">
+
+  <div id="root" class="h-full"></div>
+
+  <!-- React Application Source Code -->
+  <script type="text/babel">
+    const { useState, useEffect, useMemo } = React;
+
+    // =========================================================================
+    // DONNÉES FICTIVES INITIALES (10+ Produits & 15+ Commandes)
+    // =========================================================================
+    const INITIAL_PRODUCTS = [
+      { id: "PRD-001", name: "Pack B1 TELC-Prüfung Deutsch (2026)", category: "Manuels B1", price: 235, originalPrice: 350, stock: 42, status: "in_stock", sales: 184, image: "assets/products/pack-b1.png", description: "Pack complet incluant les 25 Modelltests réels, corrigés et audios MP3." },
+      { id: "PRD-002", name: "Pack GOETHE - ÖSD B1 & B2 (25 Tests)", category: "Packs Complets", price: 235, originalPrice: 320, stock: 28, status: "in_stock", sales: 142, image: "assets/products/goethe-osd-b1-b2.jpg", description: "Préparation certifiée pour les examens Goethe et ÖSD avec transcription." },
+      { id: "PRD-003", name: "Pack B2 TELC-Prüfung Deutsch (Complet)", category: "Manuels B2", price: 260, originalPrice: 380, stock: 19, status: "in_stock", sales: 129, image: "assets/products/telc-real-collection.jpg", description: "Collection officielle complète pour le niveau B2 professionnel." },
+      { id: "PRD-004", name: "TELC Deutsch B1 - SPRECHEN (Expression Orale)", category: "Manuels B1", price: 120, originalPrice: 160, stock: 8, status: "low_stock", sales: 98, image: "assets/products/telc-b1-showcase.jpg", description: "Fiches thématiques et dialogues types pour réussir l'épreuve orale." },
+      { id: "PRD-005", name: "TELC Deutsch B2 - SPRACHBAUSTEINE", category: "Manuels B2", price: 130, originalPrice: 180, stock: 14, status: "in_stock", sales: 86, image: "assets/products/telc-b1-showcase.jpg", description: "Entraînement intensif à la grammaire en contexte et connecteurs B2." },
+      { id: "PRD-006", name: "GOETHE-ÖSD B1 (25 Modelltests)", category: "Manuels B1", price: 140, originalPrice: 190, stock: 3, status: "low_stock", sales: 74, image: "assets/products/goethe-osd-b1-b2.jpg", description: "25 tests réels d'entraînement complet pour l'examen Goethe B1." },
+      { id: "PRD-007", name: "GOETHE-ÖSD B2 (25 Modelltests)", category: "Manuels B2", price: 150, originalPrice: 200, stock: 0, status: "out_of_stock", sales: 65, image: "assets/products/goethe-osd-b1-b2.jpg", description: "Modelltests officiels de niveau avancé B2 avec barèmes détaillés." },
+      { id: "PRD-008", name: "Grammatik Aktiv A1-B1 (Pratique Allemand)", category: "Grammaire", price: 110, originalPrice: 140, stock: 22, status: "in_stock", sales: 53, image: "assets/products/pack-b1.png", description: "Cahier d'exercices progressifs et règles visuelles simplifiées." },
+      { id: "PRD-009", name: "Wortschatz B1/B2 (Vocabulaire Thématique)", category: "Vocabulaire", price: 95, originalPrice: 130, stock: 31, status: "in_stock", sales: 61, image: "assets/products/telc-b1-showcase.jpg", description: "3,000 mots et expressions incontournables classés par thème d'examen." },
+      { id: "PRD-010", name: "Dossier Modèles Schreiben B1/B2 (Rédaction)", category: "Rédaction", price: 85, originalPrice: 110, stock: 17, status: "in_stock", sales: 89, image: "assets/products/telc-real-collection.jpg", description: "50 lettres types, réclamations et courriels formels prêts à l'emploi." }
+    ];
+
+    const INITIAL_ORDERS = [
+      { id: "CMD-2026-101", customer: "Yassine Mansouri", email: "yassine.m@gmail.com", phone: "+212 6 61 23 45 67", city: "Casablanca", address: "Bd d'Anfa, Rés. Al Yassamine Apt 14", date: "2026-08-31 16:45", items: [{ id: "PRD-001", name: "Pack B1 TELC (2026)", qty: 1, price: 235 }], total: 235, status: "delivered", payment: "Paiement à la livraison (COD)" },
+      { id: "CMD-2026-102", customer: "Salma Benjelloun", email: "salma.benj@outlook.com", phone: "+212 6 72 88 99 10", city: "Rabat", address: "Quartier Agdal, Rue Oukaimeden N° 22", date: "2026-08-31 15:30", items: [{ id: "PRD-002", name: "Pack GOETHE - ÖSD B1 & B2", qty: 1, price: 235 }, { id: "PRD-004", name: "TELC B1 Sprechen", qty: 1, price: 120 }], total: 355, status: "shipped", payment: "Paiement à la livraison (COD)" },
+      { id: "CMD-2026-103", customer: "Othmane Tazi", email: "othmane.tazi@gmail.com", phone: "+212 6 63 44 55 66", city: "Tanger", address: "Malabata, Rés. Jardins du Détroit", date: "2026-08-31 14:10", items: [{ id: "PRD-003", name: "Pack B2 TELC Complet", qty: 1, price: 260 }], total: 260, status: "processing", payment: "Paiement à la livraison (COD)" },
+      { id: "CMD-2026-104", customer: "Khadija El Idrissi", email: "khadija.idrissi@yahoo.fr", phone: "+212 6 50 11 22 33", city: "Marrakech", address: "Guéliz, Bd Mohammed V, Imm 45", date: "2026-08-31 12:20", items: [{ id: "PRD-001", name: "Pack B1 TELC (2026)", qty: 2, price: 235 }], total: 470, status: "pending", payment: "Paiement à la livraison (COD)" },
+      { id: "CMD-2026-105", customer: "Mehdi Cherkaoui", email: "mehdi.cherk@gmail.com", phone: "+212 6 14 99 88 77", city: "Fès", address: "Route d'Imouzzer, Rés. Narjiss", date: "2026-08-31 10:15", items: [{ id: "PRD-005", name: "TELC B2 Sprachbausteine", qty: 1, price: 130 }], total: 130, status: "pending", payment: "Paiement à la livraison (COD)" },
+      { id: "CMD-2026-106", customer: "Imane Berrada", email: "imane.berrada@gmail.com", phone: "+212 6 61 88 44 22", city: "Casablanca", address: "Maârif, Rue du Jura N° 18", date: "2026-08-30 18:40", items: [{ id: "PRD-007", name: "GOETHE B2 (25 Tests)", qty: 1, price: 150 }], total: 150, status: "delivered", payment: "Paiement à la livraison (COD)" },
+      { id: "CMD-2026-107", customer: "Anas Chraibi", email: "anas.chraibi@outlook.fr", phone: "+212 6 62 33 11 99", city: "Rabat", address: "Hay Riad, Secteur 14, Villa 12", date: "2026-08-30 16:50", items: [{ id: "PRD-002", name: "Pack GOETHE - ÖSD B1 & B2", qty: 1, price: 235 }], total: 235, status: "delivered", payment: "Paiement à la livraison (COD)" },
+      { id: "CMD-2026-108", customer: "Zineb Alami", email: "zineb.alami@gmail.com", phone: "+212 6 65 12 39 87", city: "Agadir", address: "Cité Dakhla, Rue 840 N° 5", date: "2026-08-30 14:00", items: [{ id: "PRD-004", name: "TELC B1 Sprechen", qty: 1, price: 120 }], total: 120, status: "shipped", payment: "Paiement à la livraison (COD)" },
+      { id: "CMD-2026-109", customer: "Hamza Bennani", email: "hamza.bennani@gmail.com", phone: "+212 6 60 44 77 88", city: "Fès", address: "Champs de Course, Imm 12", date: "2026-08-29 17:30", items: [{ id: "PRD-003", name: "Pack B2 TELC Complet", qty: 1, price: 260 }], total: 260, status: "delivered", payment: "Paiement à la livraison (COD)" },
+      { id: "CMD-2026-110", customer: "Nour El Houda", email: "nour.houda@gmail.com", phone: "+212 6 71 22 33 44", city: "Casablanca", address: "Ain Diab, Résidence Les Perles", date: "2026-08-29 11:20", items: [{ id: "PRD-006", name: "GOETHE B1 (25 Tests)", qty: 1, price: 140 }], total: 140, status: "delivered", payment: "Paiement à la livraison (COD)" },
+      { id: "CMD-2026-111", customer: "Karim Senhaji", email: "karim.senhaji@gmail.com", phone: "+212 6 63 99 88 11", city: "Tanger", address: "Boulevard Pasteur, Imm 8", date: "2026-08-28 15:45", items: [{ id: "PRD-001", name: "Pack B1 TELC (2026)", qty: 1, price: 235 }], total: 235, status: "cancelled", payment: "Paiement à la livraison (COD)" },
+      { id: "CMD-2026-112", customer: "Fatima Zahra Lahlou", email: "fz.lahlou@gmail.com", phone: "+212 6 68 55 44 33", city: "Rabat", address: "Aviation, Rue de Fès N° 4", date: "2026-08-28 10:10", items: [{ id: "PRD-002", name: "Pack GOETHE - ÖSD B1 & B2", qty: 1, price: 235 }], total: 235, status: "delivered", payment: "Paiement à la livraison (COD)" },
+      { id: "CMD-2026-113", customer: "Ayoub Fassi", email: "ayoub.fassi@hotmail.com", phone: "+212 6 67 11 22 55", city: "Marrakech", address: "Targa, Résidence Les Palmiers", date: "2026-08-27 16:20", items: [{ id: "PRD-003", name: "Pack B2 TELC Complet", qty: 1, price: 260 }], total: 260, status: "delivered", payment: "Paiement à la livraison (COD)" },
+      { id: "CMD-2026-114", customer: "Meriem Tahiri", email: "meriem.tahiri@gmail.com", phone: "+212 6 64 33 22 11", city: "Casablanca", address: "Gauthier, Rue Moussa Ibn Noussair", date: "2026-08-27 13:40", items: [{ id: "PRD-001", name: "Pack B1 TELC (2026)", qty: 1, price: 235 }], total: 235, status: "delivered", payment: "Paiement à la livraison (COD)" },
+      { id: "CMD-2026-115", customer: "Walid Radi", email: "walid.radi@gmail.com", phone: "+212 6 62 99 00 11", city: "Tanger", address: "Val Fleuri, Rés. Jasmine Apt 3", date: "2026-08-26 18:15", items: [{ id: "PRD-005", name: "TELC B2 Sprachbausteine", qty: 1, price: 130 }], total: 130, status: "delivered", payment: "Paiement à la livraison (COD)" }
+    ];
+
+    // =========================================================================
+    // APPLICATION PRINCIPALE REACT
+    // =========================================================================
+    function App() {
+      const [currentTab, setCurrentTab] = useState("overview"); // overview, products, orders, clients, settings
+      const [products, setProducts] = useState(() => {
+        const local = localStorage.getItem("adminflow_products");
+        return local ? JSON.parse(local) : INITIAL_PRODUCTS;
+      });
+      const [orders, setOrders] = useState(() => {
+        const local = localStorage.getItem("adminflow_orders");
+        return local ? JSON.parse(local) : INITIAL_ORDERS;
+      });
+
+      // Modals State
+      const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+      const [editingProduct, setEditingProduct] = useState(null);
+      const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+      const [selectedOrderDetails, setSelectedOrderDetails] = useState(null);
+      const [toastMessage, setToastMessage] = useState("");
+
+      // Global Search
+      const [globalSearch, setGlobalSearch] = useState("");
+
+      // Save to localStorage
+      useEffect(() => {
+        localStorage.setItem("adminflow_products", JSON.stringify(products));
+      }, [products]);
+
+      useEffect(() => {
+        localStorage.setItem("adminflow_orders", JSON.stringify(orders));
+      }, [orders]);
+
+      // Re-trigger Lucide Icons on DOM update
+      useEffect(() => {
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      });
+
+      const showToast = (msg) => {
+        setToastMessage(msg);
+        setTimeout(() => setToastMessage(""), 3000);
+      };
+
+      // CRUD Products
+      const handleSaveProduct = (prodData) => {
+        if (editingProduct) {
+          setProducts(products.map(p => p.id === editingProduct.id ? { ...p, ...prodData } : p));
+          showToast("Produit modifié avec succès !");
+        } else {
+          const newId = "PRD-" + String(products.length + 1).padStart(3, '0');
+          setProducts([{ id: newId, sales: 0, ...prodData }, ...products]);
+          showToast("Nouveau produit ajouté au catalogue !");
+        }
+        setIsProductModalOpen(false);
+        setEditingProduct(null);
+      };
+
+      const handleDeleteProduct = (id) => {
+        if (confirm("Supprimer définitivement ce produit ?")) {
+          setProducts(products.filter(p => p.id !== id));
+          showToast("Produit supprimé.");
+        }
+      };
+
+      // Order Status Update
+      const handleUpdateOrderStatus = (orderId, newStatus) => {
+        setOrders(orders.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+        showToast("Statut de la commande mis à jour !");
+      };
+
+      const handleDeleteOrder = (orderId) => {
+        if (confirm("Supprimer cette commande ?")) {
+          setOrders(orders.filter(o => o.id !== orderId));
+          showToast("Commande supprimée.");
+        }
+      };
+
+      return (
+        <div className="flex h-screen overflow-hidden bg-slate-50">
+          
+          {/* ================= 1. SIDEBAR ================= */}
+          <aside className="w-64 bg-white border-r border-slate-200 flex flex-col justify-between hidden md:flex shrink-0 shadow-sm z-20">
+            <div className="p-6 space-y-7">
+              
+              {/* Brand Logo */}
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-outfit font-black text-lg shadow-md shadow-blue-500/20">
+                  AF
+                </div>
+                <div>
+                  <span className="font-outfit font-black text-lg text-slate-900 tracking-tight block leading-tight">
+                    Admin<span className="text-blue-600">Flow</span>
+                  </span>
+                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Store Manager</span>
+                </div>
+              </div>
+
+              {/* Navigation Items */}
+              <nav className="space-y-1.5">
+                <NavItem icon="layout-dashboard" label="Vue d'ensemble" active={currentTab === "overview"} onClick={() => setCurrentTab("overview")} />
+                <NavItem icon="package" label="Produits" count={products.length} active={currentTab === "products"} onClick={() => setCurrentTab("products")} />
+                <NavItem icon="shopping-cart" label="Commandes" count={orders.filter(o => o.status === "pending" || o.status === "processing").length} active={currentTab === "orders"} onClick={() => setCurrentTab("orders")} badgeColor="bg-amber-100 text-amber-700" />
+                <NavItem icon="users" label="Clients" active={currentTab === "clients"} onClick={() => setCurrentTab("clients")} />
+                <NavItem icon="settings" label="Paramètres" active={currentTab === "settings"} onClick={() => setCurrentTab("settings")} />
+              </nav>
+
+            </div>
+
+            {/* User Profile & Store Link */}
+            <div className="p-5 border-t border-slate-100 space-y-3">
+              <a href="index.html" target="_blank" className="w-full py-2.5 px-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 font-semibold text-xs flex items-center justify-center gap-2 transition border border-slate-200">
+                <i data-lucide="external-link" className="w-3.5 h-3.5"></i>
+                <span>Voir la Boutique</span>
+              </a>
+
+              <div className="flex items-center gap-3 pt-1">
+                <div className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-xs text-blue-600">
+                  SM
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-xs font-bold text-slate-800 truncate">Sarah Martin</h4>
+                  <p className="text-[10px] text-slate-400 truncate">Administrateur</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          {/* ================= 2. MAIN WORKSPACE ================= */}
+          <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+            
+            {/* Topbar Header */}
+            <header className="h-16 bg-white border-b border-slate-200 px-6 sm:px-8 flex items-center justify-between sticky top-0 z-10">
+              
+              {/* Search Bar */}
+              <div className="relative w-64 sm:w-80">
+                <i data-lucide="search" className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                <input 
+                  type="text" 
+                  value={globalSearch}
+                  onChange={(e) => setGlobalSearch(e.target.value)}
+                  placeholder="Recherche globale (produit, client...)" 
+                  className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white transition"
+                />
+              </div>
+
+              {/* Action Tools */}
+              <div className="flex items-center gap-3">
+                <button onClick={() => { setEditingProduct(null); setIsProductModalOpen(true); }} className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm shadow-blue-500/20 flex items-center gap-1.5 transition">
+                  <i data-lucide="plus" className="w-4 h-4"></i>
+                  <span className="hidden sm:inline">Ajouter Produit</span>
+                </button>
+
+                <div className="h-6 w-px bg-slate-200 mx-1"></div>
+
+                <div className="relative">
+                  <button className="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition relative">
+                    <i data-lucide="bell" className="w-4 h-4"></i>
+                    <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-600"></span>
+                  </button>
+                </div>
+              </div>
+
+            </header>
+
+            {/* Dynamic Content Panel */}
+            <main className="p-6 sm:p-8 max-w-7xl w-full mx-auto space-y-8 flex-1">
+              
+              {currentTab === "overview" && (
+                <OverviewTab 
+                  products={products} 
+                  orders={orders} 
+                  onViewOrders={() => setCurrentTab("orders")}
+                  onSelectOrder={(ord) => setSelectedOrderDetails(ord)}
+                />
+              )}
+
+              {currentTab === "products" && (
+                <ProductsTab 
+                  products={products} 
+                  globalSearch={globalSearch}
+                  onAddProduct={() => { setEditingProduct(null); setIsProductModalOpen(true); }}
+                  onEditProduct={(p) => { setEditingProduct(p); setIsProductModalOpen(true); }}
+                  onDeleteProduct={handleDeleteProduct}
+                />
+              )}
+
+              {currentTab === "orders" && (
+                <OrdersTab 
+                  orders={orders} 
+                  globalSearch={globalSearch}
+                  onUpdateStatus={handleUpdateOrderStatus}
+                  onDeleteOrder={handleDeleteOrder}
+                  onViewDetails={(ord) => setSelectedOrderDetails(ord)}
+                  onNewOrder={() => setIsOrderModalOpen(true)}
+                />
+              )}
+
+              {currentTab === "clients" && (
+                <ClientsTab orders={orders} />
+              )}
+
+              {currentTab === "settings" && (
+                <SettingsTab 
+                  products={products} 
+                  orders={orders} 
+                  onReset={() => {
+                    setProducts(INITIAL_PRODUCTS);
+                    setOrders(INITIAL_ORDERS);
+                    showToast("Données réinitialisées aux valeurs par défaut !");
+                  }}
+                  showToast={showToast}
+                />
+              )}
+
+            </main>
+
+          </div>
+
+          {/* ================= 3. MODALS ================= */}
+          {isProductModalOpen && (
+            <ProductModal 
+              product={editingProduct} 
+              onClose={() => { setIsProductModalOpen(false); setEditingProduct(null); }} 
+              onSave={handleSaveProduct} 
+            />
+          )}
+
+          {isOrderModalOpen && (
+            <NewOrderModal 
+              products={products} 
+              onClose={() => setIsOrderModalOpen(false)} 
+              onSave={(newOrd) => {
+                setOrders([newOrd, ...orders]);
+                setIsOrderModalOpen(false);
+                showToast("Nouvelle commande créée !");
+              }} 
+            />
+          )}
+
+          {selectedOrderDetails && (
+            <OrderDetailsModal 
+              order={selectedOrderDetails} 
+              onClose={() => setSelectedOrderDetails(null)} 
+              onUpdateStatus={handleUpdateOrderStatus}
+            />
+          )}
+
+          {/* Toast Notification */}
+          {toastMessage && (
+            <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-xl font-bold text-xs flex items-center gap-2.5 animate-bounce">
+              <i data-lucide="check-circle" className="w-4 h-4 text-emerald-400"></i>
+              <span>{toastMessage}</span>
+            </div>
+          )}
+
+        </div>
+      );
+    }
+
+    // =========================================================================
+    // COMPOSANTS DE NAVIGATION & TABS
+    // =========================================================================
+    function NavItem({ icon, label, count, active, onClick, badgeColor = "bg-slate-100 text-slate-600" }) {
+      return (
+        <button 
+          onClick={onClick}
+          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs transition ${
+            active 
+              ? 'bg-blue-50 text-blue-700 font-bold border border-blue-100 shadow-sm' 
+              : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <i data-lucide={icon} className={`w-4 h-4 ${active ? 'text-blue-600' : 'text-slate-400'}`}></i>
+            <span>{label}</span>
+          </div>
+          {count !== undefined && (
+            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${active ? 'bg-blue-600 text-white' : badgeColor}`}>
+              {count}
+            </span>
+          )}
+        </button>
+      );
+    }
+
+    // =========================================================================
+    // TAB 1 : VUE D'ENSEMBLE (DASHBOARD & KPIS)
+    // =========================================================================
+    function OverviewTab({ products, orders, onViewOrders, onSelectOrder }) {
+      const totalRevenue = orders
+        .filter(o => o.status !== "cancelled")
+        .reduce((acc, o) => acc + o.total, 0);
+
+      const totalOrdersCount = orders.length;
+      const pendingOrdersCount = orders.filter(o => o.status === "pending" || o.status === "processing").length;
+      const totalProductsCount = products.length;
+
+      // Top Selling Products
+      const topProducts = [...products].sort((a, b) => b.sales - a.sales).slice(0, 5);
+
+      // Recent 5 Orders
+      const recentOrders = [...orders].slice(0, 5);
+
+      return (
+        <div className="space-y-8">
+          
+          {/* Header Title */}
+          <div>
+            <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 tracking-tight">Vue d'ensemble</h1>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">Performances des ventes et activité récente du catalogue.</p>
+          </div>
+
+          {/* 4 Stat Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <KpiCard title="Chiffre d'Affaires" value={totalRevenue.toLocaleString() + " DH"} trend="+14.2%" trendPositive={true} icon="coins" color="blue" subtitle="Toutes commandes valides" />
+            <KpiCard title="Total Commandes" value={totalOrdersCount} trend="+8.5%" trendPositive={true} icon="shopping-bag" color="emerald" subtitle="Ce mois-ci" />
+            <KpiCard title="Articles au Catalogue" value={totalProductsCount} icon="package" color="purple" subtitle="100% actifs" />
+            <KpiCard title="Commandes en Attente" value={pendingOrdersCount} icon="clock" color="amber" subtitle="À expédier en priorité" alert={pendingOrdersCount > 0} />
+          </div>
+
+          {/* Sales Chart & Category Distribution */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            {/* Sales Chart (SVG Interactive Area Spline) */}
+            <div className="lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-outfit font-bold text-base text-slate-900">Évolution des Ventes</h3>
+                  <p className="text-xs text-slate-400">Revenus hebdomadaires en DH</p>
+                </div>
+                <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 text-xs font-bold text-slate-600">
+                  <button className="px-2.5 py-1 rounded-lg bg-white shadow-xs text-slate-900">7 Jours</button>
+                  <button className="px-2.5 py-1 rounded-lg text-slate-500 hover:text-slate-900">30 Jours</button>
+                </div>
+              </div>
+
+              {/* Responsive SVG Chart */}
+              <div className="h-64 w-full pt-4">
+                <svg className="w-full h-full overflow-visible" viewBox="0 0 700 200">
+                  <defs>
+                    <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.25" />
+                      <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0" />
+                    </linearGradient>
+                  </defs>
+                  {/* Grid Lines */}
+                  <line x1="0" y1="40" x2="700" y2="40" stroke="#f1f5f9" strokeWidth="1" />
+                  <line x1="0" y1="90" x2="700" y2="90" stroke="#f1f5f9" strokeWidth="1" />
+                  <line x1="0" y1="140" x2="700" y2="140" stroke="#f1f5f9" strokeWidth="1" />
+                  {/* Area */}
+                  <path d="M 50 160 Q 150 110 250 130 T 450 70 T 650 40 L 650 180 L 50 180 Z" fill="url(#blueGradient)" />
+                  {/* Line */}
+                  <path d="M 50 160 Q 150 110 250 130 T 450 70 T 650 40" fill="none" stroke="#2563eb" strokeWidth="3" />
+                  {/* Data Points */}
+                  {[
+                    { x: 50, y: 160, val: "470 DH", day: "Lun" },
+                    { x: 150, y: 120, val: "705 DH", day: "Mar" },
+                    { x: 250, y: 130, val: "940 DH", day: "Mer" },
+                    { x: 350, y: 95, val: "1,175 DH", day: "Jeu" },
+                    { x: 450, y: 70, val: "1,410 DH", day: "Ven" },
+                    { x: 550, y: 60, val: "1,880 DH", day: "Sam" },
+                    { x: 650, y: 40, val: "2,350 DH", day: "Dim" }
+                  ].map((pt, i) => (
+                    <g key={i} className="cursor-pointer group">
+                      <circle cx={pt.x} cy={pt.y} r="5" fill="#ffffff" stroke="#2563eb" strokeWidth="3" className="group-hover:scale-125 transition" />
+                      <text x={pt.x} y="195" textAnchor="middle" fontSize="11" fill="#94a3b8" fontWeight="600">{pt.day}</text>
+                      <text x={pt.x} y={pt.y - 10} textAnchor="middle" fontSize="10" fill="#1e293b" fontWeight="bold" opacity="0" className="group-hover:opacity-100 transition">{pt.val}</text>
+                    </g>
+                  ))}
+                </svg>
+              </div>
+            </div>
+
+            {/* Top Products Card */}
+            <div className="lg:col-span-4 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
+              <div>
+                <h3 className="font-outfit font-bold text-base text-slate-900">Produits les Plus Vendus</h3>
+                <p className="text-xs text-slate-400">Classement par volume de commandes</p>
+              </div>
+
+              <div className="space-y-3.5">
+                {topProducts.map((p, idx) => (
+                  <div key={p.id} className="flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-700 font-bold flex items-center justify-center text-[10px] shrink-0">{idx + 1}</span>
+                      <span className="font-semibold text-slate-800 truncate">{p.name}</span>
+                    </div>
+                    <span className="font-bold text-blue-600 shrink-0 ml-2">{p.sales} vus</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="p-3 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-between text-xs text-blue-800 font-bold">
+                <span>Total Ventes :</span>
+                <span>{products.reduce((s, p) => s + p.sales, 0)} exemplaires</span>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Recent Orders Table */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <h3 className="font-outfit font-bold text-base text-slate-900">Dernières Commandes</h3>
+                <p className="text-xs text-slate-400">Suivi des 5 dernières commandes passées</p>
+              </div>
+              <button onClick={onViewOrders} className="text-xs text-blue-600 hover:text-blue-700 font-bold flex items-center gap-1">
+                <span>Voir tout ({orders.length})</span>
+                <i data-lucide="arrow-right" className="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="text-slate-400 uppercase font-bold text-[10px] border-b border-slate-100">
+                  <tr>
+                    <th className="pb-3">N° Commande</th>
+                    <th className="pb-3">Client</th>
+                    <th className="pb-3">Date</th>
+                    <th className="pb-3">Montant</th>
+                    <th className="pb-3">Statut</th>
+                    <th className="pb-3 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-50 font-medium">
+                  {recentOrders.map(o => (
+                    <tr key={o.id} className="hover:bg-slate-50/80 transition">
+                      <td className="py-3.5 font-mono font-bold text-slate-800">{o.id}</td>
+                      <td className="py-3.5">
+                        <div className="font-bold text-slate-900">{o.customer}</div>
+                        <div className="text-[10px] text-slate-400">{o.city}</div>
+                      </td>
+                      <td className="py-3.5 text-slate-500">{o.date.split(' ')[0]}</td>
+                      <td className="py-3.5 font-bold text-slate-900">{o.total} DH</td>
+                      <td className="py-3.5"><StatusBadge status={o.status} /></td>
+                      <td className="py-3.5 text-right">
+                        <button onClick={() => onSelectOrder(o)} className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-bold transition">
+                          Détails
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      );
+    }
+
+    function KpiCard({ title, value, trend, trendPositive, icon, color, subtitle, alert }) {
+      const colors = {
+        blue: "bg-blue-50 text-blue-600",
+        emerald: "bg-emerald-50 text-emerald-600",
+        purple: "bg-purple-50 text-purple-600",
+        amber: "bg-amber-50 text-amber-600"
+      };
+
+      return (
+        <div className={`bg-white border ${alert ? 'border-amber-300 ring-2 ring-amber-100' : 'border-slate-200'} rounded-2xl p-6 shadow-sm space-y-3`}>
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">{title}</span>
+            <div className={`w-10 h-10 rounded-xl ${colors[color]} flex items-center justify-center font-bold`}>
+              <i data-lucide={icon} className="w-5 h-5"></i>
+            </div>
+          </div>
+          <div className="space-y-1">
+            <div className="font-outfit font-black text-2xl text-slate-900">{value}</div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-slate-400 text-[11px]">{subtitle}</span>
+              {trend && (
+                <span className={`font-bold ${trendPositive ? 'text-emerald-600' : 'text-red-500'}`}>
+                  {trend}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // =========================================================================
+    // TAB 2 : GESTION DES PRODUITS (CRUD)
+    // =========================================================================
+    function ProductsTab({ products, globalSearch, onAddProduct, onEditProduct, onDeleteProduct }) {
+      const [categoryFilter, setCategoryFilter] = useState("all");
+      const [statusFilter, setStatusFilter] = useState("all");
+      const [searchQuery, setSearchQuery] = useState("");
+      const [currentPage, setCurrentPage] = useState(1);
+      const itemsPerPage = 6;
+
+      const categories = useMemo(() => {
+        const set = new Set(products.map(p => p.category));
+        return ["all", ...Array.from(set)];
+      }, [products]);
+
+      // Filtering Logic
+      const filtered = useMemo(() => {
+        return products.filter(p => {
+          const q = (searchQuery || globalSearch).toLowerCase();
+          const matchSearch = !q || p.name.toLowerCase().includes(q) || p.id.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
+          const matchCat = categoryFilter === "all" || p.category === categoryFilter;
+          const matchStatus = statusFilter === "all" || 
+            (statusFilter === "in_stock" && p.stock > 10) ||
+            (statusFilter === "low_stock" && p.stock > 0 && p.stock <= 10) ||
+            (statusFilter === "out_of_stock" && p.stock === 0);
+          return matchSearch && matchCat && matchStatus;
+        });
+      }, [products, categoryFilter, statusFilter, searchQuery, globalSearch]);
+
+      // Pagination
+      const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+      const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+      return (
+        <div className="space-y-6">
+          
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 tracking-tight">Catalogue des Produits</h1>
+              <p className="text-xs sm:text-sm text-slate-500 mt-1">Gérez vos articles, prix, descriptions et niveaux de stock.</p>
+            </div>
+            <button onClick={onAddProduct} className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20 flex items-center gap-2 transition self-start sm:self-auto">
+              <i data-lucide="plus" className="w-4 h-4"></i>
+              <span>Nouveau Produit</span>
+            </button>
+          </div>
+
+          {/* Search & Filters Bar */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
+            
+            {/* Search Input */}
+            <div className="relative w-full md:w-80">
+              <i data-lucide="search" className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+              <input 
+                type="text" 
+                placeholder="Rechercher par nom, référence..." 
+                value={searchQuery}
+                onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            {/* Filter Dropdowns */}
+            <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+              <select 
+                value={categoryFilter} 
+                onChange={(e) => { setCategoryFilter(e.target.value); setCurrentPage(1); }}
+                className="p-2 rounded-xl bg-slate-50 border border-slate-200 font-semibold text-slate-700 focus:outline-none"
+              >
+                <option value="all">Toutes Catégories</option>
+                {categories.filter(c => c !== "all").map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+
+              <select 
+                value={statusFilter} 
+                onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
+                className="p-2 rounded-xl bg-slate-50 border border-slate-200 font-semibold text-slate-700 focus:outline-none"
+              >
+                <option value="all">Tous Statuts</option>
+                <option value="in_stock">🟢 En Stock (&gt; 10)</option>
+                <option value="low_stock">🟡 Stock Faible (1 - 10)</option>
+                <option value="out_of_stock">🔴 Rupture de Stock (0)</option>
+              </select>
+            </div>
+
+          </div>
+
+          {/* Products Table */}
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50/80 text-slate-500 uppercase font-bold text-[10px] border-b border-slate-200">
+                  <tr>
+                    <th className="p-4">Produit</th>
+                    <th className="p-4">Catégorie</th>
+                    <th className="p-4">Prix</th>
+                    <th className="p-4">Stock</th>
+                    <th className="p-4">Statut</th>
+                    <th className="p-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {paginated.length === 0 ? (
+                    <tr>
+                      <td colSpan="6" className="p-8 text-center text-slate-400">Aucun produit ne correspond à votre recherche.</td>
+                    </tr>
+                  ) : (
+                    paginated.map(p => (
+                      <tr key={p.id} className="hover:bg-slate-50/80 transition">
+                        <td className="p-4">
+                          <div className="flex items-center gap-3">
+                            <img src={p.image} alt={p.name} className="w-11 h-11 rounded-xl object-contain bg-slate-100 p-1 border border-slate-200 shrink-0" />
+                            <div>
+                              <h4 className="font-bold text-slate-900 leading-snug line-clamp-1">{p.name}</h4>
+                              <span className="text-[10px] text-slate-400 font-mono">{p.id}</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <span className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-semibold text-[11px]">
+                            {p.category}
+                          </span>
+                        </td>
+                        <td className="p-4">
+                          <span className="font-bold text-slate-900 text-sm">{p.price} DH</span>
+                          {p.originalPrice && <span className="text-[10px] text-slate-400 line-through block">{p.originalPrice} DH</span>}
+                        </td>
+                        <td className="p-4">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-slate-900">{p.stock}</span>
+                            <span className="text-[10px] text-slate-400">unités</span>
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          {p.stock > 10 ? (
+                            <span className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">✓ En Stock</span>
+                          ) : p.stock > 0 ? (
+                            <span className="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200 font-bold text-[10px]">⚠️ Faible ({p.stock})</span>
+                          ) : (
+                            <span className="px-2.5 py-1 rounded-full bg-red-50 text-red-700 border border-red-200 font-bold text-[10px]">✕ Rupture</span>
+                          )}
+                        </td>
+                        <td className="p-4 text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            <button onClick={() => onEditProduct(p)} className="p-2 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition" title="Modifier">
+                              <i data-lucide="edit-2" className="w-3.5 h-3.5"></i>
+                            </button>
+                            <button onClick={() => onDeleteProduct(p.id)} className="p-2 rounded-lg bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-600 transition" title="Supprimer">
+                              <i data-lucide="trash-2" className="w-3.5 h-3.5"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination Toolbar */}
+            <div className="p-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <span>Affichage de {(currentPage - 1) * itemsPerPage + 1} à {Math.min(currentPage * itemsPerPage, filtered.length)} sur {filtered.length} produits</span>
+              <div className="flex items-center gap-1">
+                <button 
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(p => p - 1)}
+                  className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50 font-bold"
+                >
+                  Précédent
+                </button>
+                <span className="px-3 py-1.5 font-bold text-slate-800">{currentPage} / {totalPages}</span>
+                <button 
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(p => p + 1)}
+                  className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50 font-bold"
+                >
+                  Suivant
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      );
+    }
+
+    // =========================================================================
+    // TAB 3 : GESTION DES COMMANDES
+    // =========================================================================
+    function OrdersTab({ orders, globalSearch, onUpdateStatus, onDeleteOrder, onViewDetails, onNewOrder }) {
+      const [statusFilter, setStatusFilter] = useState("all");
+      const [searchQuery, setSearchQuery] = useState("");
+      const [currentPage, setCurrentPage] = useState(1);
+      const itemsPerPage = 8;
+
+      const filtered = useMemo(() => {
+        return orders.filter(o => {
+          const q = (searchQuery || globalSearch).toLowerCase();
+          const matchSearch = !q || o.customer.toLowerCase().includes(q) || o.id.toLowerCase().includes(q) || o.city.toLowerCase().includes(q);
+          const matchStatus = statusFilter === "all" || o.status === statusFilter;
+          return matchSearch && matchStatus;
+        });
+      }, [orders, statusFilter, searchQuery, globalSearch]);
+
+      const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+      const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+      return (
+        <div className="space-y-6">
+          
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 tracking-tight">Suivi des Commandes</h1>
+              <p className="text-xs sm:text-sm text-slate-500 mt-1">Gérez le traitement, la livraison et le statut des commandes clients.</p>
+            </div>
+            <button onClick={onNewOrder} className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-500/20 flex items-center gap-2 transition self-start sm:self-auto">
+              <i data-lucide="plus" className="w-4 h-4"></i>
+              <span>Créer Commande</span>
+            </button>
+          </div>
+
+          {/* Filters Bar */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
+            
+            <div className="relative w-full md:w-80">
+              <i data-lucide="search" className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+              <input 
+                type="text" 
+                placeholder="Rechercher par N° commande, client..." 
+                value={searchQuery}
+                onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            {/* Status Pills */}
+            <div className="flex flex-wrap items-center gap-1.5 w-full md:w-auto">
+              {[
+                { id: "all", label: "Toutes" },
+                { id: "pending", label: "🟡 En attente" },
+                { id: "processing", label: "🔵 En cours" },
+                { id: "shipped", label: "🟣 Expédiée" },
+                { id: "delivered", label: "🟢 Livrée" },
+                { id: "cancelled", label: "🔴 Annulée" }
+              ].map(s => (
+                <button 
+                  key={s.id}
+                  onClick={() => { setStatusFilter(s.id); setCurrentPage(1); }}
+                  className={`px-3 py-1.5 rounded-xl font-bold transition ${
+                    statusFilter === s.id 
+                      ? 'bg-blue-600 text-white shadow-xs' 
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
+
+          </div>
+
+          {/* Orders Table */}
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50/80 text-slate-500 uppercase font-bold text-[10px] border-b border-slate-200">
+                  <tr>
+                    <th className="p-4">N° Commande</th>
+                    <th className="p-4">Client & Ville</th>
+                    <th className="p-4">Date</th>
+                    <th className="p-4">Articles</th>
+                    <th className="p-4">Total</th>
+                    <th className="p-4">Statut</th>
+                    <th className="p-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {paginated.length === 0 ? (
+                    <tr>
+                      <td colSpan="7" className="p-8 text-center text-slate-400">Aucune commande trouvée.</td>
+                    </tr>
+                  ) : (
+                    paginated.map(o => (
+                      <tr key={o.id} className="hover:bg-slate-50/80 transition">
+                        <td className="p-4 font-mono font-bold text-slate-900">{o.id}</td>
+                        <td className="p-4">
+                          <div className="font-bold text-slate-900">{o.customer}</div>
+                          <div className="text-[10px] text-slate-400">{o.city} • {o.phone}</div>
+                        </td>
+                        <td className="p-4 text-slate-500 whitespace-nowrap">{o.date}</td>
+                        <td className="p-4">
+                          <span className="text-slate-700 font-medium block truncate max-w-xs">{o.items.map(i => i.name).join(", ")}</span>
+                          <span className="text-[10px] text-blue-600 font-bold">{o.items.length} article(s)</span>
+                        </td>
+                        <td className="p-4 font-bold text-slate-900 text-sm whitespace-nowrap">{o.total} DH</td>
+                        <td className="p-4">
+                          <select 
+                            value={o.status}
+                            onChange={(e) => onUpdateStatus(o.id, e.target.value)}
+                            className="p-1.5 rounded-lg border border-slate-200 bg-white font-bold text-xs focus:outline-none"
+                          >
+                            <option value="pending">🟡 En attente</option>
+                            <option value="processing">🔵 En cours</option>
+                            <option value="shipped">🟣 Expédiée</option>
+                            <option value="delivered">🟢 Livrée</option>
+                            <option value="cancelled">🔴 Annulée</option>
+                          </select>
+                        </td>
+                        <td className="p-4 text-right whitespace-nowrap">
+                          <div className="flex items-center justify-end gap-1.5">
+                            <button onClick={() => onViewDetails(o)} className="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold transition">
+                              Détails
+                            </button>
+                            <button onClick={() => onDeleteOrder(o.id)} className="p-2 rounded-lg bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-600 transition" title="Supprimer">
+                              <i data-lucide="trash-2" className="w-3.5 h-3.5"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination */}
+            <div className="p-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <span>Page {currentPage} sur {totalPages}</span>
+              <div className="flex items-center gap-1">
+                <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)} className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50 font-bold">Précédent</button>
+                <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)} className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50 font-bold">Suivant</button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      );
+    }
+
+    // =========================================================================
+    // TAB 4 : CLIENTS (CRM)
+    // =========================================================================
+    function ClientsTab({ orders }) {
+      const clients = useMemo(() => {
+        const map = {};
+        orders.forEach(o => {
+          if (!map[o.phone]) {
+            map[o.phone] = {
+              name: o.customer,
+              email: o.email,
+              phone: o.phone,
+              city: o.city,
+              ordersCount: 1,
+              totalSpent: o.total,
+              lastOrderDate: o.date
+            };
+          } else {
+            map[o.phone].ordersCount += 1;
+            map[o.phone].totalSpent += o.total;
+          }
+        });
+        return Object.values(map);
+      }, [orders]);
+
+      return (
+        <div className="space-y-6">
+          <div>
+            <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 tracking-tight">Répertoire Clients (CRM)</h1>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">Historique des commandes et coordonnées des candidats acheteurs.</p>
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50 text-slate-500 uppercase font-bold text-[10px] border-b border-slate-200">
+                  <tr>
+                    <th className="p-4">Nom du Client</th>
+                    <th className="p-4">Téléphone / WhatsApp</th>
+                    <th className="p-4">Ville</th>
+                    <th className="p-4">Commandes</th>
+                    <th className="p-4">Total Dépensé</th>
+                    <th className="p-4 text-right">Contacter</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {clients.map((c, i) => (
+                    <tr key={i} className="hover:bg-slate-50/80 transition">
+                      <td className="p-4">
+                        <div className="font-bold text-slate-900">{c.name}</div>
+                        <div className="text-[10px] text-slate-400">{c.email}</div>
+                      </td>
+                      <td className="p-4 font-mono text-slate-700 font-semibold">{c.phone}</td>
+                      <td className="p-4 text-slate-600">{c.city}</td>
+                      <td className="p-4">
+                        <span className="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 font-bold text-[10px]">
+                          {c.ordersCount} commande(s)
+                        </span>
+                      </td>
+                      <td className="p-4 font-bold text-slate-900 text-sm">{c.totalSpent} DH</td>
+                      <td className="p-4 text-right">
+                        <a 
+                          href={`https://api.whatsapp.com/send?phone=${c.phone.replace(/[^0-9]/g, '')}&text=Bonjour%20${encodeURIComponent(c.name)},%20suivi%20de%20votre%20commande%20chez%20Pr%C3%BCfungStore.`}
+                          target="_blank"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-bold transition"
+                        >
+                          <span>💬 WhatsApp</span>
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // =========================================================================
+    // TAB 5 : PARAMÈTRES & EXPORT
+    // =========================================================================
+    function SettingsTab({ products, orders, onReset, showToast }) {
+      const [whatsapp, setWhatsapp] = useState("212632017446");
+      const [storeName, setStoreName] = useState("PrüfungStore Pro");
+
+      const exportOrdersCSV = () => {
+        let csv = "ID,Client,Email,Telephone,Ville,Date,Montant_DH,Statut\n";
+        orders.forEach(o => {
+          csv += `"${o.id}","${o.customer}","${o.email}","${o.phone}","${o.city}","${o.date}",${o.total},"${o.status}"\n`;
+        });
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "commandes_adminflow_" + new Date().toISOString().slice(0, 10) + ".csv";
+        link.click();
+        showToast("Fichier CSV exporté !");
+      };
+
+      const exportJSON = () => {
+        const data = { products, orders, exportDate: new Date().toISOString() };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "backup_adminflow_" + new Date().toISOString().slice(0, 10) + ".json";
+        link.click();
+        showToast("Sauvegarde JSON exportée !");
+      };
+
+      return (
+        <div className="space-y-6 max-w-3xl">
+          <div>
+            <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 tracking-tight">Paramètres & Configuration</h1>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">Gérez les informations générales de la boutique et la sauvegarde des données.</p>
+          </div>
+
+          {/* Store Info Card */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+            <h3 className="font-outfit font-bold text-base text-slate-900">Coordonnées du Magasin</h3>
+            <div className="space-y-3 text-xs">
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Nom de la Boutique :</label>
+                <input type="text" value={storeName} onChange={(e) => setStoreName(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Numéro WhatsApp Réception Commandes :</label>
+                <input type="text" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none focus:border-blue-500" />
+              </div>
+            </div>
+            <button onClick={() => showToast("Coordonnées enregistrées !")} className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition">
+              Enregistrer
+            </button>
+          </div>
+
+          {/* Export & Reset */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+            <h3 className="font-outfit font-bold text-base text-slate-900">Exportation & Sauvegarde</h3>
+            <p className="text-xs text-slate-500">Téléchargez vos données pour Excel ou effectuez une sauvegarde intégrale.</p>
+            
+            <div className="flex flex-wrap gap-3 pt-2">
+              <button onClick={exportOrdersCSV} className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center gap-2 border border-slate-200 transition">
+                <i data-lucide="download" className="w-4 h-4"></i>
+                <span>Exporter Commandes (CSV/Excel)</span>
+              </button>
+              <button onClick={exportJSON} className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center gap-2 border border-slate-200 transition">
+                <i data-lucide="file-json" className="w-4 h-4"></i>
+                <span>Sauvegarder en JSON</span>
+              </button>
+              <button onClick={onReset} className="px-4 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs flex items-center gap-2 border border-red-200 transition">
+                <i data-lucide="refresh-cw" className="w-4 h-4"></i>
+                <span>Réinitialiser Données Fictives</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      );
+    }
+
+    // =========================================================================
+    // MODALS : ADD/EDIT PRODUCT & ORDER DETAILS
+    // =========================================================================
+    function ProductModal({ product, onClose, onSave }) {
+      const [name, setName] = useState(product ? product.name : "");
+      const [category, setCategory] = useState(product ? product.category : "Manuels B1");
+      const [price, setPrice] = useState(product ? product.price : 235);
+      const [originalPrice, setOriginalPrice] = useState(product ? product.originalPrice : 350);
+      const [stock, setStock] = useState(product ? product.stock : 20);
+      const [image, setImage] = useState(product ? product.image : "assets/products/pack-b1.png");
+      const [description, setDescription] = useState(product ? product.description : "");
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        onSave({
+          name,
+          category,
+          price: parseFloat(price) || 0,
+          originalPrice: originalPrice ? parseFloat(originalPrice) : null,
+          stock: parseInt(stock, 10) || 0,
+          image: image || "assets/products/pack-b1.png",
+          description
+        });
+      };
+
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-slate-200 p-6 sm:p-8 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="font-outfit font-black text-lg text-slate-900">
+                {product ? "Modifier le Produit" : "Ajouter un Nouveau Produit"}
+              </h3>
+              <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100">
+                <i data-lucide="x" className="w-5 h-5"></i>
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Nom du Produit / Manuel :</label>
+                <input type="text" required value={name} onChange={(e) => setName(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none focus:border-blue-500" />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Catégorie :</label>
+                  <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 font-semibold focus:outline-none">
+                    <option value="Manuels B1">Manuels B1</option>
+                    <option value="Manuels B2">Manuels B2</option>
+                    <option value="Packs Complets">Packs Complets</option>
+                    <option value="Grammaire">Grammaire</option>
+                    <option value="Vocabulaire">Vocabulaire</option>
+                    <option value="Rédaction">Rédaction</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Quantité en Stock :</label>
+                  <input type="number" required value={stock} onChange={(e) => setStock(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none focus:border-blue-500" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Prix (DH) :</label>
+                  <input type="number" required value={price} onChange={(e) => setPrice(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none focus:border-blue-500" />
+                </div>
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Prix Barré (Optionnel) :</label>
+                  <input type="number" value={originalPrice || ""} onChange={(e) => setOriginalPrice(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 text-slate-400 focus:outline-none" />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Chemin Image / Fichier :</label>
+                <input type="text" value={image} onChange={(e) => setImage(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 focus:outline-none" />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Description courte :</label>
+                <textarea rows="2" value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 focus:outline-none"></textarea>
+              </div>
+
+              <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100">
+                <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold">Annuler</button>
+                <button type="submit" className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-md shadow-blue-500/20">Enregistrer</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      );
+    }
+
+    function OrderDetailsModal({ order, onClose, onUpdateStatus }) {
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-lg w-full border border-slate-200 p-6 sm:p-8 shadow-2xl space-y-6">
+            
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <span className="font-mono text-[11px] text-slate-400 font-bold block">{order.id}</span>
+                <h3 className="font-outfit font-black text-lg text-slate-900">Détails de la Commande</h3>
+              </div>
+              <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100">
+                <i data-lucide="x" className="w-5 h-5"></i>
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs">
+              
+              {/* Customer Box */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Coordonnées Client</span>
+                <div className="font-bold text-slate-900 text-sm">{order.customer}</div>
+                <div className="text-slate-600 font-medium">📞 {order.phone} • ✉️ {order.email}</div>
+                <div className="text-slate-600">📍 {order.address}, <strong>{order.city}</strong></div>
+              </div>
+
+              {/* Items List */}
+              <div className="space-y-2">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Articles Commandés</span>
+                <div className="divide-y divide-slate-100 border border-slate-100 rounded-xl overflow-hidden">
+                  {order.items.map((it, idx) => (
+                    <div key={idx} className="p-3 flex items-center justify-between bg-white">
+                      <div>
+                        <span className="font-bold text-slate-800">{it.name}</span>
+                        <span className="text-slate-400 block text-[11px]">Quantité : {it.qty}</span>
+                      </div>
+                      <span className="font-bold text-slate-900">{it.price * it.qty} DH</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Total & Payment */}
+              <div className="flex justify-between items-center p-3.5 rounded-xl bg-blue-50 text-blue-900 font-bold">
+                <span>Total à Encaisser (COD) :</span>
+                <span className="font-outfit font-black text-lg text-blue-700">{order.total} DH</span>
+              </div>
+
+              {/* Status Change */}
+              <div className="pt-2 flex items-center justify-between">
+                <label className="font-bold text-slate-700">Changer Statut :</label>
+                <select 
+                  value={order.status}
+                  onChange={(e) => { onUpdateStatus(order.id, e.target.value); onClose(); }}
+                  className="p-2 rounded-xl border border-slate-200 font-bold bg-white focus:outline-none"
+                >
+                  <option value="pending">🟡 En attente</option>
+                  <option value="processing">🔵 En cours</option>
+                  <option value="shipped">🟣 Expédiée</option>
+                  <option value="delivered">🟢 Livrée & Payée</option>
+                  <option value="cancelled">🔴 Annulée</option>
+                </select>
+              </div>
+
+            </div>
+
+            <div className="pt-3 border-t border-slate-100 flex items-center justify-end">
+              <button onClick={onClose} className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs">
+                Fermer
+              </button>
+            </div>
+
+          </div>
+        </div>
+      );
+    }
+
+    function NewOrderModal({ products, onClose, onSave }) {
+      const [customer, setCustomer] = useState("");
+      const [phone, setPhone] = useState("");
+      const [email, setEmail] = useState("");
+      const [city, setCity] = useState("Casablanca");
+      const [address, setAddress] = useState("");
+      const [selectedProdId, setSelectedProdId] = useState(products[0]?.id || "");
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        const p = products.find(prod => prod.id === selectedProdId) || products[0];
+        onSave({
+          id: "CMD-" + Date.now().toString().slice(-6),
+          customer,
+          phone,
+          email: email || "client@gmail.com",
+          city,
+          address,
+          date: new Date().toISOString().replace('T', ' ').slice(0, 16),
+          items: [{ id: p.id, name: p.name, qty: 1, price: p.price }],
+          total: p.price,
+          status: "pending",
+          payment: "Paiement à la livraison (COD)"
+        });
+      };
+
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full border border-slate-200 p-6 sm:p-8 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="font-outfit font-black text-lg text-slate-900">Nouvelle Commande Manuelle</h3>
+              <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100">
+                <i data-lucide="x" className="w-5 h-5"></i>
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Nom du Client :</label>
+                <input type="text" required value={customer} onChange={(e) => setCustomer(e.target.value)} placeholder="ex: Mohammed Alami" className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none focus:border-blue-500" />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Téléphone :</label>
+                  <input type="text" required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 6..." className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none focus:border-blue-500" />
+                </div>
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Ville :</label>
+                  <input type="text" required value={city} onChange={(e) => setCity(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none focus:border-blue-500" />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Adresse de Livraison :</label>
+                <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Quartier, Rue, N°..." className="w-full p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500" />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Produit Commandé :</label>
+                <select value={selectedProdId} onChange={(e) => setSelectedProdId(e.target.value)} className="w-full p-2.5 rounded-xl border border-slate-200 font-bold focus:outline-none">
+                  {products.map(p => (
+                    <option key={p.id} value={p.id}>{p.name} ({p.price} DH)</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100">
+                <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold">Annuler</button>
+                <button type="submit" className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-md shadow-emerald-500/20">Créer</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      );
+    }
+
+    function StatusBadge({ status }) {
+      const map = {
+        pending: { label: "🟡 En attente", cls: "bg-amber-50 text-amber-700 border-amber-200" },
+        processing: { label: "🔵 En cours", cls: "bg-blue-50 text-blue-700 border-blue-200" },
+        shipped: { label: "🟣 Expédiée", cls: "bg-purple-50 text-purple-700 border-purple-200" },
+        delivered: { label: "🟢 Livrée", cls: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+        cancelled: { label: "🔴 Annulée", cls: "bg-red-50 text-red-700 border-red-200" }
+      };
+      const st = map[status] || map.pending;
+      return <span className={`px-2.5 py-0.5 rounded-full border text-[10px] font-bold ${st.cls}`}>{st.label}</span>;
+    }
+
+    // Render Root
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
 </body>
 </html>
