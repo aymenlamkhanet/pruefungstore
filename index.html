@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PrüfungStore — L'Excellence des Examens d'Allemand B1 & B2</title>
+  
+  <link rel="icon" type="image/jpeg" href="assets/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            outfit: ['Outfit', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          boxShadow: {
+            'glow-apple': '0 0 50px -10px rgba(245, 158, 11, 0.3)',
+            'glow-cyan': '0 0 50px -10px rgba(6, 182, 212, 0.3)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Three.js for 3D WebGL Rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      background-color: #060608;
+      color: #f5f5f7;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .apple-gradient-text {
+      background: linear-gradient(180deg, #FFFFFF 0%, #A1A1A6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .apple-gold-text {
+      background: linear-gradient(135deg, #FDE68A 0%, #F59E0B 50%, #D97706 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .frosted-glass {
+      background: rgba(18, 18, 22, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .bento-card {
+      background: rgba(18, 18, 24, 0.85);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    .animate-float {
+      animation: float 4s ease-in-out infinite;
+    }
+  
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black relative bg-[#060608]">
+
+  <!-- ================= GEMINI CINEMATIC LIBRARY BACKGROUND (BIEN APPARENT) ================= -->
+  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+    <img src="assets/site-bg.jpg" alt="Gemini Library Background" class="w-full h-full object-cover object-center filter brightness-[0.75] contrast-115 scale-105 transform">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#060608]/70 via-[#060608]/50 to-[#060608]/80 backdrop-blur-[1px]"></div>
+  </div>
+
+  <!-- ================= APPLE STYLE TOP NAVBAR ================= -->
+  <header class="fixed top-0 left-0 right-0 z-50 frosted-glass border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-2.5 group">
+        <img src="assets/logo.jpg" alt="Logo" class="w-8 h-8 rounded-lg object-cover border border-amber-500/40">
+        <span class="font-outfit font-extrabold text-lg tracking-tight text-white flex items-center">
+          Prüfung<span class="text-amber-400">Store</span>
+          <span class="text-[10px] text-slate-400 font-mono ml-1.5 px-1.5 py-0.2 rounded bg-white/10">PRO</span>
+        </span>
+      </a>
+
+      <!-- Quick Nav Links -->
+      <nav class="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-400">
+        <a href="#hero-3d" class="hover:text-white transition">Accueil</a>
+        <a href="#bento-section" class="hover:text-white transition">Innovations</a>
+        <a href="#catalog-section" class="hover:text-white transition">Les Packs</a>
+        <a href="#compare-section" class="hover:text-white transition">Comparatif</a>
+      </nav>
+
+      <!-- Cart Trigger & Action -->
+      <div class="flex items-center gap-3">
+        <button id="cart-drawer-btn" class="relative p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-2 text-xs font-bold px-3.5">
+          <i data-lucide="shopping-bag" class="w-4 h-4 text-amber-400"></i>
+          <span class="hidden sm:inline">Panier</span>
+          <span id="cart-count" class="bg-white text-black text-[10px] font-black px-1.5 py-0.2 rounded-full">0</span>
+        </button>
+
+        <a href="#catalog-section" class="px-4 py-2 rounded-full bg-white hover:bg-slate-200 text-black font-outfit font-extrabold text-xs transition shadow-md">
+          Acheter (235 DH)
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= CINEMATIC HERO WITH INTERACTIVE 3D THREE.JS CANVAS ================= -->
+  <section id="hero-3d" class="relative min-h-[90vh] pt-24 pb-16 flex flex-col justify-center items-center overflow-hidden">
+    
+    <!-- Background Aura -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-amber-500/10 rounded-full blur-[140px] pointer-events-none"></div>
+    <div class="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center relative z-10 space-y-6">
+      
+      <!-- Overline Tag -->
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-slate-300 backdrop-blur-md">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>Édition Officielle 2026 • Format Reliure Spirale Métallique</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="font-outfit text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-tight">
+        <span class="apple-gradient-text">Prüfung Deutsch B1 & B2.</span><br>
+        <span class="apple-gold-text">Redéfinir votre réussite.</span>
+      </h1>
+
+      <p id="hero-3d-tag" class="text-sm sm:text-lg text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed">
+        L'excellence des manuels de préparation <strong>TELC</strong> et <strong>GOETHE-ÖSD</strong> avec 25 Modelltests calibrés, corrigés exhaustifs et audios haute fidélité.
+      </p>
+
+      <!-- Center Official Logo with Smooth Floating Animation & Glow -->
+      <div class="relative w-full max-w-sm mx-auto my-8 flex items-center justify-center">
+        
+        <!-- Ambient radial pulse glow behind logo -->
+        <div class="absolute inset-0 bg-gradient-to-r from-amber-500/25 via-red-500/20 to-amber-500/25 rounded-full blur-3xl animate-pulse pointer-events-none"></div>
+        
+        <!-- Logo Card with smooth floating animation -->
+        <div class="relative z-10 group cursor-pointer transition-all duration-700 hover:scale-105">
+          <div class="p-3 sm:p-4 rounded-3xl bg-gradient-to-b from-white/15 to-white/5 border border-white/20 shadow-2xl backdrop-blur-2xl animate-float">
+            <img src="assets/logo.jpg" alt="Logo Prüfung Vorbereitung Bücher" class="w-48 h-48 sm:w-56 sm:h-56 rounded-2xl object-cover shadow-2xl border border-amber-500/30">
+          </div>
+          
+          <!-- Floating Status Badge -->
+          <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-black/90 backdrop-blur-md border border-amber-500/40 text-xs font-bold text-amber-300 shadow-xl flex items-center gap-2 whitespace-nowrap">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>@prufung_vorbereitung_bucher</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action Box -->
+      <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <button id="hero-3d-cta" onclick="orderOnWhatsApp('pack-b1-telc-2026')" class="w-full sm:w-auto px-8 py-4 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-outfit font-extrabold text-sm shadow-xl shadow-emerald-950/60 transition flex items-center justify-center gap-2.5">
+          <svg class="w-5 h-5 fill-white shrink-0" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+          <span>Commandez</span>
+        </button>
+
+        <a href="#catalog-section" class="w-full sm:w-auto px-7 py-4 rounded-full bg-white/10 hover:bg-white/15 text-white font-outfit font-bold text-sm border border-white/15 transition flex items-center justify-center gap-2">
+          <span>Découvrir tous les livres</span>
+          <i data-lucide="arrow-down" class="w-4 h-4"></i>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= BENTO GRID SECTION (APPLE PRO INNOVATIONS) ================= -->
+  <section id="bento-section" class="py-20 border-t border-white/10 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+        <span class="text-xs font-black tracking-widest uppercase text-amber-400">INGÉNIERIE PÉDAGOGIQUE</span>
+        <h2 class="font-outfit text-3xl sm:text-5xl font-extrabold text-white">
+          Chaque détail a été pensé pour votre réussite.
+        </h2>
+        <p class="text-sm sm:text-base text-slate-400">
+          Les meilleures ressources réunies dans un format d'étude ultra-ergonomique.
+        </p>
+      </div>
+
+      <!-- Bento Grid Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+        
+        <!-- Bento 1: 25 Modelltests (Large 8 Cols) -->
+        <div class="md:col-span-8 bento-card rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden group hover:border-amber-500/40 transition-all">
+          <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div class="space-y-3 max-w-md relative z-10">
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              100% Fidélité aux Épreuves
+            </span>
+            <h3 class="font-outfit text-3xl font-extrabold text-white">25 Modelltests réels. Sans surprise le jour J.</h3>
+            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              Reproduit fidèlement les épreuves officielles de <em>Leseverstehen</em>, <em>Hörverstehen</em>, <em>Schriftlicher Ausdruck</em> et <em>Mündliche Prüfung</em> avec barème officiel.
+            </p>
+          </div>
+
+          <div class="pt-8 flex items-center gap-6 text-slate-300 text-xs">
+            <div>
+              <span class="font-outfit font-black text-2xl text-white block">25</span>
+              <span class="text-slate-500">Examens blancs</span>
+            </div>
+            <div class="h-8 w-px bg-white/10"></div>
+            <div>
+              <span class="font-outfit font-black text-2xl text-amber-400 block">100%</span>
+              <span class="text-slate-500">Solutions incluses</span>
+            </div>
+            <div class="h-8 w-px bg-white/10"></div>
+            <div>
+              <span class="font-outfit font-black text-2xl text-emerald-400 block">MP3</span>
+              <span class="text-slate-500">Audios Haute Clarté</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento 2: QR Code Audios (4 Cols) -->
+        <div class="md:col-span-4 bento-card rounded-3xl p-8 flex flex-col justify-between hover:border-cyan-500/40 transition-all">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+              <i data-lucide="qr-code" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-outfit text-2xl font-extrabold text-white">Audios QR-Code & Google Drive</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Scannez et écoutez immédiatement chaque piste audio sur votre smartphone sans avoir besoin de lecteur CD.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-cyan-400 pt-4 flex items-center gap-1">
+            <span>Accès instantané 24/7</span>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </span>
+        </div>
+
+        <!-- Bento 3: Reliure Spirale 360° (4 Cols) -->
+        <div class="md:col-span-4 bento-card rounded-3xl p-8 flex flex-col justify-between hover:border-purple-500/40 transition-all">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
+              <i data-lucide="layers" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-outfit text-2xl font-extrabold text-white">Reliure Spirale 360°</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Ouvrez vos livres à plat sur votre bureau pour annoter, réviser et travailler confortablement sans abîmer les pages.
+            </p>
+          </div>
+          <span class="text-xs font-bold text-purple-400 pt-4">Confort d'étude optimal</span>
+        </div>
+
+        <!-- Bento 4: Livraison & Paiement (8 Cols) -->
+        <div class="md:col-span-8 bento-card rounded-3xl p-8 flex flex-col justify-between hover:border-emerald-500/40 transition-all">
+          <div class="space-y-3 max-w-lg">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <i data-lucide="truck" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-outfit text-3xl font-extrabold text-white">Livraison Gratuite & Paiement à la réception</h3>
+            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              Recevez vos manuels en 24h/48h partout au Maroc. Vous ne réglez le livreur en espèces qu'après avoir inspecté votre colis.
+            </p>
+          </div>
+          <div class="pt-4 flex items-center gap-2 text-xs font-bold text-emerald-400">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+            <span>Zéro risque • Service client disponible 7j/7</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= CATALOGUE SECTION (3D TILT CARDS) ================= -->
+  <section id="catalog-section" class="py-20 border-t border-white/10 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div>
+          <span class="text-xs font-black tracking-widest uppercase text-amber-400">COLLECTION OFFICIELLE</span>
+          <h2 class="font-outfit text-3xl sm:text-5xl font-black text-white mt-1">
+            Choisissez votre Pack de Réussite.
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-2">
+            Tous les livres sont imprimés en haute qualité et accompagnés de leurs corrigés.
+          </p>
+        </div>
+
+        <!-- Filter Pill Tabs -->
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="filterCatalog('all')" data-level="all" class="level-filter-btn active px-4 py-2 rounded-full text-xs font-bold bg-white text-black shadow-lg transition-all">
+            Tous les articles
+          </button>
+          <button onclick="filterCatalog('packs')" data-level="packs" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white/10 text-slate-300 hover:bg-white/20 transition-all">
+            ★ Packs Complets
+          </button>
+          <button onclick="filterCatalog('B1')" data-level="B1" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white/10 text-slate-300 hover:bg-white/20 transition-all">
+            Niveau B1
+          </button>
+          <button onclick="filterCatalog('B2')" data-level="B2" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white/10 text-slate-300 hover:bg-white/20 transition-all">
+            Niveau B2
+          </button>
+        </div>
+      </div>
+
+      <!-- Catalog Grid with 3D Tilt Cards -->
+      <div id="catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <!-- Injected via JavaScript -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= INTERACTIVE COMPARISON MATRIX (APPLE STYLE) ================= -->
+  <section id="compare-section" class="py-20 border-t border-white/10 bg-black/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-14 space-y-3">
+        <span class="text-xs font-black tracking-widest uppercase text-amber-400">GUIDE DE CHOIX</span>
+        <h2 class="font-outfit text-3xl sm:text-4xl font-extrabold text-white">Comparez les Packs</h2>
+        <p class="text-xs sm:text-sm text-slate-400">Trouvez la formule exacte selon votre examen cible.</p>
+      </div>
+
+      <div class="overflow-x-auto rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl">
+        <table class="w-full text-left text-xs text-slate-300">
+          <thead class="bg-white/5 border-b border-white/10 text-white font-outfit text-sm">
+            <tr>
+              <th class="p-4 sm:p-6">Caractéristiques</th>
+              <th class="p-4 sm:p-6 text-amber-400">Pack B1 TELC (2026)</th>
+              <th class="p-4 sm:p-6 text-cyan-400">Pack GOETHE - ÖSD B1/B2</th>
+              <th class="p-4 sm:p-6 text-purple-400">Pack B2 TELC Pro</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5">
+            <tr>
+              <td class="p-4 sm:p-6 font-bold text-white">Niveau Visé</td>
+              <td class="p-4 sm:p-6">B1 (Allemand Intermédiaire)</td>
+              <td class="p-4 sm:p-6">B1 et B2 Combinés</td>
+              <td class="p-4 sm:p-6">B2 (Avancé Professionnel)</td>
+            </tr>
+            <tr>
+              <td class="p-4 sm:p-6 font-bold text-white">Organisme d'Examen</td>
+              <td class="p-4 sm:p-6">telc GmbH</td>
+              <td class="p-4 sm:p-6">Goethe-Institut & ÖSD</td>
+              <td class="p-4 sm:p-6">telc GmbH</td>
+            </tr>
+            <tr>
+              <td class="p-4 sm:p-6 font-bold text-white">Nombre de Volumes</td>
+              <td class="p-4 sm:p-6">2 Volumes Spirales</td>
+              <td class="p-4 sm:p-6">2 Volumes Format Paysage</td>
+              <td class="p-4 sm:p-6">Collection 4 Modules</td>
+            </tr>
+            <tr>
+              <td class="p-4 sm:p-6 font-bold text-white">Format Audio</td>
+              <td class="p-4 sm:p-6">Google Drive MP3 + QR Codes</td>
+              <td class="p-4 sm:p-6">QR-Codes instantanés</td>
+              <td class="p-4 sm:p-6">Google Drive HD + App</td>
+            </tr>
+            <tr>
+              <td class="p-4 sm:p-6 font-bold text-white">Prix Promo Actuel</td>
+              <td class="p-4 sm:p-6 font-outfit font-black text-base text-white">235 DH</td>
+              <td class="p-4 sm:p-6 font-outfit font-black text-base text-white">235 DH</td>
+              <td class="p-4 sm:p-6 font-outfit font-black text-base text-white">260 DH</td>
+            </tr>
+            <tr>
+              <td class="p-4 sm:p-6 font-bold text-white">Action Immédiate</td>
+              <td class="p-4 sm:p-6">
+                <button onclick="orderOnWhatsApp('pack-b1-telc-2026')" class="px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs">
+                  Commander
+                </button>
+              </td>
+              <td class="p-4 sm:p-6">
+                <button onclick="orderOnWhatsApp('pack-goethe-osd-b1-b2')" class="px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs">
+                  Commander
+                </button>
+              </td>
+              <td class="p-4 sm:p-6">
+                <button onclick="orderOnWhatsApp('pack-b2-telc-complet')" class="px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs">
+                  Commander
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= NOTRE ACTUALITÉ SUR INSTAGRAM (SECTION IDENTIQUE) ================= -->
+  <section id="instagram-section" class="py-20 border-t border-white/10 relative bg-black/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-2xl mx-auto mb-14 space-y-2">
+        <span class="inline-block px-4 py-1.5 rounded-full bg-[#f59e0b] text-black font-black text-xs uppercase tracking-wider shadow-md">
+          SUIVEZ-NOUS
+        </span>
+        
+        <h2 class="font-outfit text-3xl sm:text-4xl font-extrabold text-white pt-2">
+          Notre Actualité sur Instagram
+        </h2>
+        
+        <p class="text-xs sm:text-sm text-slate-400">
+          Découvrez nos dernières publications, photos et vidéos
+        </p>
+      </div>
+
+      <!-- 3 Instagram Cards Grid with Pure Full-Height Embedded Reels -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto items-stretch">
+        
+        <!-- Card 1: Official Instagram Profile Card -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 flex flex-col items-center justify-between text-center shadow-2xl border border-white/20 h-[440px]">
+          <div class="space-y-4">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 p-0.5 mx-auto shadow-lg">
+              <div class="w-full h-full bg-white rounded-2xl flex items-center justify-center">
+                <svg class="w-8 h-8 fill-pink-600 shrink-0" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </div>
+            </div>
+            
+            <h3 class="font-outfit font-black text-2xl text-slate-900">Instagram Officiel</h3>
+            <p class="text-xs text-slate-500 font-medium">@prufung_vorbereitung_bucher</p>
+            
+            <p class="text-xs text-slate-600 leading-relaxed pt-1">
+              Rejoignez notre communauté de candidats : cours en direct, vidéos d'explications et conseils pour réussir le B1 et B2.
+            </p>
+          </div>
+
+          <div class="w-full space-y-3 pt-4 border-t border-slate-100">
+            <a href="https://www.instagram.com/prufung_vorbereitung_bucher?igsi=MTkweG5pZnExb2h1Yw%3D%3D#" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2">
+              <svg class="w-4 h-4 fill-white shrink-0" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+              <span>S'abonner sur Instagram</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 2: Embedded Reel 1 (DUOLdw-DEyJ) - 100% Pure Video (Zero Headers, Zero Footers) -->
+        <div class="bg-black rounded-3xl overflow-hidden border border-white/15 shadow-2xl h-[440px] flex flex-col relative group">
+          <div class="w-full h-full bg-black relative flex items-center justify-center overflow-hidden rounded-3xl">
+            <iframe 
+              id="reel-frame-1"
+              src="https://www.instagram.com/reel/DUOLdw-DEyJ/embed/?autoplay=1" 
+              class="w-full h-[580px] -mt-[64px] border-0"
+              frameborder="0" 
+              scrolling="no" 
+              allowtransparency="true" 
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+            ></iframe>
+          </div>
+        </div>
+
+        <!-- Card 3: Embedded Reel 2 (DS7_i7ujIuR) - 100% Pure Video (Zero Headers, Zero Footers) -->
+        <div class="bg-black rounded-3xl overflow-hidden border border-white/15 shadow-2xl h-[440px] flex flex-col relative group">
+          <div class="w-full h-full bg-black relative flex items-center justify-center overflow-hidden rounded-3xl">
+            <iframe 
+              id="reel-frame-2"
+              src="https://www.instagram.com/reel/DS7_i7ujIuR/embed/?autoplay=1" 
+              class="w-full h-[580px] -mt-[64px] border-0"
+              frameborder="0" 
+              scrolling="no" 
+              allowtransparency="true" 
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+            ></iframe>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Profile Link -->
+      <div class="text-center pt-10">
+        <a href="https://www.instagram.com/prufung_vorbereitung_bucher?igsi=MTkweG5pZnExb2h1Yw%3D%3D#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] hover:opacity-90 text-white font-bold text-xs shadow-lg transition transform hover:scale-105">
+          <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+          </svg>
+          <span>Rejoindre notre communauté sur Instagram (@prufung_vorbereitung_bucher)</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+    <!-- ================= FOOTER ABDEUTSCH CENTER (STRUCTURE OFFICIELLE 4 COLONNES) ================= -->
+    <!-- ================= FOOTER ABDEUTSCH CENTER (STRUCTURE OFFICIELLE 4 COLONNES) ================= -->
+  <footer class="relative z-10 bg-black border-t-2 border-red-600/80 text-slate-400 text-xs">
+    
+    <!-- German Flag Top Accent Stripe -->
+    <div class="w-full h-1 flex">
+      <div class="w-1/3 bg-black"></div>
+      <div class="w-1/3 bg-red-600"></div>
+      <div class="w-1/3 bg-amber-400"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+        
+        <!-- Col 1: Brand & Presentation -->
+        <div class="space-y-4">
+          <h3 class="font-outfit font-black text-lg text-white tracking-wide uppercase">
+            ABDEUTSCH CENTER
+          </h3>
+          <p class="text-xs text-slate-400 leading-relaxed max-w-xs">
+            Votre partenaire de confiance pour l'apprentissage de l'allemand et l'accompagnement vers une carrière en Allemagne.
+          </p>
+        </div>
+
+        <!-- Col 2: Liens Rapides -->
+        <div class="space-y-3">
+          <h4 class="font-outfit font-bold text-sm text-white tracking-wider">
+            Liens Rapides
+          </h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="#hero-3d" class="hover:text-white transition">À propos</a></li>
+            <li><a href="#bento-section" class="hover:text-white transition">Nos Services</a></li>
+            <li><a href="#catalog-section" class="hover:text-white transition">Nos Cours</a></li>
+            <li><a href="#catalog-section" class="hover:text-white transition">Examens</a></li>
+            <li><a href="https://api.whatsapp.com/send?phone=212632017446&text=Bonjour%20ABDEUTSCH%20CENTER" target="_blank" class="hover:text-white transition">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Nos Services -->
+        <div class="space-y-3">
+          <h4 class="font-outfit font-bold text-sm text-white tracking-wider">
+            Nos Services
+          </h4>
+          <ul class="space-y-2 text-xs">
+            <li class="hover:text-white transition cursor-default">Cours d'Allemand</li>
+            <li class="hover:text-white transition cursor-default">Préparation Examens</li>
+            <li class="hover:text-white transition cursor-default">Accompagnement Visa</li>
+            <li class="hover:text-white transition cursor-default">Formation Professionnelle</li>
+            <li class="hover:text-white transition cursor-default">Orientation Universitaire</li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Contact -->
+        <div class="space-y-3">
+          <h4 class="font-outfit font-bold text-sm text-white tracking-wider">
+            Contact
+          </h4>
+          <ul class="space-y-3 text-xs">
+            <li>
+              <a href="tel:+212632017446" class="flex items-center gap-2.5 text-slate-300 hover:text-white transition">
+                <i data-lucide="phone" class="w-4 h-4 text-red-500 shrink-0"></i>
+                <span class="font-semibold">+212 632-017446</span>
+              </a>
+            </li>
+            
+            <li>
+              <a href="https://maps.google.com/?q=ABDEUTSCH+CENTER" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 text-slate-300 hover:text-white transition">
+                <i data-lucide="map-pin" class="w-4 h-4 text-red-500 shrink-0"></i>
+                <span>Voir sur Maps</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="pt-10 mt-10 border-t border-white/10 text-center text-[11px] text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p>© 2026 ABDEUTSCH CENTER • Tous droits réservés.</p>
+        <p class="text-slate-400">PrüfungStore — Manuels & Packs de Préparation B1 / B2</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= FLOATING WHATSAPP BUTTON (AUTHENTIC & PULSING) ================= -->
+  <a href="https://api.whatsapp.com/send?phone=212632017446&text=Bonjour,%20je%20souhaite%20commander%20un%20pack%20de%20pr%C3%A9paration%20aux%20examens%20d%27allemand%20B1/B2." target="_blank" rel="noopener noreferrer" class="fixed bottom-6 left-6 z-50 w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white flex items-center justify-center shadow-[0_0_25px_rgba(37,211,102,0.6)] hover:scale-110 transition-all duration-300 group" title="Contactez-nous sur WhatsApp">
+    <!-- Pulsing ring -->
+    <span class="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-30 pointer-events-none"></span>
+    
+    <!-- SVG WhatsApp Icon -->
+    <svg class="w-8 h-8 fill-white relative z-10" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+  </a>
+
+  <!-- ================= BOOK DETAILS MODAL ================= -->
+  <div id="book-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-[#121216] rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border border-white/15 p-6 sm:p-8 relative shadow-2xl">
+      <button onclick="closeBookModal()" class="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-400 hover:text-white transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- ================= CART DRAWER ================= -->
+  <div id="cart-drawer-overlay" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm transition-opacity">
+    <div id="cart-drawer" class="fixed top-0 right-0 w-full max-w-md h-full bg-[#121216] shadow-2xl flex flex-col z-50 transform translate-x-full transition-transform duration-300 border-l border-white/10">
+      
+      <div class="p-5 border-b border-white/10 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i data-lucide="shopping-bag" class="w-5 h-5 text-amber-400"></i>
+          <h3 class="font-outfit font-bold text-lg text-white">Votre Panier</h3>
+          <span id="cart-drawer-badge" class="px-2 py-0.5 text-xs rounded-full bg-white/10 text-white font-bold">0</span>
+        </div>
+        <button onclick="closeCartDrawer()" class="p-2 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div id="cart-items-list" class="flex-1 overflow-y-auto p-5 space-y-3"></div>
+
+      <div class="p-5 border-t border-white/10 bg-black/50 space-y-3">
+        <div class="flex items-center justify-between text-sm">
+          <span class="font-semibold text-slate-400">Total Net :</span>
+          <span id="cart-total-price" class="font-outfit font-extrabold text-xl text-white">0 DH</span>
+        </div>
+        
+        <button onclick="orderCartOnWhatsApp()" class="w-full py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-outfit font-extrabold text-sm shadow-xl transition flex items-center justify-center gap-2">
+          <svg class="w-5 h-5 fill-white shrink-0" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+          <span>Commander tout le panier sur WhatsApp</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="src/data/books.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>
