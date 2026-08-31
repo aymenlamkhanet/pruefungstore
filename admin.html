@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connexion Administration • AdminFlow Pro</title>
-  <meta name="description" content="Portail d'authentification administrateur sécurisé avec nom d'utilisateur et mot de passe.">
+  <title>Administration • PrüfungStore Pro (Theme Germany)</title>
+  <meta name="description" content="Dashboard d'administration pour PrüfungStore avec arrière-plan thématique Allemagne et design moderne.">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,6 +29,11 @@
               500: '#3b82f6',
               600: '#2563eb',
               700: '#1d4ed8',
+            },
+            germany: {
+              gold: '#f59e0b',
+              red: '#ef4444',
+              black: '#0a0a0f'
             }
           }
         }
@@ -45,15 +50,38 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.25s ease, color 0.25s ease; }
+    body { 
+      font-family: 'Plus Jakarta Sans', sans-serif; 
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
     .font-outfit { font-family: 'Outfit', sans-serif; }
+    
+    /* Germany Flag Accent Bar */
+    .germany-ribbon {
+      height: 3px;
+      background: linear-gradient(90deg, #18181b 0%, #18181b 33.3%, #dc2626 33.3%, #dc2626 66.6%, #f59e0b 66.6%, #f59e0b 100%);
+    }
+
+    /* Glassmorphism Panels with Germany Backdrop */
+    .glass-dark {
+      background: rgba(14, 20, 34, 0.88);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .glass-light {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.3); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.6); }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(245, 158, 11, 0.5); }
   </style>
 </head>
-<body class="h-full antialiased selection:bg-blue-600 selection:text-white bg-slate-50 dark:bg-[#090d16] text-slate-900 dark:text-slate-100">
+<body class="h-full antialiased selection:bg-amber-500 selection:text-black bg-slate-900 text-slate-100">
 
   <div id="root" class="h-full"></div>
 
@@ -61,7 +89,6 @@
   <script type="text/babel">
     const { useState, useEffect, useMemo } = React;
 
-    // Identifiants par défaut
     const DEFAULT_AUTH = {
       username: "admin",
       password: "admin2026"
@@ -99,18 +126,15 @@
     ];
 
     function App() {
-      // Authentication State
       const [isAuthenticated, setIsAuthenticated] = useState(() => {
         return sessionStorage.getItem("adminflow_auth") === "true";
       });
 
-      // Stored Credentials
       const [authCredentials, setAuthCredentials] = useState(() => {
         const local = localStorage.getItem("adminflow_creds");
         return local ? JSON.parse(local) : DEFAULT_AUTH;
       });
 
-      // Theme State (Dark vs Light)
       const [theme, setTheme] = useState(() => {
         return localStorage.getItem("adminflow_theme") || "dark";
       });
@@ -169,48 +193,47 @@
         setTimeout(() => setToastMessage(""), 3000);
       };
 
-      // Auth Handler
       const handleLoginSuccess = () => {
         sessionStorage.setItem("adminflow_auth", "true");
         setIsAuthenticated(true);
-        showToast("Bienvenue sur votre Dashboard !");
+        showToast("Willkommen! Accès au Dashboard autorisé.");
       };
 
       const handleLogout = () => {
         sessionStorage.removeItem("adminflow_auth");
         setIsAuthenticated(false);
-        showToast("Vous avez été déconnecté.");
+        showToast("Session clôturée avec succès.");
       };
 
       const handleUpdateCredentials = (newUsername, newPassword) => {
         setAuthCredentials({ username: newUsername, password: newPassword });
-        showToast("Identifiants de connexion modifiés avec succès !");
+        showToast("Identifiants de connexion modifiés !");
       };
 
       // CRUD Products
       const handleSaveProduct = (prodData) => {
         if (editingProduct) {
           setProducts(products.map(p => p.id === editingProduct.id ? { ...p, ...prodData } : p));
-          showToast("Produit modifié avec succès !");
+          showToast("Manuel modifié avec succès !");
         } else {
           const newId = "PRD-" + String(products.length + 1).padStart(3, '0');
           setProducts([{ id: newId, sales: 0, ...prodData }, ...products]);
-          showToast("Nouveau produit ajouté au catalogue !");
+          showToast("Nouveau manuel ajouté au catalogue !");
         }
         setIsProductModalOpen(false);
         setEditingProduct(null);
       };
 
       const handleDeleteProduct = (id) => {
-        if (confirm("Supprimer définitivement ce produit ?")) {
+        if (confirm("Supprimer définitivement ce manuel ?")) {
           setProducts(products.filter(p => p.id !== id));
-          showToast("Produit supprimé.");
+          showToast("Manuel supprimé.");
         }
       };
 
       const handleUpdateOrderStatus = (orderId, newStatus) => {
         setOrders(orders.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
-        showToast("Statut de la commande mis à jour !");
+        showToast("Statut de livraison actualisé !");
       };
 
       const handleDeleteOrder = (orderId) => {
@@ -221,7 +244,7 @@
       };
 
       // =========================================================================
-      // SI L'UTILISATEUR N'EST PAS AUTHENTIFIÉ : AFFICHER LA PAGE DE LOGIN
+      // LOGIN PAGE AVEC ARRIÈRE-PLAN ALLEMAGNE (BERLIN BRANDENBURG GATE)
       // =========================================================================
       if (!isAuthenticated) {
         return (
@@ -235,57 +258,66 @@
       }
 
       // =========================================================================
-      // DASHBOARD ADMINISTRATEUR CONNECTÉ
+      // DASHBOARD ADMINISTRATEUR (THEME GERMANY & GLASSMORPHISM)
       // =========================================================================
       return (
-        <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-[#090d16] text-slate-900 dark:text-slate-100 transition-colors duration-200">
+        <div className="relative flex h-screen overflow-hidden bg-slate-950 text-slate-100">
           
+          {/* Germany City Wallpaper Backdrop */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-20 pointer-events-none filter blur-[2px] transform scale-105"
+            style={{ backgroundImage: "url('assets/germany_bg.jpg')" }}
+          ></div>
+
           {/* ================= 1. SIDEBAR ================= */}
-          <aside className="w-64 bg-white dark:bg-[#0e1422] border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between hidden md:flex shrink-0 shadow-sm z-20 transition-colors duration-200">
+          <aside className="w-64 glass-dark border-r border-white/10 flex flex-col justify-between hidden md:flex shrink-0 shadow-2xl z-20">
             <div className="p-6 space-y-7">
               
-              {/* Brand Logo */}
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-outfit font-black text-lg shadow-md shadow-blue-500/20">
-                  AF
+              {/* Brand Logo with Germany Colors Badge */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-400 text-black flex items-center justify-center font-outfit font-black text-lg shadow-lg shadow-amber-500/20">
+                    🇩🇪
+                  </div>
+                  <div>
+                    <span className="font-outfit font-black text-lg text-white tracking-tight block leading-tight">
+                      Prüfung<span className="text-amber-400">Admin</span>
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">ABDEUTSCH CENTER</span>
+                  </div>
                 </div>
-                <div>
-                  <span className="font-outfit font-black text-lg text-slate-900 dark:text-white tracking-tight block leading-tight">
-                    Admin<span className="text-blue-600 dark:text-blue-400">Flow</span>
-                  </span>
-                  <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">Store Manager</span>
-                </div>
+                <div className="germany-ribbon rounded-full"></div>
               </div>
 
               {/* Navigation Items */}
               <nav className="space-y-1.5">
                 <NavItem icon="layout-dashboard" label="Vue d'ensemble" active={currentTab === "overview"} onClick={() => setCurrentTab("overview")} />
-                <NavItem icon="package" label="Produits" count={products.length} active={currentTab === "products"} onClick={() => setCurrentTab("products")} />
-                <NavItem icon="shopping-cart" label="Commandes" count={orders.filter(o => o.status === "pending" || o.status === "processing").length} active={currentTab === "orders"} onClick={() => setCurrentTab("orders")} badgeColor="bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400" />
-                <NavItem icon="users" label="Clients" active={currentTab === "clients"} onClick={() => setCurrentTab("clients")} />
+                <NavItem icon="book-open" label="Manuels & Stocks" count={products.length} active={currentTab === "products"} onClick={() => setCurrentTab("products")} />
+                <NavItem icon="shopping-bag" label="Commandes" count={orders.filter(o => o.status === "pending" || o.status === "processing").length} active={currentTab === "orders"} onClick={() => setCurrentTab("orders")} badgeColor="bg-amber-500/20 text-amber-300 border border-amber-500/30" />
+                <NavItem icon="users" label="Clients WhatsApp" active={currentTab === "clients"} onClick={() => setCurrentTab("clients")} />
                 <NavItem icon="settings" label="Paramètres" active={currentTab === "settings"} onClick={() => setCurrentTab("settings")} />
               </nav>
 
             </div>
 
             {/* Bottom Profile & Logout */}
-            <div className="p-5 border-t border-slate-100 dark:border-slate-800/80 space-y-3">
-              <a href="index.html" target="_blank" className="w-full py-2 px-3 rounded-xl bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold text-xs flex items-center justify-center gap-2 transition border border-slate-200 dark:border-slate-800">
+            <div className="p-5 border-t border-white/10 space-y-3">
+              <a href="index.html" target="_blank" className="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-semibold text-xs flex items-center justify-center gap-2 transition border border-white/10">
                 <i data-lucide="external-link" className="w-3.5 h-3.5"></i>
                 <span>Voir la Boutique</span>
               </a>
 
-              <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800">
+              <div className="flex items-center justify-between p-2 rounded-xl bg-black/40 border border-white/10">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-8 h-8 rounded-full bg-blue-600/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xs shrink-0">
-                    {authCredentials.username.slice(0, 2).toUpperCase()}
+                  <div className="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center font-bold text-xs shrink-0">
+                    AD
                   </div>
                   <div className="min-w-0">
-                    <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">{authCredentials.username}</h4>
-                    <p className="text-[10px] text-emerald-500 font-medium truncate">● En ligne</p>
+                    <h4 className="text-xs font-bold text-white truncate">{authCredentials.username}</h4>
+                    <p className="text-[10px] text-emerald-400 font-medium truncate">● En ligne (Admin)</p>
                   </div>
                 </div>
-                <button onClick={handleLogout} className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 transition" title="Se déconnecter">
+                <button onClick={handleLogout} className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition" title="Se déconnecter">
                   <i data-lucide="log-out" className="w-4 h-4"></i>
                 </button>
               </div>
@@ -293,10 +325,10 @@
           </aside>
 
           {/* ================= 2. MAIN WORKSPACE ================= */}
-          <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+          <div className="flex-1 flex flex-col min-w-0 overflow-y-auto z-10 relative">
             
             {/* Topbar Header */}
-            <header className="h-16 bg-white/90 dark:bg-[#0e1422]/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-6 sm:px-8 flex items-center justify-between sticky top-0 z-10 transition-colors duration-200">
+            <header className="h-16 glass-dark border-b border-white/10 px-6 sm:px-8 flex items-center justify-between sticky top-0 z-20">
               
               {/* Search Bar */}
               <div className="relative w-64 sm:w-80">
@@ -306,7 +338,7 @@
                   value={globalSearch}
                   onChange={(e) => setGlobalSearch(e.target.value)}
                   placeholder="Recherche globale..." 
-                  className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white dark:focus:bg-slate-950 transition"
+                  className="w-full pl-10 pr-4 py-2 rounded-xl bg-black/50 border border-white/15 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-amber-500 transition"
                 />
               </div>
 
@@ -316,7 +348,7 @@
                 {/* ☀️ / 🌙 THEME TOGGLE BUTTON */}
                 <button 
                   onClick={toggleTheme}
-                  className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-amber-400 font-bold text-xs flex items-center gap-1.5 transition shadow-xs"
+                  className="p-2 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-amber-400 font-bold text-xs flex items-center gap-1.5 transition"
                   title={theme === 'dark' ? "Passer en Mode Clair" : "Passer en Mode Sombre"}
                 >
                   {theme === "dark" ? (
@@ -326,21 +358,21 @@
                     </>
                   ) : (
                     <>
-                      <i data-lucide="moon" className="w-4 h-4 text-slate-700"></i>
-                      <span className="hidden sm:inline text-xs text-slate-700">Sombre</span>
+                      <i data-lucide="moon" className="w-4 h-4 text-slate-300"></i>
+                      <span className="hidden sm:inline text-xs text-slate-300">Sombre</span>
                     </>
                   )}
                 </button>
 
-                <button onClick={() => { setEditingProduct(null); setIsProductModalOpen(true); }} className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm shadow-blue-500/20 flex items-center gap-1.5 transition">
+                <button onClick={() => { setEditingProduct(null); setIsProductModalOpen(true); }} className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black text-xs shadow-lg shadow-amber-500/20 flex items-center gap-1.5 transition">
                   <i data-lucide="plus" className="w-4 h-4"></i>
-                  <span className="hidden sm:inline">Ajouter Produit</span>
+                  <span className="hidden sm:inline">Ajouter Manuel</span>
                 </button>
 
-                <div className="h-6 w-px bg-slate-200 dark:bg-slate-800 mx-1"></div>
+                <div className="h-6 w-px bg-white/15 mx-1"></div>
 
                 <div className="relative">
-                  <button onClick={handleLogout} className="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Déconnexion">
+                  <button onClick={handleLogout} className="p-2 rounded-xl text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition" title="Déconnexion">
                     <i data-lucide="log-out" className="w-4 h-4"></i>
                   </button>
                 </div>
@@ -438,8 +470,8 @@
 
           {/* Toast Notification */}
           {toastMessage && (
-            <div className="fixed bottom-6 right-6 z-50 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-3 rounded-2xl shadow-2xl font-bold text-xs flex items-center gap-2.5 animate-bounce">
-              <i data-lucide="check-circle" className="w-4 h-4 text-emerald-500"></i>
+            <div className="fixed bottom-6 right-6 z-50 bg-amber-500 text-black px-5 py-3 rounded-2xl shadow-2xl font-outfit font-black text-xs flex items-center gap-2.5 animate-bounce">
+              <i data-lucide="check-circle" className="w-4 h-4"></i>
               <span>{toastMessage}</span>
             </div>
           )}
@@ -449,7 +481,7 @@
     }
 
     // =========================================================================
-    // PAGE DE LOGIN (AUTHENTIFICATION NOM D'UTILISATEUR & MOT DE PASSE)
+    // LOGIN PAGE (AVEC FOND ALLEMAGNE BERLIN BRANDENBURG GATE)
     // =========================================================================
     function LoginPage({ authCredentials, theme, onToggleTheme, onLoginSuccess }) {
       const [usernameInput, setUsernameInput] = useState("");
@@ -477,38 +509,47 @@
       };
 
       return (
-        <div className="min-h-screen w-full flex flex-col justify-center items-center p-4 bg-slate-50 dark:bg-[#090d16] text-slate-900 dark:text-slate-100 relative transition-colors duration-200">
+        <div className="min-h-screen w-full flex flex-col justify-center items-center p-4 relative overflow-hidden bg-slate-950 text-white">
           
-          {/* Top Controls (Theme & Store Link) */}
-          <div className="absolute top-6 right-6 flex items-center gap-3">
-            <button 
-              onClick={onToggleTheme}
-              className="p-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0e1422] shadow-xs text-slate-700 dark:text-amber-400 font-bold text-xs flex items-center gap-2 transition"
-            >
-              {theme === "dark" ? <i data-lucide="sun" className="w-4 h-4"></i> : <i data-lucide="moon" className="w-4 h-4"></i>}
-              <span className="hidden sm:inline">{theme === "dark" ? "Mode Clair" : "Mode Sombre"}</span>
-            </button>
+          {/* Photorealistic Germany Background Generated by Gemini */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 transform scale-105 filter brightness-75 contrast-105"
+            style={{ backgroundImage: "url('assets/germany_bg.jpg')" }}
+          ></div>
+
+          {/* Dark Glass Overlay with German Glow */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-slate-950/60 backdrop-blur-[6px] z-0"></div>
+
+          {/* Top Controls */}
+          <div className="absolute top-6 right-6 z-10 flex items-center gap-3">
+            <span className="px-3 py-1.5 rounded-full bg-black/60 border border-white/15 text-amber-400 text-xs font-bold flex items-center gap-2 backdrop-blur-md">
+              <span>🇩🇪</span>
+              <span className="hidden sm:inline">PrüfungStore Germany Edition</span>
+            </span>
           </div>
 
-          {/* Login Card */}
-          <div className="w-full max-w-md bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800/80 rounded-3xl p-8 sm:p-10 shadow-xl space-y-7 transition-all">
+          {/* Center Login Glass Card */}
+          <div className="relative z-10 w-full max-w-md bg-[#0e1422]/90 backdrop-blur-2xl border border-amber-500/30 rounded-3xl p-8 sm:p-10 shadow-2xl space-y-6">
             
+            {/* German Flag Decorative Ribbon */}
+            <div className="germany-ribbon rounded-full -mt-2 mb-2"></div>
+
             {/* Header Brand */}
             <div className="text-center space-y-2">
-              <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-outfit font-black text-2xl mx-auto shadow-lg shadow-blue-500/25 mb-4">
-                AF
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500/20 to-amber-400/10 border border-amber-500/40 text-amber-400 flex items-center justify-center font-outfit font-black text-2xl mx-auto shadow-xl mb-3">
+                🔐
               </div>
-              <h1 className="font-outfit font-black text-2xl text-slate-900 dark:text-white tracking-tight">
-                Espace Administration
+              <h1 className="font-outfit font-black text-2xl text-white tracking-tight">
+                Espace Administrateur
               </h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Connectez-vous pour gérer les produits et les commandes
+              <p className="text-xs text-slate-400">
+                Portail officiel ABDEUTSCH CENTER • TELC & Goethe
               </p>
             </div>
 
-            {/* Error Message */}
+            {/* Error Alert */}
             {errorMsg && (
-              <div className="p-3.5 rounded-2xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 text-xs font-bold flex items-center gap-2 animate-shake">
+              <div className="p-3.5 rounded-2xl bg-red-500/20 border border-red-500/40 text-red-300 text-xs font-bold flex items-center gap-2">
                 <i data-lucide="alert-circle" className="w-4 h-4 shrink-0"></i>
                 <span>{errorMsg}</span>
               </div>
@@ -519,7 +560,7 @@
               
               {/* Username Input */}
               <div className="space-y-1.5">
-                <label className="block font-bold text-slate-700 dark:text-slate-300">
+                <label className="block font-bold text-slate-300">
                   Nom d'utilisateur :
                 </label>
                 <div className="relative">
@@ -530,14 +571,14 @@
                     value={usernameInput}
                     onChange={(e) => setUsernameInput(e.target.value)}
                     placeholder="Nom d'utilisateur (ex: admin)" 
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-bold text-xs focus:outline-none focus:border-blue-500 focus:bg-white dark:focus:bg-slate-950 transition"
+                    className="w-full pl-10 pr-4 py-3.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold text-xs focus:outline-none focus:border-amber-500 transition"
                   />
                 </div>
               </div>
 
               {/* Password Input */}
               <div className="space-y-1.5">
-                <label className="block font-bold text-slate-700 dark:text-slate-300">
+                <label className="block font-bold text-slate-300">
                   Mot de passe :
                 </label>
                 <div className="relative">
@@ -548,34 +589,34 @@
                     value={passwordInput}
                     onChange={(e) => setPasswordInput(e.target.value)}
                     placeholder="••••••••" 
-                    className="w-full pl-10 pr-10 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-bold text-xs focus:outline-none focus:border-blue-500 focus:bg-white dark:focus:bg-slate-950 transition"
+                    className="w-full pl-10 pr-10 py-3.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold text-xs focus:outline-none focus:border-amber-500 transition"
                   />
                   <button 
                     type="button" 
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition"
                   >
                     <i data-lucide={showPassword ? "eye-off" : "eye"} className="w-4 h-4"></i>
                   </button>
                 </div>
               </div>
 
-              {/* Helper badge */}
-              <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40 text-[11px] text-blue-700 dark:text-blue-300 font-medium">
-                💡 <strong>Accès par défaut :</strong> User: <code className="font-mono font-bold">admin</code> | Pass: <code className="font-mono font-bold">admin2026</code>
+              {/* Helper */}
+              <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-300 font-medium">
+                💡 <strong>Accès direct :</strong> User: <code className="font-mono font-bold">admin</code> | Pass: <code className="font-mono font-bold">admin2026</code>
               </div>
 
               {/* Submit Button */}
               <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-outfit font-black text-sm shadow-md shadow-blue-500/25 transition transform active:scale-95 flex items-center justify-center gap-2"
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-outfit font-black text-sm shadow-xl shadow-amber-500/20 transition transform active:scale-95 flex items-center justify-center gap-2"
               >
                 {isLoading ? (
-                  <span>Connexion en cours...</span>
+                  <span>Authentification...</span>
                 ) : (
                   <>
-                    <span>Se Connecter au Dashboard</span>
+                    <span>Déverrouiller le Dashboard</span>
                     <i data-lucide="arrow-right" className="w-4 h-4"></i>
                   </>
                 )}
@@ -583,8 +624,8 @@
 
             </form>
 
-            <div className="pt-2 border-t border-slate-100 dark:border-slate-800 text-center">
-              <a href="index.html" className="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 transition inline-flex items-center gap-1.5 font-semibold">
+            <div className="pt-2 border-t border-white/10 text-center">
+              <a href="index.html" className="text-xs text-slate-400 hover:text-white transition inline-flex items-center gap-1.5 font-semibold">
                 <i data-lucide="arrow-left" className="w-3.5 h-3.5"></i>
                 <span>Retourner à la boutique publique</span>
               </a>
@@ -596,22 +637,22 @@
       );
     }
 
-    function NavItem({ icon, label, count, active, onClick, badgeColor = "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400" }) {
+    function NavItem({ icon, label, count, active, onClick, badgeColor = "bg-white/10 text-slate-300" }) {
       return (
         <button 
           onClick={onClick}
           className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-xs transition ${
             active 
-              ? 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 font-bold border border-blue-100 dark:border-blue-800/60 shadow-xs' 
-              : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/60'
+              ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40 shadow-lg' 
+              : 'text-slate-400 hover:text-white hover:bg-white/5'
           }`}
         >
           <div className="flex items-center gap-3">
-            <i data-lucide={icon} className={`w-4 h-4 ${active ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}`}></i>
+            <i data-lucide={icon} className={`w-4 h-4 ${active ? 'text-amber-400' : 'text-slate-400'}`}></i>
             <span>{label}</span>
           </div>
           {count !== undefined && (
-            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${active ? 'bg-blue-600 text-white' : badgeColor}`}>
+            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${active ? 'bg-amber-500 text-black' : badgeColor}`}>
               {count}
             </span>
           )}
@@ -636,49 +677,55 @@
       return (
         <div className="space-y-8">
           
-          <div>
-            <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 dark:text-white tracking-tight">Vue d'ensemble</h1>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Performances des ventes et activité récente du catalogue.</p>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="font-outfit font-black text-2xl sm:text-3xl text-white tracking-tight">Vue d'ensemble • Allemagne DaF</h1>
+              <p className="text-xs sm:text-sm text-slate-400 mt-1">Performances des ventes et activité récente du catalogue.</p>
+            </div>
+            <span className="px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              Serveur Actif • Port 3000
+            </span>
           </div>
 
           {/* 4 Stat Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <KpiCard title="Chiffre d'Affaires" value={totalRevenue.toLocaleString() + " DH"} trend="+14.2%" trendPositive={true} icon="coins" color="blue" subtitle="Toutes commandes valides" />
-            <KpiCard title="Total Commandes" value={totalOrdersCount} trend="+8.5%" trendPositive={true} icon="shopping-bag" color="emerald" subtitle="Ce mois-ci" />
-            <KpiCard title="Articles au Catalogue" value={totalProductsCount} icon="package" color="purple" subtitle="100% actifs" />
-            <KpiCard title="Commandes en Attente" value={pendingOrdersCount} icon="clock" color="amber" subtitle="À expédier en priorité" alert={pendingOrdersCount > 0} />
+            <KpiCard title="Chiffre d'Affaires" value={totalRevenue.toLocaleString() + " DH"} trend="+14.2%" trendPositive={true} icon="coins" color="amber" subtitle="Toutes commandes valides" />
+            <KpiCard title="Total Commandes" value={totalOrdersCount} trend="+8.5%" trendPositive={true} icon="shopping-bag" color="blue" subtitle="Ce mois-ci" />
+            <KpiCard title="Manuels au Catalogue" value={totalProductsCount} icon="book-open" color="emerald" subtitle="100% actifs" />
+            <KpiCard title="Commandes en Attente" value={pendingOrdersCount} icon="clock" color="red" subtitle="À expédier en priorité" alert={pendingOrdersCount > 0} />
           </div>
 
           {/* Sales Chart & Category Distribution */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             
             {/* Sales Chart (Responsive SVG) */}
-            <div className="lg:col-span-8 bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
+            <div className="lg:col-span-8 glass-dark rounded-3xl p-6 shadow-xl space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-outfit font-bold text-base text-slate-900 dark:text-white">Évolution des Ventes</h3>
-                  <p className="text-xs text-slate-400">Revenus hebdomadaires en DH</p>
+                  <h3 className="font-outfit font-bold text-base text-white">Évolution des Ventes (DH)</h3>
+                  <p className="text-xs text-slate-400">Revenus hebdomadaires générés au Maroc</p>
                 </div>
-                <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-600 dark:text-slate-300">
-                  <button className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-700 shadow-xs text-slate-900 dark:text-white">7 Jours</button>
-                  <button className="px-2.5 py-1 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">30 Jours</button>
+                <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/40 text-xs font-bold text-slate-300 border border-white/10">
+                  <button className="px-2.5 py-1 rounded-lg bg-amber-500 text-black shadow-xs">7 Jours</button>
+                  <button className="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white">30 Jours</button>
                 </div>
               </div>
 
               <div className="h-64 w-full pt-4">
                 <svg className="w-full h-full overflow-visible" viewBox="0 0 700 200">
                   <defs>
-                    <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
-                      <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0" />
+                    <linearGradient id="goldGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.35" />
+                      <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.0" />
                     </linearGradient>
                   </defs>
-                  <line x1="0" y1="40" x2="700" y2="40" stroke={theme === 'dark' ? "rgba(255,255,255,0.06)" : "#f1f5f9"} strokeWidth="1" />
-                  <line x1="0" y1="90" x2="700" y2="90" stroke={theme === 'dark' ? "rgba(255,255,255,0.06)" : "#f1f5f9"} strokeWidth="1" />
-                  <line x1="0" y1="140" x2="700" y2="140" stroke={theme === 'dark' ? "rgba(255,255,255,0.06)" : "#f1f5f9"} strokeWidth="1" />
+                  <line x1="0" y1="40" x2="700" y2="40" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+                  <line x1="0" y1="90" x2="700" y2="90" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+                  <line x1="0" y1="140" x2="700" y2="140" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
                   
-                  <path d="M 50 160 Q 150 110 250 130 T 450 70 T 650 40 L 650 180 L 50 180 Z" fill="url(#areaGradient)" />
-                  <path d="M 50 160 Q 150 110 250 130 T 450 70 T 650 40" fill="none" stroke="#3b82f6" strokeWidth="3" />
+                  <path d="M 50 160 Q 150 110 250 130 T 450 70 T 650 40 L 650 180 L 50 180 Z" fill="url(#goldGradient)" />
+                  <path d="M 50 160 Q 150 110 250 130 T 450 70 T 650 40" fill="none" stroke="#f59e0b" strokeWidth="3" />
                   
                   {[
                     { x: 50, y: 160, val: "470 DH", day: "Lun" },
@@ -690,9 +737,9 @@
                     { x: 650, y: 40, val: "2,350 DH", day: "Dim" }
                   ].map((pt, i) => (
                     <g key={i} className="cursor-pointer group">
-                      <circle cx={pt.x} cy={pt.y} r="5" fill={theme === 'dark' ? "#0e1422" : "#ffffff"} stroke="#3b82f6" strokeWidth="3" className="group-hover:scale-125 transition" />
-                      <text x={pt.x} y="195" textAnchor="middle" fontSize="11" fill={theme === 'dark' ? "#64748b" : "#94a3b8"} fontWeight="600">{pt.day}</text>
-                      <text x={pt.x} y={pt.y - 10} textAnchor="middle" fontSize="10" fill={theme === 'dark' ? "#f8fafc" : "#1e293b"} fontWeight="bold" opacity="0" className="group-hover:opacity-100 transition">{pt.val}</text>
+                      <circle cx={pt.x} cy={pt.y} r="5" fill="#0e1422" stroke="#f59e0b" strokeWidth="3" className="group-hover:scale-125 transition" />
+                      <text x={pt.x} y="195" textAnchor="middle" fontSize="11" fill="#94a3b8" fontWeight="600">{pt.day}</text>
+                      <text x={pt.x} y={pt.y - 10} textAnchor="middle" fontSize="10" fill="#f8fafc" fontWeight="bold" opacity="0" className="group-hover:opacity-100 transition">{pt.val}</text>
                     </g>
                   ))}
                 </svg>
@@ -700,9 +747,9 @@
             </div>
 
             {/* Top Products Card */}
-            <div className="lg:col-span-4 bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
+            <div className="lg:col-span-4 glass-dark rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between">
               <div>
-                <h3 className="font-outfit font-bold text-base text-slate-900 dark:text-white">Produits les Plus Vendus</h3>
+                <h3 className="font-outfit font-bold text-base text-white">Manuels les Plus Vendus</h3>
                 <p className="text-xs text-slate-400">Classement par volume de commandes</p>
               </div>
 
@@ -710,15 +757,15 @@
                 {topProducts.map((p, idx) => (
                   <div key={p.id} className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <span className="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold flex items-center justify-center text-[10px] shrink-0">{idx + 1}</span>
-                      <span className="font-semibold text-slate-800 dark:text-slate-200 truncate">{p.name}</span>
+                      <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center text-[10px] shrink-0">{idx + 1}</span>
+                      <span className="font-semibold text-slate-200 truncate">{p.name}</span>
                     </div>
-                    <span className="font-bold text-blue-600 dark:text-blue-400 shrink-0 ml-2">{p.sales} vus</span>
+                    <span className="font-bold text-amber-400 shrink-0 ml-2">{p.sales} vus</span>
                   </div>
                 ))}
               </div>
 
-              <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/50 flex items-center justify-between text-xs text-blue-800 dark:text-blue-300 font-bold">
+              <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-between text-xs text-amber-300 font-bold">
                 <span>Total Ventes :</span>
                 <span>{products.reduce((s, p) => s + p.sales, 0)} exemplaires</span>
               </div>
@@ -727,13 +774,13 @@
           </div>
 
           {/* Recent Orders Table */}
-          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+          <div className="glass-dark rounded-3xl p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div>
-                <h3 className="font-outfit font-bold text-base text-slate-900 dark:text-white">Dernières Commandes</h3>
+                <h3 className="font-outfit font-bold text-base text-white">Dernières Commandes</h3>
                 <p className="text-xs text-slate-400">Suivi des 5 dernières commandes passées</p>
               </div>
-              <button onClick={onViewOrders} className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-bold flex items-center gap-1">
+              <button onClick={onViewOrders} className="text-xs text-amber-400 hover:underline font-bold flex items-center gap-1">
                 <span>Voir tout ({orders.length})</span>
                 <i data-lucide="arrow-right" className="w-3.5 h-3.5"></i>
               </button>
@@ -741,7 +788,7 @@
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="text-slate-400 uppercase font-bold text-[10px] border-b border-slate-100 dark:border-slate-800">
+                <thead className="text-slate-400 uppercase font-bold text-[10px] border-b border-white/10">
                   <tr>
                     <th className="pb-3">N° Commande</th>
                     <th className="pb-3">Client</th>
@@ -751,19 +798,19 @@
                     <th className="pb-3 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-50 dark:divide-slate-800/60 font-medium">
+                <tbody className="divide-y divide-white/5 font-medium">
                   {recentOrders.map(o => (
-                    <tr key={o.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
-                      <td className="py-3.5 font-mono font-bold text-slate-800 dark:text-slate-200">{o.id}</td>
+                    <tr key={o.id} className="hover:bg-white/5 transition">
+                      <td className="py-3.5 font-mono font-bold text-amber-400">{o.id}</td>
                       <td className="py-3.5">
-                        <div className="font-bold text-slate-900 dark:text-white">{o.customer}</div>
+                        <div className="font-bold text-white">{o.customer}</div>
                         <div className="text-[10px] text-slate-400">{o.city}</div>
                       </td>
-                      <td className="py-3.5 text-slate-500 dark:text-slate-400">{o.date.split(' ')[0]}</td>
-                      <td className="py-3.5 font-bold text-slate-900 dark:text-white">{o.total} DH</td>
+                      <td className="py-3.5 text-slate-400">{o.date.split(' ')[0]}</td>
+                      <td className="py-3.5 font-bold text-white">{o.total} DH</td>
                       <td className="py-3.5"><StatusBadge status={o.status} /></td>
                       <td className="py-3.5 text-right">
-                        <button onClick={() => onSelectOrder(o)} className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/40 text-slate-700 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-300 font-bold transition">
+                        <button onClick={() => onSelectOrder(o)} className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-amber-500/20 text-slate-200 hover:text-amber-300 font-bold transition">
                           Détails
                         </button>
                       </td>
@@ -780,26 +827,26 @@
 
     function KpiCard({ title, value, trend, trendPositive, icon, color, subtitle, alert }) {
       const colors = {
-        blue: "bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400",
-        emerald: "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400",
-        purple: "bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400",
-        amber: "bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400"
+        amber: "bg-amber-500/20 text-amber-400 border border-amber-500/30",
+        blue: "bg-blue-500/20 text-blue-400 border border-blue-500/30",
+        emerald: "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30",
+        red: "bg-red-500/20 text-red-400 border border-red-500/30"
       };
 
       return (
-        <div className={`bg-white dark:bg-[#0e1422] border ${alert ? 'border-amber-300 dark:border-amber-500/50 ring-2 ring-amber-100 dark:ring-amber-900/30' : 'border-slate-200 dark:border-slate-800'} rounded-2xl p-6 shadow-sm space-y-3`}>
+        <div className={`glass-dark ${alert ? 'border-amber-500/50 ring-2 ring-amber-500/20' : 'border-white/10'} rounded-3xl p-6 shadow-xl space-y-3`}>
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{title}</span>
-            <div className={`w-10 h-10 rounded-xl ${colors[color]} flex items-center justify-center font-bold`}>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{title}</span>
+            <div className={`w-10 h-10 rounded-2xl ${colors[color]} flex items-center justify-center font-bold`}>
               <i data-lucide={icon} className="w-5 h-5"></i>
             </div>
           </div>
           <div className="space-y-1">
-            <div className="font-outfit font-black text-2xl text-slate-900 dark:text-white">{value}</div>
+            <div className="font-outfit font-black text-2xl text-white">{value}</div>
             <div className="flex items-center justify-between text-xs">
-              <span className="text-slate-400 dark:text-slate-500 text-[11px]">{subtitle}</span>
+              <span className="text-slate-400 text-[11px]">{subtitle}</span>
               {trend && (
-                <span className={`font-bold ${trendPositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'}`}>
+                <span className={`font-bold ${trendPositive ? 'text-emerald-400' : 'text-red-400'}`}>
                   {trend}
                 </span>
               )}
@@ -845,25 +892,25 @@
           
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 dark:text-white tracking-tight">Catalogue des Produits</h1>
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Gérez vos articles, prix, descriptions et niveaux de stock.</p>
+              <h1 className="font-outfit font-black text-2xl sm:text-3xl text-white tracking-tight">Catalogue des Manuels & Packs</h1>
+              <p className="text-xs sm:text-sm text-slate-400 mt-1">Gérez vos articles, prix, descriptions et niveaux de stock.</p>
             </div>
-            <button onClick={onAddProduct} className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20 flex items-center gap-2 transition self-start sm:self-auto">
+            <button onClick={onAddProduct} className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black text-xs shadow-lg shadow-amber-500/20 flex items-center gap-2 transition self-start sm:self-auto">
               <i data-lucide="plus" className="w-4 h-4"></i>
-              <span>Nouveau Produit</span>
+              <span>Nouveau Manuel</span>
             </button>
           </div>
 
-          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
+          <div className="glass-dark rounded-3xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
             
             <div className="relative w-full md:w-80">
               <i data-lucide="search" className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
               <input 
                 type="text" 
-                placeholder="Rechercher par nom, référence..." 
+                placeholder="Rechercher un manuel..." 
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                className="w-full pl-9 pr-3 py-2 rounded-xl bg-black/60 border border-white/15 text-white placeholder-slate-400 focus:outline-none focus:border-amber-500"
               />
             </div>
 
@@ -871,7 +918,7 @@
               <select 
                 value={categoryFilter} 
                 onChange={(e) => { setCategoryFilter(e.target.value); setCurrentPage(1); }}
-                className="p-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-semibold text-slate-700 dark:text-slate-200 focus:outline-none"
+                className="p-2 rounded-xl bg-black/60 border border-white/15 font-semibold text-white focus:outline-none"
               >
                 <option value="all">Toutes Catégories</option>
                 {categories.filter(c => c !== "all").map(c => <option key={c} value={c}>{c}</option>)}
@@ -880,7 +927,7 @@
               <select 
                 value={statusFilter} 
                 onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-                className="p-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-semibold text-slate-700 dark:text-slate-200 focus:outline-none"
+                className="p-2 rounded-xl bg-black/60 border border-white/15 font-semibold text-white focus:outline-none"
               >
                 <option value="all">Tous Statuts</option>
                 <option value="in_stock">🟢 En Stock (&gt; 10)</option>
@@ -891,12 +938,12 @@
 
           </div>
 
-          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
+          <div className="glass-dark rounded-3xl shadow-xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50/80 dark:bg-slate-900/60 text-slate-500 dark:text-slate-400 uppercase font-bold text-[10px] border-b border-slate-200 dark:border-slate-800">
+                <thead className="bg-black/60 text-slate-400 uppercase font-bold text-[10px] border-b border-white/10">
                   <tr>
-                    <th className="p-4">Produit</th>
+                    <th className="p-4">Manuel / Pack</th>
                     <th className="p-4">Catégorie</th>
                     <th className="p-4">Prix</th>
                     <th className="p-4">Stock</th>
@@ -904,53 +951,53 @@
                     <th className="p-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
+                <tbody className="divide-y divide-white/5">
                   {paginated.length === 0 ? (
                     <tr>
-                      <td colSpan="6" className="p-8 text-center text-slate-400">Aucun produit ne correspond à votre recherche.</td>
+                      <td colSpan="6" className="p-8 text-center text-slate-400">Aucun produit trouvé.</td>
                     </tr>
                   ) : (
                     paginated.map(p => (
-                      <tr key={p.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
+                      <tr key={p.id} className="hover:bg-white/5 transition">
                         <td className="p-4">
                           <div className="flex items-center gap-3">
-                            <img src={p.image} alt={p.name} className="w-11 h-11 rounded-xl object-contain bg-slate-100 dark:bg-slate-800 p-1 border border-slate-200 dark:border-slate-700 shrink-0" />
+                            <img src={p.image} alt={p.name} className="w-11 h-11 rounded-xl object-contain bg-black/60 p-1 border border-white/10 shrink-0" />
                             <div>
-                              <h4 className="font-bold text-slate-900 dark:text-white leading-snug line-clamp-1">{p.name}</h4>
+                              <h4 className="font-bold text-white leading-snug line-clamp-1">{p.name}</h4>
                               <span className="text-[10px] text-slate-400 font-mono">{p.id}</span>
                             </div>
                           </div>
                         </td>
                         <td className="p-4">
-                          <span className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-[11px]">
+                          <span className="px-2.5 py-1 rounded-lg bg-white/10 text-slate-200 font-semibold text-[11px]">
                             {p.category}
                           </span>
                         </td>
                         <td className="p-4">
-                          <span className="font-bold text-slate-900 dark:text-white text-sm">{p.price} DH</span>
+                          <span className="font-bold text-white text-sm">{p.price} DH</span>
                           {p.originalPrice && <span className="text-[10px] text-slate-400 line-through block">{p.originalPrice} DH</span>}
                         </td>
                         <td className="p-4">
                           <div className="flex items-center gap-2">
-                            <span className="font-bold text-slate-900 dark:text-white">{p.stock}</span>
+                            <span className="font-bold text-white">{p.stock}</span>
                             <span className="text-[10px] text-slate-400">unités</span>
                           </div>
                         </td>
                         <td className="p-4">
                           {p.stock > 10 ? (
-                            <span className="px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 font-bold text-[10px]">✓ En Stock</span>
+                            <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold text-[10px]">✓ En Stock</span>
                           ) : p.stock > 0 ? (
-                            <span className="px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800 font-bold text-[10px]">⚠️ Faible ({p.stock})</span>
+                            <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold text-[10px]">⚠️ Faible ({p.stock})</span>
                           ) : (
-                            <span className="px-2.5 py-1 rounded-full bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800 font-bold text-[10px]">✕ Rupture</span>
+                            <span className="px-2.5 py-1 rounded-full bg-red-500/20 text-red-300 border border-red-500/30 font-bold text-[10px]">✕ Rupture</span>
                           )}
                         </td>
                         <td className="p-4 text-right">
                           <div className="flex items-center justify-end gap-1.5">
-                            <button onClick={() => onEditProduct(p)} className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/40 text-slate-600 dark:text-slate-300 hover:text-blue-600 transition" title="Modifier">
+                            <button onClick={() => onEditProduct(p)} className="p-2 rounded-lg bg-white/10 hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 transition" title="Modifier">
                               <i data-lucide="edit-2" className="w-3.5 h-3.5"></i>
                             </button>
-                            <button onClick={() => onDeleteProduct(p.id)} className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-900/40 text-slate-600 dark:text-slate-300 hover:text-red-600 transition" title="Supprimer">
+                            <button onClick={() => onDeleteProduct(p.id)} className="p-2 rounded-lg bg-white/10 hover:bg-red-500/20 text-slate-300 hover:text-red-400 transition" title="Supprimer">
                               <i data-lucide="trash-2" className="w-3.5 h-3.5"></i>
                             </button>
                           </div>
@@ -962,12 +1009,12 @@
               </table>
             </div>
 
-            <div className="p-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-              <span>Affichage de {(currentPage - 1) * itemsPerPage + 1} à {Math.min(currentPage * itemsPerPage, filtered.length)} sur {filtered.length} produits</span>
+            <div className="p-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
+              <span>Affichage de {(currentPage - 1) * itemsPerPage + 1} à {Math.min(currentPage * itemsPerPage, filtered.length)} sur {filtered.length} manuels</span>
               <div className="flex items-center gap-1">
-                <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)} className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 disabled:opacity-50 font-bold">Précédent</button>
-                <span className="px-3 py-1.5 font-bold text-slate-800 dark:text-white">{currentPage} / {totalPages}</span>
-                <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)} className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 disabled:opacity-50 font-bold">Suivant</button>
+                <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)} className="px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 disabled:opacity-50 font-bold">Précédent</button>
+                <span className="px-3 py-1.5 font-bold text-white">{currentPage} / {totalPages}</span>
+                <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)} className="px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 disabled:opacity-50 font-bold">Suivant</button>
               </div>
             </div>
 
@@ -1003,16 +1050,16 @@
           
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 dark:text-white tracking-tight">Suivi des Commandes</h1>
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Gérez le traitement, la livraison et le statut des commandes clients.</p>
+              <h1 className="font-outfit font-black text-2xl sm:text-3xl text-white tracking-tight">Suivi des Commandes & Livraisons</h1>
+              <p className="text-xs sm:text-sm text-slate-400 mt-1">Gérez le traitement, la livraison et le statut des commandes clients.</p>
             </div>
-            <button onClick={onNewOrder} className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-500/20 flex items-center gap-2 transition self-start sm:self-auto">
+            <button onClick={onNewOrder} className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-outfit font-black text-xs shadow-lg shadow-emerald-600/20 flex items-center gap-2 transition self-start sm:self-auto">
               <i data-lucide="plus" className="w-4 h-4"></i>
               <span>Créer Commande</span>
             </button>
           </div>
 
-          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
+          <div className="glass-dark rounded-3xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
             
             <div className="relative w-full md:w-80">
               <i data-lucide="search" className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
@@ -1021,7 +1068,7 @@
                 placeholder="Rechercher par N° commande, client..." 
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                className="w-full pl-9 pr-3 py-2 rounded-xl bg-black/60 border border-white/15 text-white placeholder-slate-400 focus:outline-none focus:border-amber-500"
               />
             </div>
 
@@ -1039,8 +1086,8 @@
                   onClick={() => { setStatusFilter(s.id); setCurrentPage(1); }}
                   className={`px-3 py-1.5 rounded-xl font-bold transition ${
                     statusFilter === s.id 
-                      ? 'bg-blue-600 text-white shadow-xs' 
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                      ? 'bg-amber-500 text-black shadow-md' 
+                      : 'bg-white/5 text-slate-300 hover:bg-white/10'
                   }`}
                 >
                   {s.label}
@@ -1050,10 +1097,10 @@
 
           </div>
 
-          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
+          <div className="glass-dark rounded-3xl shadow-xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50/80 dark:bg-slate-900/60 text-slate-500 dark:text-slate-400 uppercase font-bold text-[10px] border-b border-slate-200 dark:border-slate-800">
+                <thead className="bg-black/60 text-slate-400 uppercase font-bold text-[10px] border-b border-white/10">
                   <tr>
                     <th className="p-4">N° Commande</th>
                     <th className="p-4">Client & Ville</th>
@@ -1064,30 +1111,30 @@
                     <th className="p-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
+                <tbody className="divide-y divide-white/5">
                   {paginated.length === 0 ? (
                     <tr>
                       <td colSpan="7" className="p-8 text-center text-slate-400">Aucune commande trouvée.</td>
                     </tr>
                   ) : (
                     paginated.map(o => (
-                      <tr key={o.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
-                        <td className="p-4 font-mono font-bold text-slate-900 dark:text-white">{o.id}</td>
+                      <tr key={o.id} className="hover:bg-white/5 transition">
+                        <td className="p-4 font-mono font-bold text-amber-400">{o.id}</td>
                         <td className="p-4">
-                          <div className="font-bold text-slate-900 dark:text-white">{o.customer}</div>
+                          <div className="font-bold text-white">{o.customer}</div>
                           <div className="text-[10px] text-slate-400">{o.city} • {o.phone}</div>
                         </td>
-                        <td className="p-4 text-slate-500 dark:text-slate-400 whitespace-nowrap">{o.date}</td>
+                        <td className="p-4 text-slate-400 whitespace-nowrap">{o.date}</td>
                         <td className="p-4">
-                          <span className="text-slate-700 dark:text-slate-300 font-medium block truncate max-w-xs">{o.items.map(i => i.name).join(", ")}</span>
-                          <span className="text-[10px] text-blue-600 dark:text-blue-400 font-bold">{o.items.length} article(s)</span>
+                          <span className="text-slate-200 font-medium block truncate max-w-xs">{o.items.map(i => i.name).join(", ")}</span>
+                          <span className="text-[10px] text-amber-400 font-bold">{o.items.length} article(s)</span>
                         </td>
-                        <td className="p-4 font-bold text-slate-900 dark:text-white text-sm whitespace-nowrap">{o.total} DH</td>
+                        <td className="p-4 font-bold text-white text-sm whitespace-nowrap">{o.total} DH</td>
                         <td className="p-4">
                           <select 
                             value={o.status}
                             onChange={(e) => onUpdateStatus(o.id, e.target.value)}
-                            className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold text-xs focus:outline-none text-slate-800 dark:text-slate-200"
+                            className="p-1.5 rounded-lg border border-white/15 bg-black/60 font-bold text-xs focus:outline-none text-white"
                           >
                             <option value="pending">🟡 En attente</option>
                             <option value="processing">🔵 En cours</option>
@@ -1098,10 +1145,10 @@
                         </td>
                         <td className="p-4 text-right whitespace-nowrap">
                           <div className="flex items-center justify-end gap-1.5">
-                            <button onClick={() => onViewDetails(o)} className="px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 hover:bg-blue-100 font-bold transition">
+                            <button onClick={() => onViewDetails(o)} className="px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 font-bold transition">
                               Détails
                             </button>
-                            <button onClick={() => onDeleteOrder(o.id)} className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-900/40 text-slate-600 dark:text-slate-300 hover:text-red-600 transition" title="Supprimer">
+                            <button onClick={() => onDeleteOrder(o.id)} className="p-2 rounded-lg bg-white/10 hover:bg-red-500/20 text-slate-300 hover:text-red-400 transition" title="Supprimer">
                               <i data-lucide="trash-2" className="w-3.5 h-3.5"></i>
                             </button>
                           </div>
@@ -1113,11 +1160,12 @@
               </table>
             </div>
 
-            <div className="p-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <div className="p-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
               <span>Page {currentPage} sur {totalPages}</span>
               <div className="flex items-center gap-1">
-                <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)} className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 disabled:opacity-50 font-bold">Précédent</button>
-                <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)} className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 disabled:opacity-50 font-bold">Suivant</button>
+                <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)} className="px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 disabled:opacity-50 font-bold">Précédent</button>
+                <span className="px-3 py-1.5 font-bold text-white">{currentPage} / {totalPages}</span>
+                <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)} className="px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 disabled:opacity-50 font-bold">Suivant</button>
               </div>
             </div>
 
@@ -1155,14 +1203,14 @@
       return (
         <div className="space-y-6">
           <div>
-            <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 dark:text-white tracking-tight">Répertoire Clients (CRM)</h1>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Historique des commandes et coordonnées des candidats acheteurs.</p>
+            <h1 className="font-outfit font-black text-2xl sm:text-3xl text-white tracking-tight">Répertoire Clients (CRM)</h1>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">Historique des commandes et coordonnées des candidats acheteurs.</p>
           </div>
 
-          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
+          <div className="glass-dark rounded-3xl shadow-xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-400 uppercase font-bold text-[10px] border-b border-slate-200 dark:border-slate-800">
+                <thead className="bg-black/60 text-slate-400 uppercase font-bold text-[10px] border-b border-white/10">
                   <tr>
                     <th className="p-4">Nom du Client</th>
                     <th className="p-4">Téléphone / WhatsApp</th>
@@ -1172,26 +1220,26 @@
                     <th className="p-4 text-right">Contacter</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
+                <tbody className="divide-y divide-white/5">
                   {clients.map((c, i) => (
-                    <tr key={i} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
+                    <tr key={i} className="hover:bg-white/5 transition">
                       <td className="p-4">
-                        <div className="font-bold text-slate-900 dark:text-white">{c.name}</div>
+                        <div className="font-bold text-white">{c.name}</div>
                         <div className="text-[10px] text-slate-400">{c.email}</div>
                       </td>
-                      <td className="p-4 font-mono text-slate-700 dark:text-slate-300 font-semibold">{c.phone}</td>
-                      <td className="p-4 text-slate-600 dark:text-slate-400">{c.city}</td>
+                      <td className="p-4 font-mono text-slate-300 font-semibold">{c.phone}</td>
+                      <td className="p-4 text-slate-300">{c.city}</td>
                       <td className="p-4">
-                        <span className="px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 font-bold text-[10px]">
+                        <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold text-[10px]">
                           {c.ordersCount} commande(s)
                         </span>
                       </td>
-                      <td className="p-4 font-bold text-slate-900 dark:text-white text-sm">{c.totalSpent} DH</td>
+                      <td className="p-4 font-bold text-white text-sm">{c.totalSpent} DH</td>
                       <td className="p-4 text-right">
                         <a 
                           href={`https://api.whatsapp.com/send?phone=${c.phone.replace(/[^0-9]/g, '')}&text=Bonjour%20${encodeURIComponent(c.name)},%20suivi%20de%20votre%20commande%20chez%20Pr%C3%BCfungStore.`}
                           target="_blank"
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 font-bold transition"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-300 border border-emerald-500/30 font-bold transition"
                         >
                           <span>💬 WhatsApp</span>
                         </a>
@@ -1207,13 +1255,11 @@
     }
 
     // =========================================================================
-    // TAB 5 : PARAMÈTRES (AVEC GESTION IDENTIFIANTS & THÈME)
+    // TAB 5 : PARAMÈTRES
     // =========================================================================
     function SettingsTab({ products, orders, theme, authCredentials, onUpdateCredentials, onToggleTheme, onReset, showToast }) {
       const [whatsapp, setWhatsapp] = useState("212632017446");
       const [storeName, setStoreName] = useState("PrüfungStore Pro");
-
-      // Password Edit State
       const [newUsername, setNewUsername] = useState(authCredentials.username);
       const [newPassword, setNewPassword] = useState("");
 
@@ -1235,7 +1281,7 @@
         const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = "commandes_adminflow_" + new Date().toISOString().slice(0, 10) + ".csv";
+        link.download = "commandes_pruefungstore_" + new Date().toISOString().slice(0, 10) + ".csv";
         link.click();
         showToast("Fichier CSV exporté !");
       };
@@ -1245,7 +1291,7 @@
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = "backup_adminflow_" + new Date().toISOString().slice(0, 10) + ".json";
+        link.download = "backup_pruefungstore_" + new Date().toISOString().slice(0, 10) + ".json";
         link.click();
         showToast("Sauvegarde JSON exportée !");
       };
@@ -1253,104 +1299,64 @@
       return (
         <div className="space-y-6 max-w-3xl">
           <div>
-            <h1 className="font-outfit font-black text-2xl sm:text-3xl text-slate-900 dark:text-white tracking-tight">Paramètres & Sécurité</h1>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Gérez vos identifiants de connexion, l'apparence et les sauvegardes.</p>
+            <h1 className="font-outfit font-black text-2xl sm:text-3xl text-white tracking-tight">Paramètres & Sécurité</h1>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">Gérez vos identifiants de connexion, l'apparence et les sauvegardes.</p>
           </div>
 
           {/* Security & Credentials Card */}
-          <form onSubmit={handleSaveCreds} className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
-            <h3 className="font-outfit font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
-              <i data-lucide="shield-check" className="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
-              <span>Sécurité & Identifiants de Connexion</span>
+          <form onSubmit={handleSaveCreds} className="glass-dark rounded-3xl p-6 shadow-xl space-y-4">
+            <h3 className="font-outfit font-bold text-base text-white flex items-center gap-2">
+              <i data-lucide="shield-check" className="w-5 h-5 text-amber-400"></i>
+              <span>Sécurité & Identifiants Administrateur</span>
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Nom d'utilisateur :</label>
-                <input type="text" required value={newUsername} onChange={(e) => setNewUsername(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 font-bold focus:outline-none focus:border-blue-500" />
+                <label className="block font-bold text-slate-300 mb-1">Nom d'utilisateur :</label>
+                <input type="text" required value={newUsername} onChange={(e) => setNewUsername(e.target.value)} className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold focus:outline-none focus:border-amber-500" />
               </div>
               <div>
-                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Nouveau Mot de Passe (Laisser vide pour ne pas changer) :</label>
-                <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Nouveau mot de passe..." className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 font-bold focus:outline-none focus:border-blue-500" />
+                <label className="block font-bold text-slate-300 mb-1">Nouveau Mot de Passe (Laisser vide si inchangé) :</label>
+                <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Nouveau mot de passe..." className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold focus:outline-none focus:border-amber-500" />
               </div>
             </div>
-            <button type="submit" className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20 transition">
+            <button type="submit" className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black text-xs shadow-lg transition">
               Enregistrer les Identifiants
             </button>
           </form>
 
-          {/* Theme Selection Card */}
-          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
-            <h3 className="font-outfit font-bold text-base text-slate-900 dark:text-white">Apparence de l'Interface</h3>
-            <div className="grid grid-cols-2 gap-4 pt-1">
-              <button 
-                onClick={() => { if (theme !== "light") onToggleTheme(); }}
-                className={`p-4 rounded-2xl border text-left flex items-center gap-3.5 transition ${
-                  theme === "light" 
-                    ? 'border-blue-600 bg-blue-50/50 ring-2 ring-blue-500/20' 
-                    : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60'
-                }`}
-              >
-                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
-                  ☀️
-                </div>
-                <div>
-                  <h4 className="font-bold text-xs text-slate-900 dark:text-white">Thème Clair</h4>
-                  <p className="text-[10px] text-slate-400">Fond blanc et contrastes lumineux</p>
-                </div>
-              </button>
-
-              <button 
-                onClick={() => { if (theme !== "dark") onToggleTheme(); }}
-                className={`p-4 rounded-2xl border text-left flex items-center gap-3.5 transition ${
-                  theme === "dark" 
-                    ? 'border-blue-500 bg-blue-950/40 ring-2 ring-blue-500/30' 
-                    : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60'
-                }`}
-              >
-                <div className="w-10 h-10 rounded-xl bg-slate-800 text-amber-400 flex items-center justify-center font-bold">
-                  🌙
-                </div>
-                <div>
-                  <h4 className="font-bold text-xs text-slate-900 dark:text-white">Thème Sombre</h4>
-                  <p className="text-[10px] text-slate-400">Fond sombre haute lisibilité</p>
-                </div>
-              </button>
-            </div>
-          </div>
-
           {/* Store Info Card */}
-          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
-            <h3 className="font-outfit font-bold text-base text-slate-900 dark:text-white">Coordonnées de Réception</h3>
+          <div className="glass-dark rounded-3xl p-6 shadow-xl space-y-4">
+            <h3 className="font-outfit font-bold text-base text-white">Coordonnées de Réception</h3>
             <div className="space-y-3 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Nom de la Boutique :</label>
-                <input type="text" value={storeName} onChange={(e) => setStoreName(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 font-bold focus:outline-none focus:border-blue-500" />
+                <label className="block font-bold text-slate-300 mb-1">Nom de la Boutique :</label>
+                <input type="text" value={storeName} onChange={(e) => setStoreName(e.target.value)} className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold focus:outline-none focus:border-amber-500" />
               </div>
               <div>
-                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Numéro WhatsApp Récepteur :</label>
-                <input type="text" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 font-bold focus:outline-none focus:border-blue-500" />
+                <label className="block font-bold text-slate-300 mb-1">Numéro WhatsApp Récepteur :</label>
+                <input type="text" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold focus:outline-none focus:border-amber-500" />
               </div>
             </div>
-            <button onClick={() => showToast("Coordonnées enregistrées !")} className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition">
+            <button onClick={() => showToast("Coordonnées enregistrées !")} className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black text-xs transition">
               Enregistrer
             </button>
           </div>
 
           {/* Export & Reset */}
-          <div className="bg-white dark:bg-[#0e1422] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
-            <h3 className="font-outfit font-bold text-base text-slate-900 dark:text-white">Exportation & Sauvegarde</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">Téléchargez vos données pour Excel ou effectuez une sauvegarde intégrale.</p>
+          <div className="glass-dark rounded-3xl p-6 shadow-xl space-y-4">
+            <h3 className="font-outfit font-bold text-base text-white">Exportation & Sauvegarde</h3>
+            <p className="text-xs text-slate-400">Téléchargez vos données pour Excel ou effectuez une sauvegarde intégrale.</p>
             
             <div className="flex flex-wrap gap-3 pt-2">
-              <button onClick={exportOrdersCSV} className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs flex items-center gap-2 border border-slate-200 dark:border-slate-700 transition">
+              <button onClick={exportOrdersCSV} className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-2 border border-white/10 transition">
                 <i data-lucide="download" className="w-4 h-4"></i>
                 <span>Exporter Commandes (CSV/Excel)</span>
               </button>
-              <button onClick={exportJSON} className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs flex items-center gap-2 border border-slate-200 dark:border-slate-700 transition">
+              <button onClick={exportJSON} className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-2 border border-white/10 transition">
                 <i data-lucide="file-json" className="w-4 h-4"></i>
                 <span>Sauvegarder en JSON</span>
               </button>
-              <button onClick={onReset} className="px-4 py-2 rounded-xl bg-red-50 dark:bg-red-950/40 hover:bg-red-100 text-red-600 dark:text-red-400 font-bold text-xs flex items-center gap-2 border border-red-200 dark:border-red-900/40 transition">
+              <button onClick={onReset} className="px-4 py-2 rounded-xl bg-red-500/20 hover:bg-red-500/30 text-red-300 font-bold text-xs flex items-center gap-2 border border-red-500/30 transition">
                 <i data-lucide="refresh-cw" className="w-4 h-4"></i>
                 <span>Réinitialiser Données Fictives</span>
               </button>
@@ -1387,27 +1393,27 @@
       };
 
       return (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#121827] rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-2xl space-y-5 text-slate-800 dark:text-slate-100">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-              <h3 className="font-outfit font-black text-lg text-slate-900 dark:text-white">
-                {product ? "Modifier le Produit" : "Ajouter un Nouveau Produit"}
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#121827] rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-white/15 p-6 sm:p-8 shadow-2xl space-y-5 text-white">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <h3 className="font-outfit font-black text-lg text-white">
+                {product ? "Modifier le Manuel" : "Ajouter un Nouveau Manuel"}
               </h3>
-              <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800">
+              <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10">
                 <i data-lucide="x" className="w-5 h-5"></i>
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Nom du Produit / Manuel :</label>
-                <input type="text" required value={name} onChange={(e) => setName(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-bold focus:outline-none focus:border-blue-500" />
+                <label className="block font-bold text-slate-300 mb-1">Nom du Manuel / Pack :</label>
+                <input type="text" required value={name} onChange={(e) => setName(e.target.value)} className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold focus:outline-none focus:border-amber-500" />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Catégorie :</label>
-                  <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-semibold focus:outline-none">
+                  <label className="block font-bold text-slate-300 mb-1">Catégorie :</label>
+                  <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white font-semibold focus:outline-none">
                     <option value="Manuels B1">Manuels B1</option>
                     <option value="Manuels B2">Manuels B2</option>
                     <option value="Packs Complets">Packs Complets</option>
@@ -1417,35 +1423,35 @@
                   </select>
                 </div>
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Quantité en Stock :</label>
-                  <input type="number" required value={stock} onChange={(e) => setStock(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-bold focus:outline-none focus:border-blue-500" />
+                  <label className="block font-bold text-slate-300 mb-1">Quantité en Stock :</label>
+                  <input type="number" required value={stock} onChange={(e) => setStock(e.target.value)} className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold focus:outline-none focus:border-amber-500" />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Prix (DH) :</label>
-                  <input type="number" required value={price} onChange={(e) => setPrice(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-bold focus:outline-none focus:border-blue-500" />
+                  <label className="block font-bold text-slate-300 mb-1">Prix (DH) :</label>
+                  <input type="number" required value={price} onChange={(e) => setPrice(e.target.value)} className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold focus:outline-none focus:border-amber-500" />
                 </div>
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Prix Barré (Optionnel) :</label>
-                  <input type="number" value={originalPrice || ""} onChange={(e) => setOriginalPrice(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-400 focus:outline-none" />
+                  <label className="block font-bold text-slate-300 mb-1">Prix Barré (Optionnel) :</label>
+                  <input type="number" value={originalPrice || ""} onChange={(e) => setOriginalPrice(e.target.value)} className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-slate-400 focus:outline-none" />
                 </div>
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Chemin Image :</label>
-                <input type="text" value={image} onChange={(e) => setImage(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white focus:outline-none" />
+                <label className="block font-bold text-slate-300 mb-1">Chemin Image :</label>
+                <input type="text" value={image} onChange={(e) => setImage(e.target.value)} className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white focus:outline-none" />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Description courte :</label>
-                <textarea rows="2" value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white focus:outline-none"></textarea>
+                <label className="block font-bold text-slate-300 mb-1">Description courte :</label>
+                <textarea rows="2" value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white focus:outline-none"></textarea>
               </div>
 
-              <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
-                <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 font-bold">Annuler</button>
-                <button type="submit" className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-md shadow-blue-500/20">Enregistrer</button>
+              <div className="pt-3 flex items-center justify-end gap-2 border-t border-white/10">
+                <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 font-bold">Annuler</button>
+                <button type="submit" className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-outfit font-black shadow-lg">Enregistrer</button>
               </div>
             </form>
           </div>
@@ -1455,54 +1461,54 @@
 
     function OrderDetailsModal({ order, onClose, onUpdateStatus }) {
       return (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#121827] rounded-3xl max-w-lg w-full border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-2xl space-y-6 text-slate-800 dark:text-slate-100">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#121827] rounded-3xl max-w-lg w-full border border-white/15 p-6 sm:p-8 shadow-2xl space-y-6 text-white">
             
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div>
-                <span className="font-mono text-[11px] text-slate-400 font-bold block">{order.id}</span>
-                <h3 className="font-outfit font-black text-lg text-slate-900 dark:text-white">Détails de la Commande</h3>
+                <span className="font-mono text-[11px] text-amber-400 font-bold block">{order.id}</span>
+                <h3 className="font-outfit font-black text-lg text-white">Détails de la Commande</h3>
               </div>
-              <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800">
+              <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10">
                 <i data-lucide="x" className="w-5 h-5"></i>
               </button>
             </div>
 
             <div className="space-y-4 text-xs">
               
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 space-y-2">
+              <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-2">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Coordonnées Client</span>
-                <div className="font-bold text-slate-900 dark:text-white text-sm">{order.customer}</div>
-                <div className="text-slate-600 dark:text-slate-400 font-medium">📞 {order.phone} • ✉️ {order.email}</div>
-                <div className="text-slate-600 dark:text-slate-400">📍 {order.address}, <strong>{order.city}</strong></div>
+                <div className="font-bold text-white text-sm">{order.customer}</div>
+                <div className="text-slate-300 font-medium">📞 {order.phone} • ✉️ {order.email}</div>
+                <div className="text-slate-300">📍 {order.address}, <strong>{order.city}</strong></div>
               </div>
 
               <div className="space-y-2">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Articles Commandés</span>
-                <div className="divide-y divide-slate-100 dark:divide-slate-800 border border-slate-100 dark:border-slate-800 rounded-xl overflow-hidden">
+                <div className="divide-y divide-white/5 border border-white/10 rounded-xl overflow-hidden">
                   {order.items.map((it, idx) => (
-                    <div key={idx} className="p-3 flex items-center justify-between bg-white dark:bg-slate-900/40">
+                    <div key={idx} className="p-3 flex items-center justify-between bg-black/20">
                       <div>
-                        <span className="font-bold text-slate-800 dark:text-slate-200">{it.name}</span>
+                        <span className="font-bold text-white">{it.name}</span>
                         <span className="text-slate-400 block text-[11px]">Quantité : {it.qty}</span>
                       </div>
-                      <span className="font-bold text-slate-900 dark:text-white">{it.price * it.qty} DH</span>
+                      <span className="font-bold text-amber-400">{it.price * it.qty} DH</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="flex justify-between items-center p-3.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-900 dark:text-blue-300 font-bold">
+              <div className="flex justify-between items-center p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 font-bold">
                 <span>Total à Encaisser (COD) :</span>
-                <span className="font-outfit font-black text-lg text-blue-700 dark:text-blue-400">{order.total} DH</span>
+                <span className="font-outfit font-black text-lg text-amber-400">{order.total} DH</span>
               </div>
 
               <div className="pt-2 flex items-center justify-between">
-                <label className="font-bold text-slate-700 dark:text-slate-300">Changer Statut :</label>
+                <label className="font-bold text-slate-300">Changer Statut :</label>
                 <select 
                   value={order.status}
                   onChange={(e) => { onUpdateStatus(order.id, e.target.value); onClose(); }}
-                  className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 font-bold bg-white dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none"
+                  className="p-2 rounded-xl border border-white/15 font-bold bg-black/60 text-white focus:outline-none"
                 >
                   <option value="pending">🟡 En attente</option>
                   <option value="processing">🔵 En cours</option>
@@ -1514,8 +1520,8 @@
 
             </div>
 
-            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end">
-              <button onClick={onClose} className="px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-xs">
+            <div className="pt-3 border-t border-white/10 flex items-center justify-end">
+              <button onClick={onClose} className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs">
                 Fermer
               </button>
             </div>
@@ -1552,49 +1558,49 @@
       };
 
       return (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#121827] rounded-3xl max-w-md w-full border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-2xl space-y-5 text-slate-800 dark:text-slate-100">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-              <h3 className="font-outfit font-black text-lg text-slate-900 dark:text-white">Nouvelle Commande Manuelle</h3>
-              <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#121827] rounded-3xl max-w-md w-full border border-white/15 p-6 sm:p-8 shadow-2xl space-y-5 text-white">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <h3 className="font-outfit font-black text-lg text-white">Nouvelle Commande Manuelle</h3>
+              <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10">
                 <i data-lucide="x" className="w-5 h-5"></i>
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Nom du Client :</label>
-                <input type="text" required value={customer} onChange={(e) => setCustomer(e.target.value)} placeholder="ex: Mohammed Alami" className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-bold focus:outline-none focus:border-blue-500" />
+                <label className="block font-bold text-slate-300 mb-1">Nom du Client :</label>
+                <input type="text" required value={customer} onChange={(e) => setCustomer(e.target.value)} placeholder="ex: Mohammed Alami" className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold focus:outline-none focus:border-amber-500" />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Téléphone :</label>
-                  <input type="text" required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 6..." className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-bold focus:outline-none focus:border-blue-500" />
+                  <label className="block font-bold text-slate-300 mb-1">Téléphone :</label>
+                  <input type="text" required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 6..." className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold focus:outline-none focus:border-amber-500" />
                 </div>
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Ville :</label>
-                  <input type="text" required value={city} onChange={(e) => setCity(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-bold focus:outline-none focus:border-blue-500" />
+                  <label className="block font-bold text-slate-300 mb-1">Ville :</label>
+                  <input type="text" required value={city} onChange={(e) => setCity(e.target.value)} className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold focus:outline-none focus:border-amber-500" />
                 </div>
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Adresse de Livraison :</label>
-                <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Quartier, Rue, N°..." className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white focus:outline-none" />
+                <label className="block font-bold text-slate-300 mb-1">Adresse de Livraison :</label>
+                <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Quartier, Rue, N°..." className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white focus:outline-none" />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Produit Commandé :</label>
-                <select value={selectedProdId} onChange={(e) => setSelectedProdId(e.target.value)} className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white font-bold focus:outline-none">
+                <label className="block font-bold text-slate-300 mb-1">Manuel Commandé :</label>
+                <select value={selectedProdId} onChange={(e) => setSelectedProdId(e.target.value)} className="w-full p-2.5 rounded-xl bg-black/60 border border-white/15 text-white font-bold focus:outline-none">
                   {products.map(p => (
                     <option key={p.id} value={p.id}>{p.name} ({p.price} DH)</option>
                   ))}
                 </select>
               </div>
 
-              <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
-                <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 font-bold">Annuler</button>
-                <button type="submit" className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-md shadow-emerald-500/20">Créer</button>
+              <div className="pt-3 flex items-center justify-end gap-2 border-t border-white/10">
+                <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 font-bold">Annuler</button>
+                <button type="submit" className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-outfit font-black shadow-lg">Créer</button>
               </div>
             </form>
           </div>
@@ -1604,17 +1610,16 @@
 
     function StatusBadge({ status }) {
       const map = {
-        pending: { label: "🟡 En attente", cls: "bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-900/60" },
-        processing: { label: "🔵 En cours", cls: "bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-900/60" },
-        shipped: { label: "🟣 Expédiée", cls: "bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-400 border-purple-200 dark:border-purple-900/60" },
-        delivered: { label: "🟢 Livrée", cls: "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900/60" },
-        cancelled: { label: "🔴 Annulée", cls: "bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-400 border-red-200 dark:border-red-900/60" }
+        pending: { label: "🟡 En attente", cls: "bg-amber-500/20 text-amber-300 border-amber-500/30" },
+        processing: { label: "🔵 En cours", cls: "bg-blue-500/20 text-blue-300 border-blue-500/30" },
+        shipped: { label: "🟣 Expédiée", cls: "bg-purple-500/20 text-purple-300 border-purple-500/30" },
+        delivered: { label: "🟢 Livrée", cls: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30" },
+        cancelled: { label: "🔴 Annulée", cls: "bg-red-500/20 text-red-300 border-red-500/30" }
       };
       const st = map[status] || map.pending;
       return <span className={`px-2.5 py-0.5 rounded-full border text-[10px] font-bold ${st.cls}`}>{st.label}</span>;
     }
 
-    // Render App
     ReactDOM.createRoot(document.getElementById("root")).render(<App />);
   </script>
 </body>
