@@ -1,47 +1,81 @@
-# 📚 Prüfung Vorbereitung Bücher - Store & Amazon Clearance
+# PrüfungStore Pro • ABDEUTSCH CENTER 🇩🇪📚
 
-Boutique en ligne moderne et optimisée pour la recommandation et la vente affiliée de manuels de préparation aux examens d'allemand (**Goethe-Zertifikat B1/B2, telc Deutsch B1/B2, TestDaF, Grammatik & Wortschatz**), connectée au compte Instagram **@prufung_vorbereitung_bucher** et aux offres de déstockage **Amazon Books Clearance**.
-
----
-
-## 🌟 Fonctionnalités Incluses
-
-- **Logo & Identité Visuelle Officielle** : Intégration du logo fourni (`B1 B2 Vorbereitung`) et palette aux couleurs de l'Allemagne (Noir, Rouge, Or).
-- **Catalogue Riche & Certifié** : 14 ouvrages majeurs des éditeurs allemands (*Hueber, Klett Sprachen, Cornelsen, Schubert Verlag, telc*).
-- **Section Amazon Clearance & Déstockage** : Filtres rapides pour accéder aux réductions jusqu'à -35% / -40% et redirection affiliée avec le tag officiel `tag=hydglogoo-20`.
-- **Filtres Avancés & Recherche Instantanée** :
-  - Par Niveau (`B1`, `B2`, `Grammatik`, `C1 / TestDaF`, `Clearance`)
-  - Par Organisme d'Examen (`Goethe-Institut`, `telc Deutsch`, `TestDaF`)
-  - Par Tri (`Populaires`, `Plus forte réduction`, `Prix croissant / décroissant`, `Notes`)
-- **Fiches Produits Interactives (Modal)** : Descriptifs complets, points forts, sommaire, avis clients et boutons d'achat direct Amazon.
-- **Panier & Liste d'Envies (Wishlist)** : Sauvegardés automatiquement en `LocalStorage`.
-- **Multilingue & Multidevise** : Basculement instantané Français 🇫🇷 / Allemand 🇩🇪 / Anglais 🇬🇧, et Devises EUR (€) / USD ($).
-- **Mode Sombre / Clair** : Basculement fluide avec mémorisation des préférences.
-- **Section Communauté & Conseils d'Examens** : Liens directs vers la page Instagram `@prufung_vorbereitung_bucher` et 4 fiches conseils (Écrit, Écoute, Oral, Examens Blancs).
+Plateforme web e-commerce complète et Dashboard d'administration pour la vente et la gestion de manuels de préparation aux examens officiels d'allemand (**TELC B1/B2** et **GOETHE-ÖSD B1/B2**) au Maroc.
 
 ---
 
-## 🚀 Comment Lancer le Store en Local
+## 📁 Structure Unifiée du Projet
 
-1. Ouvrez un terminal dans le dossier du projet :
-   ```bash
-   cd C:\Users\HP\.gemini\antigravity\scratch\german-exam-store
-   ```
+Tous les fichiers du projet sont regroupés dans ce dossier :
+`C:\Users\HP\.gemini\antigravity\scratch\german-exam-store\`
 
-2. Lancez un serveur HTTP local (avec Node.js `npx serve` ou Python) :
-   ```bash
-   npx serve .
-   # OU
-   npx http-server -p 3000
-   ```
-
-3. Ouvrez votre navigateur sur : `http://localhost:3000` ou `http://localhost:5000`.
-   *(Vous pouvez également double-cliquer directement sur `index.html` pour l'ouvrir dans n'importe quel navigateur !)*
+```text
+german-exam-store/
+├── index.html                   # 🛍️ Boutique publique client (Catalogue, Panier, WhatsApp COD)
+├── admin.html                   # 🔐 Dashboard Administrateur (Login sécurisé, CRUD, Commandes, CRM)
+├── dashboard.html               # 🔐 Alias direct vers le Dashboard Admin
+├── student-assessment.html      # 📊 Dashboard Analytique & Scores des Étudiants
+├── server.js                    # 🚀 Serveur HTTP local Node.js (Anti-cache headers)
+├── README.md                    # 📖 Documentation officielle du projet
+├── assets/                      # 🖼️ Images & Ressources graphiques
+│   ├── germany_bg.jpg           # Arrière-plan crépusculaire Berlin / Brandebourg (Généré par Gemini)
+│   ├── site-bg.jpg              # Arrière-plan bibliothèque du store public
+│   ├── logo.jpg                 # Logo officiel PrüfungStore & ABDEUTSCH
+│   └── products/                # Couvertures des manuels et packs
+│       ├── pack-b1.png
+│       ├── goethe-osd-b1-b2.jpg
+│       ├── telc-b1-showcase.jpg
+│       └── telc-real-collection.jpg
+└── src/
+    ├── app.js                   # Moteur JavaScript interactif de la boutique
+    └── data/
+        └── books.js             # Base de données initiale des manuels et prix
+```
 
 ---
 
-## 🔗 Liens et Paramètres d'Affiliation
+## 🌐 Liens Localhost & Accès
 
-- Tag Partenaire Amazon : `hydglogoo-20`
-- URL de recherche Déstockage : `https://www.amazon.com/s/?ie=UTF8&keywords=books+clearance&index=aps&tag=hydglogoo-20&ref=pd_sl_8a9hwhwq6y_b`
-- Profil Instagram : [instagram.com/prufung_vorbereitung_bucher](https://www.instagram.com/prufung_vorbereitung_bucher)
+Une fois le serveur démarré (`node server.js`), les pages sont accessibles sur le port **3000** :
+
+| Page | URL | Description |
+|---|---|---|
+| **Boutique Client** | `http://localhost:3000/` | Storefront public avec commande WhatsApp et formulaire COD. |
+| **Portail Admin** | `http://localhost:3000/admin.html` | Dashboard sécurisé pour l'administrateur. |
+| **Dashboard BI** | `http://localhost:3000/student-assessment.html` | Suivi et analyse des performances des étudiants. |
+
+---
+
+## 🔐 Identifiants Administrateur
+
+* **Nom d'utilisateur** : `admin`
+* **Mot de passe** : `admin2026`
+
+---
+
+## ✨ Fonctionnalités Majeures
+
+### 1. 🛍️ Boutique Publique (`index.html`)
+- Présentation des packs B1 & B2 avec prix officiels en Dirhams marocains (DH).
+- Panier dynamique et commande directe sur WhatsApp au **`+212 632-017446`**.
+- Accès discret au portail d'administration via l'icône **`🛡️`** dans la barre supérieure ou le lien **`Espace Admin 🔐`** dans le pied de page.
+
+### 2. 🇩🇪 Dashboard Administrateur (`admin.html`)
+- **Écran de connexion sécurisé** avec alerte animée en cas de mot de passe erroné.
+- **Arrière-plan haute définition de Berlin** avec effets de verre dépoli (*Glassmorphism*).
+- **Importation de photos** : bouton *« Choisir une photo... »* pour uploader n'importe quelle image depuis l'ordinateur/téléphone avec prévisualisation en direct.
+- **Gestion des stocks & Produits** : Ajout, modification, ajustement rapide (+ / -) et suppression.
+- **Suivi des commandes** : Changement de statut en 1 clic (🟡 En attente, 🔵 En cours, 🟣 Expédiée, 🟢 Livrée, 🔴 Annulée).
+- **CRM WhatsApp** : Historique des commandes clients et relance instantanée sur WhatsApp.
+- **Exportations** : Export des données en format CSV (Excel) et JSON.
+- **Verrouillage automatique** : Déconnexion sécurisée dès que vous retournez à la boutique publique.
+
+---
+
+## 🚀 Démarrer le Serveur Local
+
+Pour lancer ou relancer le serveur local :
+```bash
+node server.js
+```
+Le serveur écoute sur **`http://localhost:3000/`**.
