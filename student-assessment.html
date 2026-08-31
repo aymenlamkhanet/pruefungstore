@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tableau de Bord Évaluation & Performance • PrüfungStore Pro</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .font-outfit {
+      font-family: 'Outfit', sans-serif;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+  </style>
+</head>
+<body class="bg-[var(--background,#09090d)] text-[var(--foreground,#f8fafc)] antialiased p-4 sm:p-8 min-h-screen">
+
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    <!-- ================= HEADER BAR ================= -->
+    <header class="bg-[var(--card,#13131a)] border border-[var(--border,rgba(255,255,255,0.1))] rounded-3xl p-6 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div class="space-y-1">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center font-outfit font-black text-lg">
+            PS
+          </div>
+          <div>
+            <h1 class="font-outfit font-black text-xl sm:text-2xl text-[var(--foreground,#ffffff)] tracking-tight">
+              Student Assessment & Business Intelligence
+            </h1>
+            <p class="text-xs text-[var(--muted-foreground,#94a3b8)]">
+              PrüfungStore Pro — Suivi multidimensionnel des candidats B1 / B2 et corrélations de vente
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Export & Global Actions -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        <button onclick="exportDataCSV()" class="px-4 py-2.5 rounded-xl bg-[var(--background,rgba(255,255,255,0.08))] hover:bg-white/15 text-[var(--foreground,#ffffff)] text-xs font-bold border border-[var(--border,rgba(255,255,255,0.12))] transition flex items-center gap-2 shadow-sm">
+          <span>📥 Export CSV</span>
+        </button>
+        <button onclick="exportDataJSON()" class="px-4 py-2.5 rounded-xl bg-[var(--background,rgba(255,255,255,0.08))] hover:bg-white/15 text-[var(--foreground,#ffffff)] text-xs font-bold border border-[var(--border,rgba(255,255,255,0.12))] transition flex items-center gap-2 shadow-sm">
+          <span>📦 Export JSON</span>
+        </button>
+        <button onclick="resetFilters()" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs font-outfit font-extrabold shadow-lg transition flex items-center gap-1.5">
+          <span>🔄 Réinitialiser Filtres</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ================= MULTIDIMENSIONAL FILTERS ================= -->
+    <section class="bg-[var(--card,#13131a)] border border-[var(--border,rgba(255,255,255,0.1))] rounded-3xl p-5 shadow-xl space-y-4">
+      <div class="flex items-center justify-between border-b border-[var(--border,rgba(255,255,255,0.08))] pb-3">
+        <span class="text-xs font-outfit font-extrabold uppercase tracking-wider text-amber-400 flex items-center gap-2">
+          <span>🎯 Filtrage Multidimensionnel</span>
+          <span id="active-filter-badge" class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold">Tous les candidats</span>
+        </span>
+        <span id="results-count-text" class="text-xs text-[var(--muted-foreground,#94a3b8)]">20 candidats filtrés sur 20</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3.5 text-xs">
+        
+        <!-- Dimension 1: Level -->
+        <div>
+          <label class="block font-bold text-[var(--muted-foreground,#94a3b8)] mb-1">Niveau d'Examen :</label>
+          <select id="filter-level" onchange="applyFilters()" class="w-full p-2.5 rounded-xl bg-[var(--background,#09090d)] border border-[var(--border,rgba(255,255,255,0.15))] text-[var(--foreground,#ffffff)] font-bold focus:outline-none focus:border-amber-500">
+            <option value="all">Tous les Niveaux</option>
+            <option value="B1">Niveau B1</option>
+            <option value="B2">Niveau B2</option>
+          </select>
+        </div>
+
+        <!-- Dimension 2: Exam Body -->
+        <div>
+          <label class="block font-bold text-[var(--muted-foreground,#94a3b8)] mb-1">Organisme Examen :</label>
+          <select id="filter-exam" onchange="applyFilters()" class="w-full p-2.5 rounded-xl bg-[var(--background,#09090d)] border border-[var(--border,rgba(255,255,255,0.15))] text-[var(--foreground,#ffffff)] font-bold focus:outline-none focus:border-amber-500">
+            <option value="all">Tous (telc, Goethe, ÖSD)</option>
+            <option value="telc">telc GmbH</option>
+            <option value="Goethe">Goethe-Institut</option>
+            <option value="ÖSD">ÖSD</option>
+          </select>
+        </div>
+
+        <!-- Dimension 3: Preparation Readiness Status -->
+        <div>
+          <label class="block font-bold text-[var(--muted-foreground,#94a3b8)] mb-1">État de Préparation :</label>
+          <select id="filter-status" onchange="applyFilters()" class="w-full p-2.5 rounded-xl bg-[var(--background,#09090d)] border border-[var(--border,rgba(255,255,255,0.15))] text-[var(--foreground,#ffffff)] font-bold focus:outline-none focus:border-amber-500">
+            <option value="all">Tous les États</option>
+            <option value="pret">🟢 Prêt pour Examen (&gt; 75%)</option>
+            <option value="cours">🟡 En Cours (60 - 75%)</option>
+            <option value="renforcer">🔴 À Renforcer (&lt; 60%)</option>
+          </select>
+        </div>
+
+        <!-- Dimension 4: City -->
+        <div>
+          <label class="block font-bold text-[var(--muted-foreground,#94a3b8)] mb-1">Ville (Maroc) :</label>
+          <select id="filter-city" onchange="applyFilters()" class="w-full p-2.5 rounded-xl bg-[var(--background,#09090d)] border border-[var(--border,rgba(255,255,255,0.15))] text-[var(--foreground,#ffffff)] font-bold focus:outline-none focus:border-amber-500">
+            <option value="all">Toutes les Villes</option>
+            <option value="Casablanca">Casablanca</option>
+            <option value="Rabat">Rabat</option>
+            <option value="Tanger">Tanger</option>
+            <option value="Marrakech">Marrakech</option>
+            <option value="Fès">Fès</option>
+            <option value="Agadir">Agadir</option>
+          </select>
+        </div>
+
+        <!-- Dimension 5: Search Query -->
+        <div>
+          <label class="block font-bold text-[var(--muted-foreground,#94a3b8)] mb-1">Recherche Candidat / ID :</label>
+          <input 
+            id="filter-search" 
+            type="text" 
+            placeholder="Nom, matricule..." 
+            oninput="applyFilters()" 
+            class="w-full p-2.5 rounded-xl bg-[var(--background,#09090d)] border border-[var(--border,rgba(255,255,255,0.15))] text-[var(--foreground,#ffffff)] font-bold focus:outline-none focus:border-amber-500"
+          >
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= KEY KPI METRIC CARDS ================= -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      
+      <div class="bg-[var(--card,#13131a)] border border-[var(--border,rgba(255,255,255,0.1))] rounded-3xl p-5 shadow-lg relative overflow-hidden">
+        <span class="text-xs font-bold text-[var(--muted-foreground,#94a3b8)] uppercase tracking-wider block mb-1">Moyenne Globale Candidats</span>
+        <div class="flex items-baseline gap-2">
+          <span id="kpi-avg-score" class="font-outfit font-black text-3xl text-amber-400">76.4%</span>
+          <span class="text-xs text-emerald-400 font-bold">+4.2% vs M-1</span>
+        </div>
+        <div class="w-full bg-white/10 h-1.5 rounded-full mt-3 overflow-hidden">
+          <div id="kpi-avg-score-bar" class="bg-amber-400 h-full rounded-full transition-all duration-500" style="width: 76.4%"></div>
+        </div>
+      </div>
+
+      <div class="bg-[var(--card,#13131a)] border border-[var(--border,rgba(255,255,255,0.1))] rounded-3xl p-5 shadow-lg relative overflow-hidden">
+        <span class="text-xs font-bold text-[var(--muted-foreground,#94a3b8)] uppercase tracking-wider block mb-1">Taux de Réussite Estimé</span>
+        <div class="flex items-baseline gap-2">
+          <span id="kpi-pass-rate" class="font-outfit font-black text-3xl text-emerald-400">85.0%</span>
+          <span class="text-xs text-[var(--muted-foreground,#94a3b8)]">Seuil &ge; 60%</span>
+        </div>
+        <span id="kpi-pass-count" class="text-[11px] text-slate-400 font-medium block mt-2">17 candidats qualifiés</span>
+      </div>
+
+      <div class="bg-[var(--card,#13131a)] border border-[var(--border,rgba(255,255,255,0.1))] rounded-3xl p-5 shadow-lg relative overflow-hidden">
+        <span class="text-xs font-bold text-[var(--muted-foreground,#94a3b8)] uppercase tracking-wider block mb-1">Chiffre d'Affaires Associé</span>
+        <div class="flex items-baseline gap-2">
+          <span id="kpi-revenue" class="font-outfit font-black text-3xl text-[var(--foreground,#ffffff)]">5,145 DH</span>
+          <span class="text-xs text-emerald-400 font-bold">100% COD</span>
+        </div>
+        <span id="kpi-avg-cart" class="text-[11px] text-slate-400 font-medium block mt-2">Panier moyen : 257.25 DH</span>
+      </div>
+
+      <div class="bg-[var(--card,#13131a)] border border-[var(--border,rgba(255,255,255,0.1))] rounded-3xl p-5 shadow-lg relative overflow-hidden">
+        <span class="text-xs font-bold text-[var(--muted-foreground,#94a3b8)] uppercase tracking-wider block mb-1">Compétence Critique</span>
+        <div class="flex items-baseline gap-2">
+          <span id="kpi-critical-module" class="font-outfit font-black text-3xl text-red-400">Sprechen</span>
+          <span class="text-xs text-red-400 font-bold">68.5%</span>
+        </div>
+        <span class="text-[11px] text-slate-400 font-medium block mt-2">Module nécessitant le plus de fiches</span>
+      </div>
+
+    </section>
+
+    <!-- ================= LINKED CHARTS GRID ================= -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Chart 1: Module Skills Radar/Bar Chart (Lesen, Hören, Schreiben, Sprechen) -->
+      <div class="lg:col-span-6 bg-[var(--card,#13131a)] border border-[var(--border,rgba(255,255,255,0.1))] rounded-3xl p-6 shadow-xl space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-outfit font-bold text-base text-[var(--foreground,#ffffff)]">Moyenne par Compétence Linguistique</h3>
+            <p class="text-xs text-[var(--muted-foreground,#94a3b8)]">Comparaison des 4 épreuves d'examen (sur 100)</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300 font-bold text-[10px]">Analytique DaF</span>
+        </div>
+
+        <div id="chart-modules-container" class="space-y-3.5 pt-2">
+          <!-- Dynamically Rendered Bars -->
+        </div>
+      </div>
+
+      <!-- Chart 2: Score Distribution Histogram -->
+      <div class="lg:col-span-6 bg-[var(--card,#13131a)] border border-[var(--border,rgba(255,255,255,0.1))] rounded-3xl p-6 shadow-xl space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-outfit font-bold text-base text-[var(--foreground,#ffffff)]">Distribution des Notes des Candidats</h3>
+            <p class="text-xs text-[var(--muted-foreground,#94a3b8)]">Répartition par tranches de performance</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-full bg-blue-500/15 text-blue-300 font-bold text-[10px]">Histogramme</span>
+        </div>
+
+        <div id="chart-distribution-container" class="grid grid-cols-4 gap-3 pt-4 items-end h-48">
+          <!-- Dynamically Rendered Column Bars -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ================= DATA TABLE WITH CANDIDATE ASSESSMENTS & BUSINESS DATA ================= -->
+    <section class="bg-[var(--card,#13131a)] border border-[var(--border,rgba(255,255,255,0.1))] rounded-3xl p-6 shadow-xl space-y-4">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h3 class="font-outfit font-black text-lg text-[var(--foreground,#ffffff)]">Détail des Évaluations & Commandes Étudiants</h3>
+          <p class="text-xs text-[var(--muted-foreground,#94a3b8)]">Cliquez sur un candidat pour analyser sa fiche complète ou ouvrir sa discussion WhatsApp.</p>
+        </div>
+        
+        <div class="flex items-center gap-2">
+          <span id="table-filtered-counter" class="text-xs font-bold px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300">
+            Affichage : 20 / 20
+          </span>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-[var(--border,rgba(255,255,255,0.08))]">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-black/60 text-[var(--muted-foreground,#94a3b8)] font-bold uppercase tracking-wider border-b border-white/10">
+            <tr>
+              <th class="p-3.5">Candidat & ID</th>
+              <th class="p-3.5">Niveau & Examen</th>
+              <th class="p-3.5 text-center">Lesen</th>
+              <th class="p-3.5 text-center">Hören</th>
+              <th class="p-3.5 text-center">Schreiben</th>
+              <th class="p-3.5 text-center">Sprechen</th>
+              <th class="p-3.5 text-center">Moyenne</th>
+              <th class="p-3.5">Pack Acheté</th>
+              <th class="p-3.5">Statut Évaluation</th>
+              <th class="p-3.5 text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody id="candidates-table-body" class="divide-y divide-white/5">
+            <!-- Rendered by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ================= JAVASCRIPT DATA & INTERACTIVITY ENGINE ================= -->
+  <script>
+    // Comprehensive student assessment and business dataset
+    const DATASET = [
+      { id: "STU-2026-001", name: "Yassine Mansouri", phone: "212661234567", city: "Casablanca", level: "B1", exam: "telc", pack: "Pack B1 TELC (2026)", priceDh: 235, lesen: 82, hoeren: 78, schreiben: 75, sprechen: 80, readiness: "pret" },
+      { id: "STU-2026-002", name: "Salma Benjelloun", phone: "212672889910", city: "Rabat", level: "B1", exam: "Goethe", pack: "Pack GOETHE - ÖSD B1 & B2", priceDh: 235, lesen: 88, hoeren: 85, schreiben: 80, sprechen: 84, readiness: "pret" },
+      { id: "STU-2026-003", name: "Othmane Tazi", phone: "212663445566", city: "Tanger", level: "B2", exam: "telc", pack: "Pack B2 TELC Collection", priceDh: 260, lesen: 74, hoeren: 70, schreiben: 68, sprechen: 72, readiness: "cours" },
+      { id: "STU-2026-004", name: "Khadija El Idrissi", phone: "212650112233", city: "Marrakech", level: "B1", exam: "telc", pack: "Pack B1 TELC (2026)", priceDh: 235, lesen: 92, hoeren: 90, schreiben: 88, sprechen: 91, readiness: "pret" },
+      { id: "STU-2026-005", name: "Mehdi Cherkaoui", phone: "212614998877", city: "Fès", level: "B2", exam: "telc", pack: "TELC B2 Sprachbausteine", priceDh: 130, lesen: 58, hoeren: 52, schreiben: 55, sprechen: 60, readiness: "renforcer" },
+      { id: "STU-2026-006", name: "Imane Berrada", phone: "212661884422", city: "Casablanca", level: "B2", exam: "Goethe", pack: "GOETHE B2 (25 Tests)", priceDh: 150, lesen: 85, hoeren: 82, schreiben: 79, sprechen: 83, readiness: "pret" },
+      { id: "STU-2026-007", name: "Anas Chraibi", phone: "212662331199", city: "Rabat", level: "B1", exam: "ÖSD", pack: "Pack GOETHE - ÖSD B1 & B2", priceDh: 235, lesen: 70, hoeren: 65, schreiben: 64, sprechen: 68, readiness: "cours" },
+      { id: "STU-2026-008", name: "Zineb Alami", phone: "212665123987", city: "Agadir", level: "B1", exam: "telc", pack: "TELC B1 Sprechen", priceDh: 120, lesen: 64, hoeren: 60, schreiben: 58, sprechen: 62, readiness: "cours" },
+      { id: "STU-2026-009", name: "Hamza Bennani", phone: "212660447788", city: "Fès", level: "B2", exam: "telc", pack: "Pack B2 TELC Collection", priceDh: 260, lesen: 90, hoeren: 88, schreiben: 84, sprechen: 89, readiness: "pret" },
+      { id: "STU-2026-010", name: "Nour El Houda", phone: "212671223344", city: "Casablanca", level: "B1", exam: "Goethe", pack: "GOETHE B1 (25 Tests)", priceDh: 140, lesen: 78, hoeren: 74, schreiben: 72, sprechen: 76, readiness: "pret" },
+      { id: "STU-2026-011", name: "Karim Senhaji", phone: "212663998811", city: "Tanger", level: "B1", exam: "telc", pack: "Pack B1 TELC (2026)", priceDh: 235, lesen: 54, hoeren: 50, schreiben: 48, sprechen: 52, readiness: "renforcer" },
+      { id: "STU-2026-012", name: "Fatima Zahra Lahlou", phone: "212668554433", city: "Rabat", level: "B2", exam: "ÖSD", pack: "Pack GOETHE - ÖSD B1 & B2", priceDh: 235, lesen: 82, hoeren: 80, schreiben: 76, sprechen: 81, readiness: "pret" },
+      { id: "STU-2026-013", name: "Ayoub Fassi", phone: "212667112255", city: "Marrakech", level: "B2", exam: "telc", pack: "Pack B2 TELC Collection", priceDh: 260, lesen: 68, hoeren: 62, schreiben: 60, sprechen: 65, readiness: "cours" },
+      { id: "STU-2026-014", name: "Meriem Tahiri", phone: "212664332211", city: "Casablanca", level: "B1", exam: "telc", pack: "Pack B1 TELC (2026)", priceDh: 235, lesen: 95, hoeren: 94, schreiben: 92, sprechen: 96, readiness: "pret" },
+      { id: "STU-2026-015", name: "Soufiane Kabbaj", phone: "212669887766", city: "Agadir", level: "B2", exam: "Goethe", pack: "GOETHE B2 (25 Tests)", priceDh: 150, lesen: 55, hoeren: 52, schreiben: 49, sprechen: 54, readiness: "renforcer" },
+      { id: "STU-2026-016", name: "Hiba Naciri", phone: "212661556677", city: "Rabat", level: "B1", exam: "telc", pack: "Pack B1 TELC (2026)", priceDh: 235, lesen: 76, hoeren: 72, schreiben: 70, sprechen: 75, readiness: "pret" },
+      { id: "STU-2026-017", name: "Walid Radi", phone: "212662990011", city: "Tanger", level: "B2", exam: "telc", pack: "TELC B2 Sprachbausteine", priceDh: 130, lesen: 80, hoeren: 78, schreiben: 74, sprechen: 79, readiness: "pret" },
+      { id: "STU-2026-018", name: "Siham Glaoui", phone: "212660114477", city: "Marrakech", level: "B1", exam: "Goethe", pack: "Pack GOETHE - ÖSD B1 & B2", priceDh: 235, lesen: 84, hoeren: 81, schreiben: 78, sprechen: 82, readiness: "pret" },
+      { id: "STU-2026-019", name: "Bilal Filali", phone: "212673225588", city: "Fès", level: "B1", exam: "telc", pack: "TELC B1 Sprechen", priceDh: 120, lesen: 71, hoeren: 68, schreiben: 65, sprechen: 70, readiness: "cours" },
+      { id: "STU-2026-020", name: "Nadia Amrani", phone: "212665443322", city: "Casablanca", level: "B2", exam: "telc", pack: "Pack B2 TELC Collection", priceDh: 260, lesen: 88, hoeren: 86, schreiben: 82, sprechen: 87, readiness: "pret" }
+    ];
+
+    let filteredData = [...DATASET];
+
+    function calculateAverage(stu) {
+      return ((stu.lesen + stu.hoeren + stu.schreiben + stu.sprechen) / 4).toFixed(1);
+    }
+
+    function applyFilters() {
+      const level = document.getElementById("filter-level").value;
+      const exam = document.getElementById("filter-exam").value;
+      const status = document.getElementById("filter-status").value;
+      const city = document.getElementById("filter-city").value;
+      const search = document.getElementById("filter-search").value.toLowerCase().trim();
+
+      filteredData = DATASET.filter(item => {
+        const matchLevel = level === "all" || item.level === level;
+        const matchExam = exam === "all" || item.exam === exam;
+        const matchStatus = status === "all" || item.readiness === status;
+        const matchCity = city === "all" || item.city === city;
+        const matchSearch = !search || 
+          item.name.toLowerCase().includes(search) || 
+          item.id.toLowerCase().includes(search) ||
+          item.city.toLowerCase().includes(search) ||
+          item.pack.toLowerCase().includes(search);
+
+        return matchLevel && matchExam && matchStatus && matchCity && matchSearch;
+      });
+
+      renderDashboard();
+    }
+
+    function resetFilters() {
+      document.getElementById("filter-level").value = "all";
+      document.getElementById("filter-exam").value = "all";
+      document.getElementById("filter-status").value = "all";
+      document.getElementById("filter-city").value = "all";
+      document.getElementById("filter-search").value = "";
+      applyFilters();
+    }
+
+    function renderDashboard() {
+      // 1. Update Results Badge
+      const count = filteredData.length;
+      document.getElementById("results-count-text").textContent = count + " candidat(s) filtré(s) sur " + DATASET.length;
+      document.getElementById("table-filtered-counter").textContent = "Affichage : " + count + " / " + DATASET.length;
+
+      // 2. KPIs calculation
+      if (count === 0) {
+        document.getElementById("kpi-avg-score").textContent = "0.0%";
+        document.getElementById("kpi-avg-score-bar").style.width = "0%";
+        document.getElementById("kpi-pass-rate").textContent = "0.0%";
+        document.getElementById("kpi-pass-count").textContent = "0 candidat qualifié";
+        document.getElementById("kpi-revenue").textContent = "0 DH";
+        document.getElementById("kpi-avg-cart").textContent = "Panier moyen : 0 DH";
+        document.getElementById("candidates-table-body").innerHTML = `
+          <tr><td colspan="10" class="p-8 text-center text-slate-400 font-medium">Aucun candidat ne correspond à ces critères de filtrage.</td></tr>
+        `;
+        return;
+      }
+
+      let sumAvg = 0;
+      let passCount = 0;
+      let totalRevenue = 0;
+      let sumLesen = 0, sumHoeren = 0, sumSchreiben = 0, sumSprechen = 0;
+
+      filteredData.forEach(item => {
+        const avg = parseFloat(calculateAverage(item));
+        sumAvg += avg;
+        if (avg >= 60) passCount++;
+        totalRevenue += item.priceDh;
+        sumLesen += item.lesen;
+        sumHoeren += item.hoeren;
+        sumSchreiben += item.schreiben;
+        sumSprechen += item.sprechen;
+      });
+
+      const overallAvg = (sumAvg / count).toFixed(1);
+      const passRate = ((passCount / count) * 100).toFixed(1);
+      const avgCart = (totalRevenue / count).toFixed(2);
+
+      document.getElementById("kpi-avg-score").textContent = overallAvg + "%";
+      document.getElementById("kpi-avg-score-bar").style.width = Math.min(100, overallAvg) + "%";
+      document.getElementById("kpi-pass-rate").textContent = passRate + "%";
+      document.getElementById("kpi-pass-count").textContent = passCount + " candidat(s) qualifié(s)";
+      document.getElementById("kpi-revenue").textContent = totalRevenue.toLocaleString() + " DH";
+      document.getElementById("kpi-avg-cart").textContent = "Panier moyen : " + avgCart + " DH";
+
+      // 3. Render Chart 1: Module Skills Breakdown
+      const avgLesen = (sumLesen / count).toFixed(1);
+      const avgHoeren = (sumHoeren / count).toFixed(1);
+      const avgSchreiben = (sumSchreiben / count).toFixed(1);
+      const avgSprechen = (sumSprechen / count).toFixed(1);
+
+      const modules = [
+        { name: "Leseverstehen (Compréhension Écrite)", score: avgLesen, color: "bg-amber-400", textCol: "text-amber-400" },
+        { name: "Hörverstehen (Compréhension Orale)", score: avgHoeren, color: "bg-blue-400", textCol: "text-blue-400" },
+        { name: "Schriftlicher Ausdruck (Production Écrite)", score: avgSchreiben, color: "bg-purple-400", textCol: "text-purple-400" },
+        { name: "Mündlicher Ausdruck (Épreuve Orale)", score: avgSprechen, color: "bg-emerald-400", textCol: "text-emerald-400" }
+      ];
+
+      document.getElementById("chart-modules-container").innerHTML = modules.map(m => `
+        <div class="space-y-1.5">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-[var(--foreground,#ffffff)]">${m.name}</span>
+            <span class="font-outfit font-black ${m.textCol} text-sm">${m.score}%</span>
+          </div>
+          <div class="w-full bg-white/10 h-2.5 rounded-full overflow-hidden">
+            <div class="${m.color} h-full rounded-full transition-all duration-500" style="width: ${m.score}%"></div>
+          </div>
+        </div>
+      `).join('');
+
+      // 4. Render Chart 2: Score Distribution Histogram
+      let band1 = 0, band2 = 0, band3 = 0, band4 = 0;
+      filteredData.forEach(item => {
+        const a = parseFloat(calculateAverage(item));
+        if (a < 60) band1++;
+        else if (a < 75) band2++;
+        else if (a < 90) band3++;
+        else band4++;
+      });
+
+      const maxBand = Math.max(1, band1, band2, band3, band4);
+      const bands = [
+        { label: "< 60%", sub: "Insuffisant", count: band1, color: "bg-red-500", textCol: "text-red-400" },
+        { label: "60 - 74%", sub: "Passable / Ausreichend", count: band2, color: "bg-amber-500", textCol: "text-amber-400" },
+        { label: "75 - 89%", sub: "Bien / Gut", count: band3, color: "bg-blue-500", textCol: "text-blue-400" },
+        { label: "90 - 100%", sub: "Très Bien / Sehr gut", count: band4, color: "bg-emerald-500", textCol: "text-emerald-400" }
+      ];
+
+      document.getElementById("chart-distribution-container").innerHTML = bands.map(b => {
+        const heightPct = Math.max(15, (b.count / maxBand) * 100);
+        return `
+          <div class="flex flex-col items-center justify-end h-full group">
+            <span class="font-outfit font-black ${b.textCol} text-sm mb-1">${b.count}</span>
+            <div class="w-full ${b.color} rounded-t-xl transition-all duration-500 opacity-90 group-hover:opacity-100 shadow-lg" style="height: ${heightPct}%"></div>
+            <span class="text-[10px] font-bold text-slate-300 mt-2 text-center block">${b.label}</span>
+            <span class="text-[9px] text-slate-500 text-center truncate w-full block">${b.sub}</span>
+          </div>
+        `;
+      }).join('');
+
+      // 5. Render Data Table
+      document.getElementById("candidates-table-body").innerHTML = filteredData.map(item => {
+        const avg = calculateAverage(item);
+        let badgeClass = "bg-emerald-500/20 text-emerald-300 border-emerald-500/30";
+        let badgeText = "🟢 Prêt";
+        if (item.readiness === "cours") {
+          badgeClass = "bg-amber-500/20 text-amber-300 border-amber-500/30";
+          badgeText = "🟡 En cours";
+        } else if (item.readiness === "renforcer") {
+          badgeClass = "bg-red-500/20 text-red-300 border-red-500/30";
+          badgeText = "🔴 À renforcer";
+        }
+
+        return `
+          <tr class="hover:bg-white/5 transition">
+            <td class="p-3.5">
+              <div class="font-bold text-[var(--foreground,#ffffff)]">${item.name}</div>
+              <div class="text-[10px] text-slate-400">${item.id} • ${item.city}</div>
+            </td>
+            <td class="p-3.5">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${item.level === 'B1' ? 'bg-amber-500/20 text-amber-300' : 'bg-blue-500/20 text-blue-300'} border border-white/10">
+                ${item.level}
+              </span>
+              <span class="text-[11px] text-slate-300 font-bold ml-1">${item.exam}</span>
+            </td>
+            <td class="p-3.5 text-center font-bold text-slate-200">${item.lesen}%</td>
+            <td class="p-3.5 text-center font-bold text-slate-200">${item.hoeren}%</td>
+            <td class="p-3.5 text-center font-bold text-slate-200">${item.schreiben}%</td>
+            <td class="p-3.5 text-center font-bold text-slate-200">${item.sprechen}%</td>
+            <td class="p-3.5 text-center font-outfit font-black text-sm ${avg >= 75 ? 'text-emerald-400' : (avg >= 60 ? 'text-amber-400' : 'text-red-400')}">
+              ${avg}%
+            </td>
+            <td class="p-3.5">
+              <span class="text-xs font-semibold text-slate-300 truncate max-w-[140px] block">${item.pack}</span>
+              <span class="text-[10px] text-amber-400 font-bold">${item.priceDh} DH</span>
+            </td>
+            <td class="p-3.5">
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border ${badgeClass}">
+                ${badgeText}
+              </span>
+            </td>
+            <td class="p-3.5 text-right">
+              <a href="https://api.whatsapp.com/send?phone=${item.phone}&text=Bonjour%20${encodeURIComponent(item.name)},%20suivi%20de%20votre%20pr%C3%A9paration%20${item.level}%20chez%20Pr%C3%BCfungStore%20!" target="_blank" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-300 font-bold text-xs transition">
+                <span>💬 WhatsApp</span>
+              </a>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // ================= EXPORT FUNCTIONS =================
+    function exportDataCSV() {
+      let csv = "ID,Nom,Telephone,Ville,Niveau,Examen,Pack,Prix_DH,Lesen,Hoeren,Schreiben,Sprechen,Moyenne,Statut\n";
+      filteredData.forEach(i => {
+        const avg = calculateAverage(i);
+        csv += `"${i.id}","${i.name}","+${i.phone}","${i.city}","${i.level}","${i.exam}","${i.pack}",${i.priceDh},${i.lesen},${i.hoeren},${i.schreiben},${i.sprechen},${avg},"${i.readiness}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "evaluations_pruefungstore_" + new Date().toISOString().slice(0, 10) + ".csv";
+      link.click();
+    }
+
+    function exportDataJSON() {
+      const data = {
+        metadata: {
+          exportDate: new Date().toISOString(),
+          totalFiltered: filteredData.length,
+          totalDataset: DATASET.length
+        },
+        candidates: filteredData
+      };
+
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "evaluations_pruefungstore_" + new Date().toISOString().slice(0, 10) + ".json";
+      link.click();
+    }
+
+    // Initialize Dashboard on load
+    document.addEventListener("DOMContentLoaded", () => {
+      renderDashboard();
+    });
+  </script>
+</body>
+</html>
