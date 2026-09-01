@@ -146,87 +146,36 @@
         L'excellence des manuels de préparation <strong>TELC</strong> et <strong>GOETHE-ÖSD</strong> avec 25 Modelltests calibrés, corrigés exhaustifs et audios haute fidélité.
       </p>
 
-      <!-- ================= 2 CHOIX INTERACTIFS : B1 & B2 ================= -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto my-8 text-left">
+      <!-- Center Official Logo with Smooth Floating Animation & Glow -->
+      <div class="relative w-full max-w-sm mx-auto my-8 flex items-center justify-center">
         
-        <!-- CHOIX 1 : NIVEAU B1 -->
-        <div class="group relative rounded-3xl p-6 sm:p-7 bg-gradient-to-b from-white/10 to-white/5 border border-amber-500/30 hover:border-amber-400/80 shadow-2xl backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1">
-          <div class="flex items-center justify-between gap-2 mb-4">
-            <span class="px-3.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold font-outfit uppercase tracking-wider flex items-center gap-1.5">
-              <span>🇩🇪</span>
-              <span>Choix 1 • Niveau B1</span>
-            </span>
-            <span class="font-outfit font-black text-xl text-amber-400">235 DH</span>
+        <!-- Ambient radial pulse glow behind logo -->
+        <div class="absolute inset-0 bg-gradient-to-r from-amber-500/25 via-red-500/20 to-amber-500/25 rounded-full blur-3xl animate-pulse pointer-events-none"></div>
+        
+        <!-- Logo Card with smooth floating animation -->
+        <div class="relative z-10 group cursor-pointer transition-all duration-700 hover:scale-105">
+          <div class="p-3 sm:p-4 rounded-3xl bg-gradient-to-b from-white/15 to-white/5 border border-white/20 shadow-2xl backdrop-blur-2xl animate-float">
+            <img src="assets/logo.jpg" alt="Logo Prüfung Vorbereitung Bücher" class="w-48 h-48 sm:w-56 sm:h-56 rounded-2xl object-cover shadow-2xl border border-amber-500/30">
           </div>
-
-          <div class="flex flex-col sm:flex-row items-center gap-5 my-3">
-            <div class="relative w-28 h-28 sm:w-32 sm:h-32 shrink-0 p-2 rounded-2xl bg-black/50 border border-white/15 flex items-center justify-center group-hover:scale-105 transition">
-              <img src="assets/products/pack-b1.png" alt="Pack B1 TELC & Goethe" class="w-full h-full object-contain">
-            </div>
-            <div class="space-y-1.5 text-center sm:text-left">
-              <h3 class="font-outfit font-black text-xl text-white">Pack B1 TELC & Goethe</h3>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                L'excellence des manuels de préparation <strong>TELC</strong> et <strong>GOETHE-ÖSD</strong> avec 25 Modelltests calibrés, corrigés exhaustifs et audios haute fidélité.
-              </p>
-            </div>
-          </div>
-
-          <div class="pt-4 border-t border-white/10 flex items-center gap-3">
-            <button onclick="orderOnWhatsApp('pack-b1-telc-2026')" class="flex-1 py-3 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-outfit font-extrabold text-xs shadow-lg shadow-emerald-950/50 transition flex items-center justify-center gap-2">
-              <svg class="w-4 h-4 fill-white" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
-              <span>Commander B1 (235 DH)</span>
-            </button>
-            <button onclick="openBookModal('pack-b1-telc-2026')" class="px-4 py-3 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-xs transition">
-              Détails
-            </button>
+          
+          <!-- Floating Status Badge -->
+          <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-black/90 backdrop-blur-md border border-amber-500/40 text-xs font-bold text-amber-300 shadow-xl flex items-center gap-2 whitespace-nowrap">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>@prufung_vorbereitung_bucher</span>
           </div>
         </div>
 
-        <!-- CHOIX 2 : NIVEAU B2 -->
-        <div class="group relative rounded-3xl p-6 sm:p-7 bg-gradient-to-b from-white/10 to-white/5 border border-red-500/30 hover:border-red-400/80 shadow-2xl backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1">
-          <div class="flex items-center justify-between gap-2 mb-4">
-            <span class="px-3.5 py-1 rounded-full bg-red-500/20 text-red-300 border border-red-500/40 text-xs font-bold font-outfit uppercase tracking-wider flex items-center gap-1.5">
-              <span>🇩🇪</span>
-              <span>Choix 2 • Niveau B2</span>
-            </span>
-            <span class="font-outfit font-black text-xl text-amber-400">235 DH</span>
-          </div>
-
-          <div class="flex flex-col sm:flex-row items-center gap-5 my-3">
-            <div class="relative w-28 h-28 sm:w-32 sm:h-32 shrink-0 p-2 rounded-2xl bg-black/50 border border-white/15 flex items-center justify-center group-hover:scale-105 transition">
-              <img src="assets/products/telc-real-collection.jpg" alt="Pack B2 TELC & Goethe" class="w-full h-full object-contain">
-            </div>
-            <div class="space-y-1.5 text-center sm:text-left">
-              <h3 class="font-outfit font-black text-xl text-white">Pack B2 TELC & Goethe</h3>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                L'excellence des manuels de préparation <strong>TELC</strong> et <strong>GOETHE-ÖSD</strong> avec 25 Modelltests calibrés, corrigés exhaustifs et audios haute fidélité.
-              </p>
-            </div>
-          </div>
-
-          <div class="pt-4 border-t border-white/10 flex items-center gap-3">
-            <button onclick="orderOnWhatsApp('pack-goethe-osd-b1-b2')" class="flex-1 py-3 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-outfit font-extrabold text-xs shadow-lg shadow-emerald-950/50 transition flex items-center justify-center gap-2">
-              <svg class="w-4 h-4 fill-white" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
-              <span>Commander B2 (235 DH)</span>
-            </button>
-            <button onclick="openBookModal('pack-goethe-osd-b1-b2')" class="px-4 py-3 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-xs transition">
-              Détails
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Official Instagram Badge -->
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-amber-500/40 text-xs font-bold text-amber-300 shadow-xl">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <a href="https://www.instagram.com/prufung_vorbereitung_bucher?igsi=MTkweG5pZnExb2h1Yw%3D%3D#" target="_blank" class="hover:underline">@prufung_vorbereitung_bucher</a>
       </div>
 
       <!-- Action Box -->
       <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <button id="hero-3d-cta" onclick="orderOnWhatsApp('pack-b1-telc-2026')" class="w-full sm:w-auto px-8 py-4 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-outfit font-extrabold text-sm shadow-xl shadow-emerald-950/60 transition flex items-center justify-center gap-2.5">
+          <svg class="w-5 h-5 fill-white shrink-0" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+          <span>Commandez</span>
+        </button>
+
         <a href="#catalog-section" class="w-full sm:w-auto px-7 py-4 rounded-full bg-white/10 hover:bg-white/15 text-white font-outfit font-bold text-sm border border-white/15 transition flex items-center justify-center gap-2">
-          <span>Découvrir tous les livres du catalogue</span>
+          <span>Découvrir tous les livres</span>
           <i data-lucide="arrow-down" class="w-4 h-4"></i>
         </a>
       </div>
