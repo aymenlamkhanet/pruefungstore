@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = process.env.PORT || 3000;
+let PORT = parseInt(process.env.PORT || 3000, 10);
 const PUBLIC_DIR = __dirname;
 
 const MIME_TYPES = {
@@ -42,12 +42,26 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, '0.0.0.0', () => {
-  console.log('\n=============================================================');
-  console.log('  🇩🇪  PrüfungStore Pro • ABDEUTSCH CENTER (Serveur Actif)  ');
-  console.log('=============================================================');
-  console.log('  🛍️  Boutique Publique : http://localhost:' + PORT + '/');
-  console.log('  🔐  Espace Admin     : http://localhost:' + PORT + '/admin.html');
-  console.log('  📊  Dashboard BI     : http://localhost:' + PORT + '/student-assessment.html');
-  console.log('=============================================================\n');
+function startServer(portToTry) {
+  server.listen(portToTry, '0.0.0.0', () => {
+    console.log('\n=============================================================');
+    console.log('  🇩🇪  PrüfungStore Pro • ABDEUTSCH CENTER (Serveur Actif)  ');
+    console.log('=============================================================');
+    console.log('  🛍️  Boutique Publique : http://localhost:' + portToTry + '/');
+    console.log('  🔐  Espace Admin     : http://localhost:' + portToTry + '/admin.html');
+    console.log('  📊  Dashboard BI     : http://localhost:' + portToTry + '/student-assessment.html');
+    console.log('=============================================================\n');
+  });
+}
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.warn(`⚠️  Le port ${PORT} est déjà occupé. Basculement automatique sur le port ${PORT + 1}...`);
+    PORT += 1;
+    startServer(PORT);
+  } else {
+    console.error('Erreur serveur:', err);
+  }
 });
+
+startServer(PORT);
