@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 24" width="32" height="24">
+  <clipPath id="flag-clip">
+    <rect width="32" height="24" rx="4" />
+  </clipPath>
+  <g clip-path="url(#flag-clip)">
+    <rect width="32" height="8" y="0" fill="#000000" />
+    <rect width="32" height="8" y="8" fill="#DD0000" />
+    <rect width="32" height="8" y="16" fill="#FFCC00" />
+  </g>
+</svg>
