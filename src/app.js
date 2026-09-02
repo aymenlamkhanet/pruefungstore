@@ -326,12 +326,12 @@ function renderCatalog() {
     const isWishlisted = state.wishlist.includes(book.id);
 
     return `
-      <div class="apple-tilt-card group relative bg-white border border-blue-100 hover:border-blue-500 rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-lg shadow-blue-900/5 hover:shadow-2xl hover:shadow-blue-500/10">
+      <div class="apple-tilt-card group relative bg-[#0B0F19]/92 border border-blue-900/40 hover:border-blue-500 rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-2xl backdrop-blur-xl hover:shadow-blue-500/20">
         <div>
           <!-- Header Tag -->
           <div class="flex items-center justify-between gap-2 mb-4">
             <div class="flex items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-blue-950/80 text-blue-300 border border-blue-500/40">
                 ${book.level}
               </span>
               ${book.isPack ? `
@@ -341,15 +341,15 @@ function renderCatalog() {
               ` : ''}
             </div>
 
-            <button onclick="toggleWishlist('${book.id}')" class="p-2 rounded-full bg-slate-100 hover:bg-red-50 text-slate-400 hover:text-red-500 transition">
+            <button onclick="toggleWishlist('${book.id}')" class="p-2 rounded-full bg-white/5 hover:bg-white/15 text-slate-400 hover:text-red-500 transition">
               <i data-lucide="heart" class="w-4 h-4 ${isWishlisted ? 'fill-red-500 text-red-500' : ''}"></i>
             </button>
           </div>
 
           <!-- Book Real Image Showcase -->
-          <div onclick="window.location.href=getBookPageUrl('${book.id}')" class="cursor-pointer relative w-full h-64 bg-slate-50/80 rounded-2xl flex items-center justify-center p-3 mb-5 border border-slate-100 group-hover:border-blue-200 transition-all overflow-hidden">
+          <div onclick="window.location.href=getBookPageUrl('${book.id}')" class="cursor-pointer relative w-full h-64 bg-black/60 rounded-2xl flex items-center justify-center p-3 mb-5 border border-blue-900/40 group-hover:border-blue-500/60 transition-all overflow-hidden">
             <img src="${book.image}" alt="${book.title}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute bottom-2 left-2 right-2 flex items-center justify-between text-[10px] bg-white/95 backdrop-blur-md px-3 py-1 rounded-full text-slate-700 border border-blue-100 shadow-sm">
+            <div class="absolute bottom-2 left-2 right-2 flex items-center justify-between text-[10px] bg-black/80 backdrop-blur-md px-3 py-1 rounded-full text-slate-300 border border-white/10">
               <span class="text-blue-600 font-bold">${book.examType}</span>
               <span class="text-emerald-600 font-bold">✓ Audio + Corrigés</span>
             </div>
@@ -357,17 +357,17 @@ function renderCatalog() {
 
           <!-- Titles & Description -->
           <div class="space-y-1 mb-3">
-            <h3 onclick="window.location.href=getBookPageUrl('${book.id}')" class="cursor-pointer font-outfit font-extrabold text-lg text-slate-900 group-hover:text-blue-600 transition-colors leading-snug line-clamp-2">
+            <h3 onclick="window.location.href=getBookPageUrl('${book.id}')" class="cursor-pointer font-outfit font-extrabold text-lg text-white group-hover:text-blue-400 transition-colors leading-snug line-clamp-2">
               ${book.title}
             </h3>
-            <p class="text-xs text-slate-500 font-medium line-clamp-2">${book.subtitle}</p>
+            <p class="text-xs text-slate-400 font-medium line-clamp-2">${book.subtitle}</p>
           </div>
 
           <!-- Specs List -->
-          <div class="py-3 border-y border-slate-100 space-y-1.5 text-xs text-slate-600 mb-4">
+          <div class="py-3 border-y border-white/10 space-y-1.5 text-xs text-slate-300 mb-4">
             <div class="flex items-center justify-between">
               <span class="text-slate-400">Format :</span>
-              <span class="font-bold text-slate-800 truncate max-w-[170px]">${book.format}</span>
+              <span class="font-bold text-white truncate max-w-[170px]">${book.format}</span>
             </div>
             <div class="flex items-center justify-between">
               <span class="text-slate-400">Audio :</span>
@@ -382,17 +382,17 @@ function renderCatalog() {
             <div>
               <span class="text-[10px] uppercase font-bold text-slate-400 block">Prix Préférentiel</span>
               <div class="flex items-baseline gap-2">
-                <span class="font-outfit font-black text-2xl text-blue-700">${book.priceDh} DH</span>
+                <span class="font-outfit font-black text-2xl text-blue-400">${book.priceDh} DH</span>
                 ${book.originalPriceDh ? `<span class="text-xs text-slate-400 line-through">${book.originalPriceDh} DH</span>` : ''}
               </div>
             </div>
-            <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 font-bold text-[11px] border border-emerald-200">
+            <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-bold text-[11px] border border-emerald-500/20">
               Livraison Gratuite
             </span>
           </div>
 
           <div class="grid grid-cols-2 gap-2">
-            <button onclick="addToCart('${book.id}')" class="py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition flex items-center justify-center gap-1.5 border border-slate-200">
+            <button onclick="addToCart('${book.id}')" class="py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 border border-white/10">
               <i data-lucide="shopping-bag" class="w-3.5 h-3.5 text-blue-600"></i>
               <span>Panier</span>
             </button>
