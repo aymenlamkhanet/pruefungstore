@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" class="scroll-smooth dark">
+<html lang="fr" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,31 +36,34 @@
 
   <style>
     body {
-      background-color: #060608;
-      color: #f5f5f7;
+      background-color: #F8FAFC;
+      color: #0F172A;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
-    .apple-gradient-text {
-      background: linear-gradient(180deg, #FFFFFF 0%, #A1A1A6 100%);
+    .blue-gradient-text {
+      background: linear-gradient(135deg, #0F172A 0%, #1E40AF 50%, #2563EB 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .apple-gold-text {
-      background: linear-gradient(135deg, #FDE68A 0%, #F59E0B 50%, #D97706 100%);
+    .blue-vivid-text {
+      background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 50%, #0284C7 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
     .frosted-glass {
-      background: rgba(18, 18, 22, 0.75);
+      background: rgba(255, 255, 255, 0.90);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
     }
     .bento-card {
-      background: rgba(18, 18, 24, 0.85);
-      backdrop-filter: blur(25px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.05);
     }
-  
+    .bento-card:hover {
+      border-color: #3B82F6;
+      box-shadow: 0 20px 35px -5px rgba(37, 99, 235, 0.12);
+    }
     @keyframes float {
       0%, 100% { transform: translateY(0px); }
       50% { transform: translateY(-10px); }
@@ -68,49 +71,49 @@
     .animate-float {
       animation: float 4s ease-in-out infinite;
     }
-  
   </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black relative bg-[#060608]">
+<body class="min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white relative bg-[#F8FAFC]">
 
-  <!-- ================= GEMINI CINEMATIC LIBRARY BACKGROUND (BIEN APPARENT) ================= -->
-  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-    <img src="assets/site-bg.jpg" alt="Gemini Library Background" class="w-full h-full object-cover object-center filter brightness-[0.75] contrast-115 scale-105 transform">
-    <div class="absolute inset-0 bg-gradient-to-b from-[#060608]/70 via-[#060608]/50 to-[#060608]/80 backdrop-blur-[1px]"></div>
+  <!-- ================= BACKGROUND LIGHT BLUE & WHITE ================= -->
+  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#F8FAFC]">
+    <div class="absolute -top-40 -right-40 w-[600px] h-[600px] bg-blue-100/70 rounded-full blur-[120px]"></div>
+    <div class="absolute top-1/3 -left-40 w-[500px] h-[500px] bg-sky-100/60 rounded-full blur-[100px]"></div>
+    <div class="absolute bottom-10 right-1/4 w-[450px] h-[450px] bg-indigo-50/80 rounded-full blur-[110px]"></div>
   </div>
 
   <!-- ================= APPLE STYLE TOP NAVBAR ================= -->
-  <header class="fixed top-0 left-0 right-0 z-50 frosted-glass border-b border-white/10">
+  <header class="fixed top-0 left-0 right-0 z-50 frosted-glass border-b border-blue-100 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       
       <!-- Brand Logo -->
       <a href="#" class="flex items-center gap-2.5 group">
-        <img src="assets/logo.jpg" alt="Logo" class="w-8 h-8 rounded-lg object-cover border border-amber-500/40">
-        <span class="font-outfit font-extrabold text-lg tracking-tight text-white flex items-center">
-          Prüfung<span class="text-amber-400">Store</span>
-          <span class="text-[10px] text-slate-400 font-mono ml-1.5 px-1.5 py-0.2 rounded bg-white/10">PRO</span>
+        <img src="assets/logo.jpg" alt="Logo" class="w-8 h-8 rounded-lg object-cover border border-blue-300">
+        <span class="font-outfit font-extrabold text-lg tracking-tight text-slate-900 flex items-center">
+          Prüfung<span class="text-blue-600">Store</span>
+          <span class="text-[10px] text-blue-700 font-mono ml-1.5 px-1.5 py-0.2 rounded bg-blue-50 border border-blue-200">PRO</span>
         </span>
       </a>
 
       <!-- Quick Nav Links -->
-      <nav class="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-400">
-        <a href="#hero-3d" class="hover:text-white transition">Accueil</a>
-        <a href="#bento-section" class="hover:text-white transition">Innovations</a>
-        <a href="#catalog-section" class="hover:text-white transition">Les Packs</a>
-        <a href="#compare-section" class="hover:text-white transition">Comparatif</a>
+      <nav class="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-600">
+        <a href="#hero-3d" class="hover:text-blue-600 transition">Accueil</a>
+        <a href="#bento-section" class="hover:text-blue-600 transition">Innovations</a>
+        <a href="#catalog-section" class="hover:text-blue-600 transition">Les Packs</a>
+        <a href="#compare-section" class="hover:text-blue-600 transition">Comparatif</a>
         
       </nav>
 
       <!-- Cart Trigger & Action -->
       <div class="flex items-center gap-3">
-        <a href="admin.html" class="p-2 rounded-full bg-white/5 hover:bg-amber-500/20 text-slate-400 hover:text-amber-400 border border-white/10 transition flex items-center justify-center" title="Espace Administrateur 🔐">
+        <a href="admin.html" class="p-2 rounded-full bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 border border-slate-200 transition flex items-center justify-center" title="Espace Administrateur 🔐">
           <i data-lucide="shield" class="w-4 h-4"></i>
         </a>
 
-        <button id="cart-drawer-btn" class="relative p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-2 text-xs font-bold px-3.5">
-          <i data-lucide="shopping-bag" class="w-4 h-4 text-amber-400"></i>
+        <button id="cart-drawer-btn" class="relative p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 transition flex items-center gap-2 text-xs font-bold px-3.5 border border-slate-200">
+          <i data-lucide="shopping-bag" class="w-4 h-4 text-blue-600"></i>
           <span class="hidden sm:inline">Panier</span>
-          <span id="cart-count" class="bg-white text-black text-[10px] font-black px-1.5 py-0.2 rounded-full">0</span>
+          <span id="cart-count" class="bg-blue-600 text-white text-[10px] font-black px-1.5 py-0.2 rounded-full">0</span>
         </button>
 
         <a href="https://api.whatsapp.com/send?phone=212632017446&text=Bonjour,%20je%20souhaite%20des%20informations%20sur%20les%20manuels%20d%27allemand%20B1/B2." target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-full bg-red-600 hover:bg-red-500 text-white font-outfit font-extrabold text-xs transition shadow-lg shadow-red-950/60 flex items-center gap-1.5">
@@ -132,18 +135,18 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center relative z-10 space-y-6">
       
       <!-- Overline Tag -->
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-slate-300 backdrop-blur-md">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-semibold text-blue-700">
         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
         <span>Édition Officielle 2026 • Format Reliure Spirale Métallique</span>
       </div>
 
       <!-- Main Headline -->
       <h1 class="font-outfit text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-tight">
-        <span class="apple-gradient-text">Prüfung Deutsch B1 & B2.</span><br>
-        <span class="apple-gold-text">Redéfinir votre réussite.</span>
+        <span class="blue-gradient-text">Prüfung Deutsch B1 & B2.</span><br>
+        <span class="blue-vivid-text">Redéfinir votre réussite.</span>
       </h1>
 
-      <p id="hero-3d-tag" class="text-sm sm:text-lg text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed">
+      <p id="hero-3d-tag" class="text-sm sm:text-lg text-slate-600 max-w-2xl mx-auto font-medium leading-relaxed">
         L'excellence des manuels de préparation <strong>TELC</strong> et <strong>GOETHE-ÖSD</strong> avec 25 Modelltests calibrés, corrigés exhaustifs et audios haute fidélité.
       </p>
 
@@ -152,10 +155,10 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto my-10 text-left">
         
         <!-- CARTE NIVEAU B1 -->
-        <div class="group relative rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-white/10 to-white/5 border border-amber-500/30 hover:border-amber-400/80 shadow-2xl backdrop-blur-2xl transition-all duration-500 hover:-translate-y-2">
+        <div class="group relative rounded-3xl p-6 sm:p-8 bg-white border-2 border-blue-200 hover:border-blue-500 shadow-xl transition-all duration-500 hover:-translate-y-2">
           <!-- Top Badge -->
           <div class="flex items-center justify-between gap-2 mb-4">
-            <span class="px-3.5 py-1.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-bold font-outfit uppercase tracking-wider flex items-center gap-2">
+            <span class="px-3.5 py-1.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold font-outfit uppercase tracking-wider flex items-center gap-2">
               <span>🇩🇪</span>
               <span>Niveau B1 • TELC & Goethe</span>
             </span>
@@ -163,24 +166,24 @@
           </div>
 
           <!-- Gemini Generated 3D Book Visual -->
-          <div class="relative w-full aspect-square max-w-[280px] mx-auto my-4 rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-black/60 group-hover:scale-105 transition duration-500">
+          <div class="relative w-full aspect-square max-w-[280px] mx-auto my-4 rounded-2xl overflow-hidden shadow-2xl border border-slate-200 bg-slate-50 group-hover:scale-105 transition duration-500">
             <img src="assets/hero_b1_book.jpg" alt="Manuel Prüfung Deutsch B1 TELC & Goethe" class="w-full h-full object-cover">
           </div>
 
           <!-- Title & Description -->
           <div class="space-y-2 text-center sm:text-left mt-4">
-            <h3 class="font-outfit font-black text-xl sm:text-2xl text-white">Pack Officiel Deutsch B1</h3>
-            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+            <h3 class="font-outfit font-black text-xl sm:text-2xl text-slate-900">Pack Officiel Deutsch B1</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
               L'excellence des manuels de préparation <strong>TELC</strong> et <strong>GOETHE-ÖSD</strong> avec 25 Modelltests calibrés, corrigés exhaustifs et audios haute fidélité.
             </p>
           </div>
         </div>
 
         <!-- CARTE NIVEAU B2 -->
-        <div class="group relative rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-white/10 to-white/5 border border-red-500/30 hover:border-red-400/80 shadow-2xl backdrop-blur-2xl transition-all duration-500 hover:-translate-y-2">
+        <div class="group relative rounded-3xl p-6 sm:p-8 bg-white border-2 border-indigo-200 hover:border-indigo-500 shadow-xl transition-all duration-500 hover:-translate-y-2">
           <!-- Top Badge -->
           <div class="flex items-center justify-between gap-2 mb-4">
-            <span class="px-3.5 py-1.5 rounded-full bg-red-500/20 text-red-300 border border-red-500/40 text-xs font-bold font-outfit uppercase tracking-wider flex items-center gap-2">
+            <span class="px-3.5 py-1.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-bold font-outfit uppercase tracking-wider flex items-center gap-2">
               <span>🇩🇪</span>
               <span>Niveau B2 • TELC & Goethe</span>
             </span>
@@ -188,14 +191,14 @@
           </div>
 
           <!-- Gemini Generated 3D Book Visual -->
-          <div class="relative w-full aspect-square max-w-[280px] mx-auto my-4 rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-black/60 group-hover:scale-105 transition duration-500">
+          <div class="relative w-full aspect-square max-w-[280px] mx-auto my-4 rounded-2xl overflow-hidden shadow-2xl border border-slate-200 bg-slate-50 group-hover:scale-105 transition duration-500">
             <img src="assets/hero_b2_book.jpg" alt="Manuel Prüfung Deutsch B2 TELC & Goethe" class="w-full h-full object-cover">
           </div>
 
           <!-- Title & Description -->
           <div class="space-y-2 text-center sm:text-left mt-4">
-            <h3 class="font-outfit font-black text-xl sm:text-2xl text-white">Pack Officiel Deutsch B2</h3>
-            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+            <h3 class="font-outfit font-black text-xl sm:text-2xl text-slate-900">Pack Officiel Deutsch B2</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
               L'excellence des manuels de préparation <strong>TELC</strong> et <strong>GOETHE-ÖSD</strong> avec 25 Modelltests calibrés, corrigés exhaustifs et audios haute fidélité.
             </p>
           </div>
@@ -204,14 +207,14 @@
       </div>
 
       <!-- Official Instagram Badge -->
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-amber-500/40 text-xs font-bold text-amber-300 shadow-xl">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-blue-200 text-xs font-bold text-blue-700 shadow-md">
         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
         <a href="https://www.instagram.com/prufung_vorbereitung_bucher?igsi=MTkweG5pZnExb2h1Yw%3D%3D#" target="_blank" class="hover:underline">@prufung_vorbereitung_bucher</a>
       </div>
 
       <!-- Action Box -->
       <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="#catalog-section" class="w-full sm:w-auto px-7 py-4 rounded-full bg-white/10 hover:bg-white/15 text-white font-outfit font-bold text-sm border border-white/15 transition flex items-center justify-center gap-2">
+        <a href="#catalog-section" class="w-full sm:w-auto px-7 py-4 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-outfit font-bold text-sm shadow-lg shadow-blue-500/25 transition flex items-center justify-center gap-2">
           <span>Découvrir tous les livres du catalogue</span>
           <i data-lucide="arrow-down" class="w-4 h-4"></i>
         </a>
@@ -225,11 +228,11 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
-        <span class="text-xs font-black tracking-widest uppercase text-amber-400">INGÉNIERIE PÉDAGOGIQUE</span>
-        <h2 class="font-outfit text-3xl sm:text-5xl font-extrabold text-white">
+        <span class="text-xs font-black tracking-widest uppercase text-blue-600">INGÉNIERIE PÉDAGOGIQUE</span>
+        <h2 class="font-outfit text-3xl sm:text-5xl font-extrabold text-slate-900">
           Chaque détail a été pensé pour votre réussite.
         </h2>
-        <p class="text-sm sm:text-base text-slate-400">
+        <p class="text-sm sm:text-base text-slate-600">
           Les meilleures ressources réunies dans un format d'étude ultra-ergonomique.
         </p>
       </div>
@@ -238,32 +241,32 @@
       <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
         
         <!-- Bento 1: 25 Modelltests (Large 8 Cols) -->
-        <div class="md:col-span-8 bento-card rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden group hover:border-amber-500/40 transition-all">
+        <div class="md:col-span-8 bento-card rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden group hover:border-blue-400 transition-all">
           <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
           
           <div class="space-y-3 max-w-md relative z-10">
-            <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200">
               100% Fidélité aux Épreuves
             </span>
-            <h3 class="font-outfit text-3xl font-extrabold text-white">25 Modelltests réels. Sans surprise le jour J.</h3>
-            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+            <h3 class="font-outfit text-3xl font-extrabold text-slate-900">25 Modelltests réels. Sans surprise le jour J.</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
               Reproduit fidèlement les épreuves officielles de <em>Leseverstehen</em>, <em>Hörverstehen</em>, <em>Schriftlicher Ausdruck</em> et <em>Mündliche Prüfung</em> avec barème officiel.
             </p>
           </div>
 
-          <div class="pt-8 flex items-center gap-6 text-slate-300 text-xs">
+          <div class="pt-8 flex items-center gap-6 text-slate-600 text-xs">
             <div>
-              <span class="font-outfit font-black text-2xl text-white block">25</span>
+              <span class="font-outfit font-black text-2xl text-slate-900 block">25</span>
               <span class="text-slate-500">Examens blancs</span>
             </div>
-            <div class="h-8 w-px bg-white/10"></div>
+            <div class="h-8 w-px bg-slate-200"></div>
             <div>
               <span class="font-outfit font-black text-2xl text-amber-400 block">100%</span>
               <span class="text-slate-500">Solutions incluses</span>
             </div>
-            <div class="h-8 w-px bg-white/10"></div>
+            <div class="h-8 w-px bg-slate-200"></div>
             <div>
-              <span class="font-outfit font-black text-2xl text-emerald-400 block">MP3</span>
+              <span class="font-outfit font-black text-2xl text-emerald-600 block">MP3</span>
               <span class="text-slate-500">Audios Haute Clarté</span>
             </div>
           </div>
@@ -272,15 +275,15 @@
         <!-- Bento 2: QR Code Audios (4 Cols) -->
         <div class="md:col-span-4 bento-card rounded-3xl p-8 flex flex-col justify-between hover:border-cyan-500/40 transition-all">
           <div class="space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <div class="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
               <i data-lucide="qr-code" class="w-6 h-6"></i>
             </div>
-            <h3 class="font-outfit text-2xl font-extrabold text-white">Audios QR-Code & Google Drive</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">
+            <h3 class="font-outfit text-2xl font-extrabold text-slate-900">Audios QR-Code & Google Drive</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
               Scannez et écoutez immédiatement chaque piste audio sur votre smartphone sans avoir besoin de lecteur CD.
             </p>
           </div>
-          <span class="text-xs font-bold text-cyan-400 pt-4 flex items-center gap-1">
+          <span class="text-xs font-bold text-blue-600 pt-4 flex items-center gap-1">
             <span>Accès instantané 24/7</span>
             <i data-lucide="chevron-right" class="w-4 h-4"></i>
           </span>
@@ -289,25 +292,25 @@
         <!-- Bento 3: Reliure Spirale 360° (4 Cols) -->
         <div class="md:col-span-4 bento-card rounded-3xl p-8 flex flex-col justify-between hover:border-purple-500/40 transition-all">
           <div class="space-y-3">
-            <div class="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
+            <div class="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-600">
               <i data-lucide="layers" class="w-6 h-6"></i>
             </div>
-            <h3 class="font-outfit text-2xl font-extrabold text-white">Reliure Spirale 360°</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">
+            <h3 class="font-outfit text-2xl font-extrabold text-slate-900">Reliure Spirale 360°</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
               Ouvrez vos livres à plat sur votre bureau pour annoter, réviser et travailler confortablement sans abîmer les pages.
             </p>
           </div>
-          <span class="text-xs font-bold text-purple-400 pt-4">Confort d'étude optimal</span>
+          <span class="text-xs font-bold text-indigo-600 pt-4">Confort d'étude optimal</span>
         </div>
 
         <!-- Bento 4: Livraison & Paiement (8 Cols) -->
         <div class="md:col-span-8 bento-card rounded-3xl p-8 flex flex-col justify-between hover:border-emerald-500/40 transition-all">
           <div class="space-y-3 max-w-lg">
-            <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
               <i data-lucide="truck" class="w-6 h-6"></i>
             </div>
-            <h3 class="font-outfit text-3xl font-extrabold text-white">Livraison Gratuite & Paiement à la réception</h3>
-            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+            <h3 class="font-outfit text-3xl font-extrabold text-slate-900">Livraison Gratuite & Paiement à la réception</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
               Recevez vos manuels en 24h/48h partout au Maroc. Vous ne réglez le livreur en espèces qu'après avoir inspecté votre colis.
             </p>
           </div>
@@ -328,30 +331,30 @@
       
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
         <div>
-          <span class="text-xs font-black tracking-widest uppercase text-amber-400">COLLECTION OFFICIELLE</span>
-          <h2 class="font-outfit text-3xl sm:text-5xl font-black text-white mt-1">
+          <span class="text-xs font-black tracking-widest uppercase text-blue-600">COLLECTION OFFICIELLE</span>
+          <h2 class="font-outfit text-3xl sm:text-5xl font-black text-slate-900 mt-1">
             Choisissez votre Pack de Réussite.
           </h2>
-          <p class="text-xs sm:text-sm text-slate-400 mt-2">
+          <p class="text-xs sm:text-sm text-slate-600 mt-2">
             Tous les livres sont imprimés en haute qualité et accompagnés de leurs corrigés.
           </p>
         </div>
 
         <!-- Filter Pill Tabs -->
         <div class="flex flex-wrap items-center gap-2">
-          <button onclick="filterCatalog('all')" data-level="all" class="level-filter-btn active px-4 py-2 rounded-full text-xs font-bold bg-white text-black shadow-lg transition-all">
+          <button onclick="filterCatalog('all')" data-level="all" class="level-filter-btn active px-4 py-2 rounded-full text-xs font-bold bg-blue-600 text-white shadow-md shadow-blue-500/30 transition-all">
             Tous les articles
           </button>
-          <button onclick="filterCatalog('telc')" data-level="telc" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white/10 text-slate-300 hover:bg-white/20 transition-all">
+          <button onclick="filterCatalog('telc')" data-level="telc" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all">
             🇩🇪 Catégorie TELC
           </button>
-          <button onclick="filterCatalog('goethe')" data-level="goethe" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white/10 text-slate-300 hover:bg-white/20 transition-all">
+          <button onclick="filterCatalog('goethe')" data-level="goethe" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all">
             🇩🇪 Catégorie GOETHE • ÖSD
           </button>
-          <button onclick="filterCatalog('B1')" data-level="B1" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white/10 text-slate-300 hover:bg-white/20 transition-all">
+          <button onclick="filterCatalog('B1')" data-level="B1" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all">
             Niveau B1
           </button>
-          <button onclick="filterCatalog('B2')" data-level="B2" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white/10 text-slate-300 hover:bg-white/20 transition-all">
+          <button onclick="filterCatalog('B2')" data-level="B2" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all">
             Niveau B2
           </button>
         </div>
@@ -362,13 +365,13 @@
         
         <!-- Header explicatif -->
         <div class="text-center max-w-2xl mx-auto space-y-2">
-          <span class="px-3.5 py-1 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wider">
+          <span class="px-3.5 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200 uppercase tracking-wider">
             Architecture Officielle par Catégorie
           </span>
-          <h3 class="font-outfit font-black text-2xl sm:text-3xl text-white">
+          <h3 class="font-outfit font-black text-2xl sm:text-3xl text-slate-900">
             Nos Deux Filières Principales : TELC & GOETHE-ÖSD
           </h3>
-          <p class="text-xs sm:text-sm text-slate-400">
+          <p class="text-xs sm:text-sm text-slate-600">
             Retrouvez pour chaque organisme votre pack d'examen complet avec corrigés et audios.
           </p>
         </div>
@@ -377,7 +380,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
           <!-- ================= COLONNE 1 : CATÉGORIE TELC ================= -->
-          <div class="rounded-3xl p-6 sm:p-7 bg-[#121216]/90 border-2 border-amber-500/40 shadow-2xl backdrop-blur-xl flex flex-col justify-between relative overflow-hidden">
+          <div class="rounded-3xl p-6 sm:p-7 bg-white border-2 border-blue-200 shadow-xl flex flex-col justify-between relative overflow-hidden">
             <!-- Background glow -->
             <div class="absolute -top-10 -right-10 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -385,12 +388,12 @@
               <!-- Header Catégorie TELC -->
               <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
                 <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 font-black font-outfit text-base flex items-center justify-center">
+                  <div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 font-black font-outfit text-base flex items-center justify-center">
                     🇩🇪
                   </div>
                   <div>
-                    <h4 class="font-outfit font-black text-2xl text-white tracking-tight">Catégorie TELC</h4>
-                    <p class="text-[11px] text-amber-400 font-semibold uppercase tracking-wider">telc Deutsch B1 & B2 Zertifikat</p>
+                    <h4 class="font-outfit font-black text-2xl text-slate-900 tracking-tight">Catégorie TELC</h4>
+                    <p class="text-[11px] text-blue-600 font-semibold uppercase tracking-wider">telc Deutsch B1 & B2 Zertifikat</p>
                   </div>
                 </div>
                 <span class="px-3 py-1 rounded-full bg-white/10 text-slate-300 text-xs font-bold">2 Packs Disponibles</span>
@@ -400,23 +403,23 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 
                 <!-- TELC - PACK B1 -->
-                <div class="rounded-2xl p-4 bg-black/50 border border-white/10 hover:border-amber-500/50 transition flex flex-col justify-between">
+                <div class="rounded-2xl p-4 bg-slate-50/70 border border-slate-200 hover:border-blue-400 transition flex flex-col justify-between">
                   <div class="space-y-3">
                     <div class="flex items-center justify-between">
                       <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-black font-outfit font-black text-[10px]">PACK B1</span>
-                      <span class="font-outfit font-black text-white text-base">235 DH</span>
+                      <span class="font-outfit font-black text-slate-900 text-base">235 DH</span>
                     </div>
 
-                    <a href="pack-b1-telc.html" class="block h-36 w-full rounded-xl bg-black/60 p-2 flex items-center justify-center border border-white/5 overflow-hidden group">
+                    <a href="pack-b1-telc.html" class="block h-36 w-full rounded-xl bg-white p-2 flex items-center justify-center border border-slate-200 overflow-hidden group">
                       <img src="assets/products/pack-b1.png" alt="Pack B1 TELC" class="max-h-full object-contain group-hover:scale-105 transition">
                     </a>
 
                     <div>
                       <a href="pack-b1-telc.html" class="hover:text-amber-400 transition">
-                        <h5 class="font-outfit font-extrabold text-sm text-white">Pack B1 TELC (2026)</h5>
+                        <h5 class="font-outfit font-extrabold text-sm text-slate-900">Pack B1 TELC (2026)</h5>
                       </a>
-                      <span class="text-[10px] text-amber-400 font-bold block mb-1">الوصف (Description) :</span>
-                      <p class="text-[11px] text-slate-300 leading-relaxed">
+                      <span class="text-[10px] text-blue-600 font-bold block mb-1">الوصف (Description) :</span>
+                      <p class="text-[11px] text-slate-600 leading-relaxed">
                         Enthält alle Prüfungen : Lesen (Teil 1-3), Sprachbausteine, Hören (Google Drive MP3), Schreiben (modèles) + Sprechen. 25 Modelltests réels avec 100% corrigés.
                       </p>
                     </div>
@@ -426,30 +429,30 @@
                     <a href="pack-b1-telc.html" class="flex-1 py-2 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-[11px] flex items-center justify-center gap-1.5 shadow-md">
                       <span>Commander</span>
                     </a>
-                    <a href="pack-b1-telc.html" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-[11px] text-center">
+                    <a href="pack-b1-telc.html" class="px-3 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-[11px] text-center">
                       Détails
                     </a>
                   </div>
                 </div>
 
                 <!-- TELC - PACK B2 -->
-                <div class="rounded-2xl p-4 bg-black/50 border border-white/10 hover:border-amber-500/50 transition flex flex-col justify-between">
+                <div class="rounded-2xl p-4 bg-slate-50/70 border border-slate-200 hover:border-blue-400 transition flex flex-col justify-between">
                   <div class="space-y-3">
                     <div class="flex items-center justify-between">
                       <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-black font-outfit font-black text-[10px]">PACK B2</span>
-                      <span class="font-outfit font-black text-white text-base">260 DH</span>
+                      <span class="font-outfit font-black text-slate-900 text-base">260 DH</span>
                     </div>
 
-                    <a href="pack-b2-telc.html" class="block h-36 w-full rounded-xl bg-black/60 p-2 flex items-center justify-center border border-white/5 overflow-hidden group">
+                    <a href="pack-b2-telc.html" class="block h-36 w-full rounded-xl bg-white p-2 flex items-center justify-center border border-slate-200 overflow-hidden group">
                       <img src="assets/products/telc-real-collection.jpg" alt="Pack B2 TELC" class="max-h-full object-contain group-hover:scale-105 transition">
                     </a>
 
                     <div>
                       <a href="pack-b2-telc.html" class="hover:text-amber-400 transition">
-                        <h5 class="font-outfit font-extrabold text-sm text-white">Pack B2 TELC Complet</h5>
+                        <h5 class="font-outfit font-extrabold text-sm text-slate-900">Pack B2 TELC Complet</h5>
                       </a>
-                      <span class="text-[10px] text-amber-400 font-bold block mb-1">الوصف (Description) :</span>
-                      <p class="text-[11px] text-slate-300 leading-relaxed">
+                      <span class="text-[10px] text-blue-600 font-bold block mb-1">الوصف (Description) :</span>
+                      <p class="text-[11px] text-slate-600 leading-relaxed">
                         Collection intégrale 4 modules B2 : Lesen, Sprachbausteine (grammaire avancée), Hören (MP3 HD), Schreiben et Mündlicher Ausdruck. Barème officiel telc 2026.
                       </p>
                     </div>
@@ -459,7 +462,7 @@
                     <a href="pack-b2-telc.html" class="flex-1 py-2 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-[11px] flex items-center justify-center gap-1.5 shadow-md">
                       <span>Commander</span>
                     </a>
-                    <a href="pack-b2-telc.html" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-[11px] text-center">
+                    <a href="pack-b2-telc.html" class="px-3 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-[11px] text-center">
                       Détails
                     </a>
                   </div>
@@ -470,7 +473,7 @@
           </div>
 
           <!-- ================= COLONNE 2 : CATÉGORIE GOETHE • ÖSD ================= -->
-          <div class="rounded-3xl p-6 sm:p-7 bg-[#121216]/90 border-2 border-red-500/40 shadow-2xl backdrop-blur-xl flex flex-col justify-between relative overflow-hidden">
+          <div class="rounded-3xl p-6 sm:p-7 bg-white border-2 border-indigo-200 shadow-xl flex flex-col justify-between relative overflow-hidden">
             <!-- Background glow -->
             <div class="absolute -top-10 -right-10 w-48 h-48 bg-red-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -478,12 +481,12 @@
               <!-- Header Catégorie Goethe-ÖSD -->
               <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
                 <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-xl bg-red-500/20 border border-red-500/40 text-red-400 font-black font-outfit text-base flex items-center justify-center">
+                  <div class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-700 font-black font-outfit text-base flex items-center justify-center">
                     🇩🇪
                   </div>
                   <div>
-                    <h4 class="font-outfit font-black text-2xl text-white tracking-tight">Catégorie GOETHE • ÖSD</h4>
-                    <p class="text-[11px] text-red-400 font-semibold uppercase tracking-wider">Goethe-Zertifikat & ÖSD B1 & B2</p>
+                    <h4 class="font-outfit font-black text-2xl text-slate-900 tracking-tight">Catégorie GOETHE • ÖSD</h4>
+                    <p class="text-[11px] text-indigo-600 font-semibold uppercase tracking-wider">Goethe-Zertifikat & ÖSD B1 & B2</p>
                   </div>
                 </div>
                 <span class="px-3 py-1 rounded-full bg-white/10 text-slate-300 text-xs font-bold">2 Packs Disponibles</span>
@@ -493,23 +496,23 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 
                 <!-- GOETHE-ÖSD - PACK B1 -->
-                <div class="rounded-2xl p-4 bg-black/50 border border-white/10 hover:border-red-500/50 transition flex flex-col justify-between">
+                <div class="rounded-2xl p-4 bg-slate-50/70 border border-slate-200 hover:border-indigo-400 transition flex flex-col justify-between">
                   <div class="space-y-3">
                     <div class="flex items-center justify-between">
                       <span class="px-2.5 py-0.5 rounded-full bg-red-600 text-white font-outfit font-black text-[10px]">PACK B1</span>
-                      <span class="font-outfit font-black text-white text-base">235 DH</span>
+                      <span class="font-outfit font-black text-slate-900 text-base">235 DH</span>
                     </div>
 
-                    <a href="goethe-osd-b1.html" class="block h-36 w-full rounded-xl bg-black/60 p-2 flex items-center justify-center border border-white/5 overflow-hidden group">
+                    <a href="goethe-osd-b1.html" class="block h-36 w-full rounded-xl bg-white p-2 flex items-center justify-center border border-slate-200 overflow-hidden group">
                       <img src="assets/products/goethe-osd-b1-b2.jpg" alt="Pack B1 Goethe ÖSD" class="max-h-full object-contain group-hover:scale-105 transition">
                     </a>
 
                     <div>
                       <a href="goethe-osd-b1.html" class="hover:text-amber-400 transition">
-                        <h5 class="font-outfit font-extrabold text-sm text-white">Pack B1 GOETHE - ÖSD</h5>
+                        <h5 class="font-outfit font-extrabold text-sm text-slate-900">Pack B1 GOETHE - ÖSD</h5>
                       </a>
-                      <span class="text-[10px] text-amber-400 font-bold block mb-1">الوصف (Description) :</span>
-                      <p class="text-[11px] text-slate-300 leading-relaxed">
+                      <span class="text-[10px] text-blue-600 font-bold block mb-1">الوصف (Description) :</span>
+                      <p class="text-[11px] text-slate-600 leading-relaxed">
                         25 Modelltests complets avec toutes les solutions commentées (Mit Lösungen). QR-Codes instantanés pour écouter les audios sur smartphone. Couvre les 4 compétences.
                       </p>
                     </div>
@@ -519,30 +522,30 @@
                     <a href="goethe-osd-b1.html" class="flex-1 py-2 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-[11px] flex items-center justify-center gap-1.5 shadow-md">
                       <span>Commander</span>
                     </a>
-                    <a href="goethe-osd-b1.html" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-[11px] text-center">
+                    <a href="goethe-osd-b1.html" class="px-3 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-[11px] text-center">
                       Détails
                     </a>
                   </div>
                 </div>
 
                 <!-- GOETHE-ÖSD - PACK B2 -->
-                <div class="rounded-2xl p-4 bg-black/50 border border-white/10 hover:border-red-500/50 transition flex flex-col justify-between">
+                <div class="rounded-2xl p-4 bg-slate-50/70 border border-slate-200 hover:border-indigo-400 transition flex flex-col justify-between">
                   <div class="space-y-3">
                     <div class="flex items-center justify-between">
                       <span class="px-2.5 py-0.5 rounded-full bg-red-600 text-white font-outfit font-black text-[10px]">PACK B2</span>
-                      <span class="font-outfit font-black text-white text-base">235 DH</span>
+                      <span class="font-outfit font-black text-slate-900 text-base">235 DH</span>
                     </div>
 
-                    <a href="goethe-osd-b2.html" class="block h-36 w-full rounded-xl bg-black/60 p-2 flex items-center justify-center border border-white/5 overflow-hidden group">
+                    <a href="goethe-osd-b2.html" class="block h-36 w-full rounded-xl bg-white p-2 flex items-center justify-center border border-slate-200 overflow-hidden group">
                       <img src="assets/products/goethe-osd-b1-b2.jpg" alt="Pack B2 Goethe ÖSD" class="max-h-full object-contain group-hover:scale-105 transition">
                     </a>
 
                     <div>
                       <a href="goethe-osd-b2.html" class="hover:text-amber-400 transition">
-                        <h5 class="font-outfit font-extrabold text-sm text-white">Pack B2 GOETHE - ÖSD</h5>
+                        <h5 class="font-outfit font-extrabold text-sm text-slate-900">Pack B2 GOETHE - ÖSD</h5>
                       </a>
-                      <span class="text-[10px] text-amber-400 font-bold block mb-1">الوصف (Description) :</span>
-                      <p class="text-[11px] text-slate-300 leading-relaxed">
+                      <span class="text-[10px] text-blue-600 font-bold block mb-1">الوصف (Description) :</span>
+                      <p class="text-[11px] text-slate-600 leading-relaxed">
                         25 examens modèles de niveau avancé B2 avec barèmes officiels et corrigés complets. Format paysage avec reliure spirale ultra-confortable pour les révisions intensives.
                       </p>
                     </div>
@@ -552,7 +555,7 @@
                     <a href="goethe-osd-b2.html" class="flex-1 py-2 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-[11px] flex items-center justify-center gap-1.5 shadow-md">
                       <span>Commander</span>
                     </a>
-                    <a href="goethe-osd-b2.html" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-[11px] text-center">
+                    <a href="goethe-osd-b2.html" class="px-3 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-[11px] text-center">
                       Détails
                     </a>
                   </div>
@@ -579,14 +582,14 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center max-w-2xl mx-auto mb-14 space-y-3">
-        <span class="text-xs font-black tracking-widest uppercase text-amber-400">GUIDE DE CHOIX</span>
-        <h2 class="font-outfit text-3xl sm:text-4xl font-extrabold text-white">Comparez les Packs</h2>
+        <span class="text-xs font-black tracking-widest uppercase text-blue-600">GUIDE DE CHOIX</span>
+        <h2 class="font-outfit text-3xl sm:text-4xl font-extrabold text-slate-900">Comparez les Packs</h2>
         <p class="text-xs sm:text-sm text-slate-400">Trouvez la formule exacte selon votre examen cible.</p>
       </div>
 
-      <div class="overflow-x-auto rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl">
-        <table class="w-full text-left text-xs text-slate-300">
-          <thead class="bg-white/5 border-b border-white/10 text-white font-outfit text-sm">
+      <div class="overflow-x-auto rounded-3xl border border-blue-100 bg-white shadow-xl">
+        <table class="w-full text-left text-xs text-slate-600">
+          <thead class="bg-blue-50/80 border-b border-blue-100 text-slate-900 font-outfit text-sm">
             <tr>
               <th class="p-4 sm:p-6">Caractéristiques</th>
               <th class="p-4 sm:p-6 text-amber-400">Pack B1 TELC (2026)</th>
@@ -596,37 +599,37 @@
           </thead>
           <tbody class="divide-y divide-white/5">
             <tr>
-              <td class="p-4 sm:p-6 font-bold text-white">Niveau Visé</td>
+              <td class="p-4 sm:p-6 font-bold text-slate-900">Niveau Visé</td>
               <td class="p-4 sm:p-6">B1 (Allemand Intermédiaire)</td>
               <td class="p-4 sm:p-6">B1 et B2 Combinés</td>
               <td class="p-4 sm:p-6">B2 (Avancé Professionnel)</td>
             </tr>
             <tr>
-              <td class="p-4 sm:p-6 font-bold text-white">Organisme d'Examen</td>
+              <td class="p-4 sm:p-6 font-bold text-slate-900">Organisme d'Examen</td>
               <td class="p-4 sm:p-6">telc GmbH</td>
               <td class="p-4 sm:p-6">Goethe-Institut & ÖSD</td>
               <td class="p-4 sm:p-6">telc GmbH</td>
             </tr>
             <tr>
-              <td class="p-4 sm:p-6 font-bold text-white">Nombre de Volumes</td>
+              <td class="p-4 sm:p-6 font-bold text-slate-900">Nombre de Volumes</td>
               <td class="p-4 sm:p-6">2 Volumes Spirales</td>
               <td class="p-4 sm:p-6">2 Volumes Format Paysage</td>
               <td class="p-4 sm:p-6">Collection 4 Modules</td>
             </tr>
             <tr>
-              <td class="p-4 sm:p-6 font-bold text-white">Format Audio</td>
+              <td class="p-4 sm:p-6 font-bold text-slate-900">Format Audio</td>
               <td class="p-4 sm:p-6">Google Drive MP3 + QR Codes</td>
               <td class="p-4 sm:p-6">QR-Codes instantanés</td>
               <td class="p-4 sm:p-6">Google Drive HD + App</td>
             </tr>
             <tr>
-              <td class="p-4 sm:p-6 font-bold text-white">Prix Promo Actuel</td>
-              <td class="p-4 sm:p-6 font-outfit font-black text-base text-white">235 DH</td>
-              <td class="p-4 sm:p-6 font-outfit font-black text-base text-white">235 DH</td>
-              <td class="p-4 sm:p-6 font-outfit font-black text-base text-white">260 DH</td>
+              <td class="p-4 sm:p-6 font-bold text-slate-900">Prix Promo Actuel</td>
+              <td class="p-4 sm:p-6 font-outfit font-black text-base text-blue-700">235 DH</td>
+              <td class="p-4 sm:p-6 font-outfit font-black text-base text-blue-700">235 DH</td>
+              <td class="p-4 sm:p-6 font-outfit font-black text-base text-blue-700">260 DH</td>
             </tr>
             <tr>
-              <td class="p-4 sm:p-6 font-bold text-white">Action Immédiate</td>
+              <td class="p-4 sm:p-6 font-bold text-slate-900">Action Immédiate</td>
               <td class="p-4 sm:p-6">
                 <button onclick="orderOnWhatsApp('pack-b1-telc-2026')" class="px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs">
                   Commander
@@ -651,16 +654,16 @@
   </section>
 
   <!-- ================= NOTRE ACTUALITÉ SUR INSTAGRAM (SECTION IDENTIQUE) ================= -->
-  <section id="instagram-section" class="py-20 border-t border-white/10 relative bg-black/60">
+  <section id="instagram-section" class="py-20 border-t border-slate-200 relative bg-slate-100/60">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Section Header -->
       <div class="text-center max-w-2xl mx-auto mb-14 space-y-2">
-        <span class="inline-block px-4 py-1.5 rounded-full bg-[#f59e0b] text-black font-black text-xs uppercase tracking-wider shadow-md">
+        <span class="inline-block px-4 py-1.5 rounded-full bg-blue-600 text-white font-black text-xs uppercase tracking-wider shadow-md">
           SUIVEZ-NOUS
         </span>
         
-        <h2 class="font-outfit text-3xl sm:text-4xl font-extrabold text-white pt-2">
+        <h2 class="font-outfit text-3xl sm:text-4xl font-extrabold text-slate-900 pt-2">
           Notre Actualité sur Instagram
         </h2>
         
@@ -744,7 +747,7 @@
 
     <!-- ================= FOOTER ABDEUTSCH CENTER (STRUCTURE OFFICIELLE 4 COLONNES) ================= -->
     <!-- ================= FOOTER ABDEUTSCH CENTER (STRUCTURE OFFICIELLE 4 COLONNES) ================= -->
-  <footer class="relative z-10 bg-black border-t-2 border-red-600/80 text-slate-400 text-xs">
+  <footer class="relative z-10 bg-[#0A192F] border-t-2 border-blue-600 text-slate-400 text-xs">
     
     <!-- German Flag Top Accent Stripe -->
     <div class="w-full h-1 flex">
@@ -761,7 +764,7 @@
           <h3 class="font-outfit font-black text-lg text-white tracking-wide uppercase">
             ABDEUTSCH CENTER
           </h3>
-          <p class="text-xs text-slate-400 leading-relaxed max-w-xs">
+          <p class="text-xs text-slate-600 leading-relaxed max-w-xs">
             Votre partenaire de confiance pour l'apprentissage de l'allemand et l'accompagnement vers une carrière en Allemagne.
           </p>
         </div>
@@ -772,11 +775,11 @@
             Liens Rapides
           </h4>
           <ul class="space-y-2 text-xs">
-            <li><a href="#hero-3d" class="hover:text-white transition">À propos</a></li>
-            <li><a href="#bento-section" class="hover:text-white transition">Nos Services</a></li>
-            <li><a href="#catalog-section" class="hover:text-white transition">Nos Cours</a></li>
-            <li><a href="#catalog-section" class="hover:text-white transition">Examens</a></li>
-            <li><a href="https://api.whatsapp.com/send?phone=212632017446&text=Bonjour%20ABDEUTSCH%20CENTER" target="_blank" class="hover:text-white transition">Contact</a></li>
+            <li><a href="#hero-3d" class="hover:text-blue-600 transition">À propos</a></li>
+            <li><a href="#bento-section" class="hover:text-blue-600 transition">Nos Services</a></li>
+            <li><a href="#catalog-section" class="hover:text-blue-600 transition">Nos Cours</a></li>
+            <li><a href="#catalog-section" class="hover:text-blue-600 transition">Examens</a></li>
+            <li><a href="https://api.whatsapp.com/send?phone=212632017446&text=Bonjour%20ABDEUTSCH%20CENTER" target="_blank" class="hover:text-blue-600 transition">Contact</a></li>
           </ul>
         </div>
 
@@ -786,11 +789,11 @@
             Nos Services
           </h4>
           <ul class="space-y-2 text-xs">
-            <li class="hover:text-white transition cursor-default">Cours d'Allemand</li>
-            <li class="hover:text-white transition cursor-default">Préparation Examens</li>
-            <li class="hover:text-white transition cursor-default">Accompagnement Visa</li>
-            <li class="hover:text-white transition cursor-default">Formation Professionnelle</li>
-            <li class="hover:text-white transition cursor-default">Orientation Universitaire</li>
+            <li class="hover:text-blue-600 transition cursor-default">Cours d'Allemand</li>
+            <li class="hover:text-blue-600 transition cursor-default">Préparation Examens</li>
+            <li class="hover:text-blue-600 transition cursor-default">Accompagnement Visa</li>
+            <li class="hover:text-blue-600 transition cursor-default">Formation Professionnelle</li>
+            <li class="hover:text-blue-600 transition cursor-default">Orientation Universitaire</li>
           </ul>
         </div>
 
@@ -801,14 +804,14 @@
           </h4>
           <ul class="space-y-3 text-xs">
             <li>
-              <a href="tel:+212632017446" class="flex items-center gap-2.5 text-slate-300 hover:text-white transition">
+              <a href="tel:+212632017446" class="flex items-center gap-2.5 text-slate-300 hover:text-blue-600 transition">
                 <i data-lucide="phone" class="w-4 h-4 text-red-500 shrink-0"></i>
                 <span class="font-semibold">+212 632-017446</span>
               </a>
             </li>
             
             <li>
-              <a href="https://maps.google.com/?q=ABDEUTSCH+CENTER" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 text-slate-300 hover:text-white transition">
+              <a href="https://maps.google.com/?q=ABDEUTSCH+CENTER" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 text-slate-300 hover:text-blue-600 transition">
                 <i data-lucide="map-pin" class="w-4 h-4 text-red-500 shrink-0"></i>
                 <span>Voir sur Maps</span>
               </a>
@@ -844,7 +847,7 @@
   <!-- ================= BOOK DETAILS MODAL ================= -->
   <div id="book-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="bg-[#121216] rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border border-white/15 p-6 sm:p-8 relative shadow-2xl">
-      <button onclick="closeBookModal()" class="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-400 hover:text-white transition">
+      <button onclick="closeBookModal()" class="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-400 hover:text-blue-600 transition">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
       <div id="modal-content"></div>

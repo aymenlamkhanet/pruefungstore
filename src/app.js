@@ -326,81 +326,78 @@ function renderCatalog() {
     const isWishlisted = state.wishlist.includes(book.id);
 
     return `
-      <div class="apple-tilt-card group relative bg-[#121216]/90 border border-white/10 hover:border-amber-500/50 rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-2xl backdrop-blur-xl">
-        <div class="card-sheen pointer-events-none absolute inset-0 transition-opacity duration-300 opacity-0 rounded-3xl"></div>
-
+      <div class="apple-tilt-card group relative bg-white border border-blue-100 hover:border-blue-500 rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-lg shadow-blue-900/5 hover:shadow-2xl hover:shadow-blue-500/10">
         <div>
           <!-- Header Tag -->
           <div class="flex items-center justify-between gap-2 mb-4">
             <div class="flex items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/10 text-white border border-white/15">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
                 ${book.level}
               </span>
               ${book.isPack ? `
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-gradient-to-r from-amber-500 to-amber-600 text-black">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm">
                   ★ PACK COMPLET
                 </span>
               ` : ''}
             </div>
 
-            <button onclick="toggleWishlist('${book.id}')" class="p-2 rounded-full bg-white/5 hover:bg-white/15 text-slate-400 hover:text-red-500 transition">
+            <button onclick="toggleWishlist('${book.id}')" class="p-2 rounded-full bg-slate-100 hover:bg-red-50 text-slate-400 hover:text-red-500 transition">
               <i data-lucide="heart" class="w-4 h-4 ${isWishlisted ? 'fill-red-500 text-red-500' : ''}"></i>
             </button>
           </div>
 
           <!-- Book Real Image Showcase -->
-          <div onclick="window.location.href=getBookPageUrl('${book.id}')" class="cursor-pointer relative w-full h-64 bg-black/60 rounded-2xl flex items-center justify-center p-3 mb-5 border border-white/5 group-hover:border-amber-500/30 transition-all overflow-hidden shadow-inner">
+          <div onclick="window.location.href=getBookPageUrl('${book.id}')" class="cursor-pointer relative w-full h-64 bg-slate-50/80 rounded-2xl flex items-center justify-center p-3 mb-5 border border-slate-100 group-hover:border-blue-200 transition-all overflow-hidden">
             <img src="${book.image}" alt="${book.title}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute bottom-2 left-2 right-2 flex items-center justify-between text-[10px] bg-black/80 backdrop-blur-md px-3 py-1 rounded-full text-slate-300 border border-white/10">
-              <span class="text-amber-400 font-bold">${book.examType}</span>
-              <span class="text-emerald-400 font-bold">✓ Audio + Corrigés</span>
+            <div class="absolute bottom-2 left-2 right-2 flex items-center justify-between text-[10px] bg-white/95 backdrop-blur-md px-3 py-1 rounded-full text-slate-700 border border-blue-100 shadow-sm">
+              <span class="text-blue-600 font-bold">${book.examType}</span>
+              <span class="text-emerald-600 font-bold">✓ Audio + Corrigés</span>
             </div>
           </div>
 
           <!-- Titles & Description -->
           <div class="space-y-1 mb-3">
-            <h3 onclick="window.location.href=getBookPageUrl('${book.id}')" class="cursor-pointer font-outfit font-extrabold text-lg text-white group-hover:text-amber-400 transition-colors leading-snug line-clamp-2">
+            <h3 onclick="window.location.href=getBookPageUrl('${book.id}')" class="cursor-pointer font-outfit font-extrabold text-lg text-slate-900 group-hover:text-blue-600 transition-colors leading-snug line-clamp-2">
               ${book.title}
             </h3>
-            <p class="text-xs text-slate-400 font-medium line-clamp-2">${book.subtitle}</p>
+            <p class="text-xs text-slate-500 font-medium line-clamp-2">${book.subtitle}</p>
           </div>
 
           <!-- Specs List -->
-          <div class="py-3 border-y border-white/10 space-y-1.5 text-xs text-slate-300 mb-4">
+          <div class="py-3 border-y border-slate-100 space-y-1.5 text-xs text-slate-600 mb-4">
             <div class="flex items-center justify-between">
-              <span class="text-slate-500">Format :</span>
-              <span class="font-bold text-white truncate max-w-[170px]">${book.format}</span>
+              <span class="text-slate-400">Format :</span>
+              <span class="font-bold text-slate-800 truncate max-w-[170px]">${book.format}</span>
             </div>
             <div class="flex items-center justify-between">
-              <span class="text-slate-500">Audio :</span>
-              <span class="font-bold text-amber-400">Drive MP3 & QR Codes</span>
+              <span class="text-slate-400">Audio :</span>
+              <span class="font-bold text-blue-600">Drive MP3 & QR Codes</span>
             </div>
           </div>
         </div>
 
-        <!-- Pricing & WhatsApp Action -->
+        <!-- Pricing & Actions -->
         <div class="space-y-3 pt-2">
           <div class="flex items-baseline justify-between">
             <div>
-              <span class="text-[10px] uppercase font-bold text-slate-500 block">Prix Préférentiel</span>
+              <span class="text-[10px] uppercase font-bold text-slate-400 block">Prix Préférentiel</span>
               <div class="flex items-baseline gap-2">
-                <span class="font-outfit font-black text-2xl text-white">${book.priceDh} DH</span>
-                ${book.originalPriceDh ? `<span class="text-xs text-slate-500 line-through">${book.originalPriceDh} DH</span>` : ''}
+                <span class="font-outfit font-black text-2xl text-blue-700">${book.priceDh} DH</span>
+                ${book.originalPriceDh ? `<span class="text-xs text-slate-400 line-through">${book.originalPriceDh} DH</span>` : ''}
               </div>
             </div>
-            <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-bold text-[11px] border border-emerald-500/20">
+            <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 font-bold text-[11px] border border-emerald-200">
               Livraison Gratuite
             </span>
           </div>
 
           <div class="grid grid-cols-2 gap-2">
-            <button onclick="addToCart('${book.id}')" class="py-3 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 border border-white/10">
-              <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+            <button onclick="addToCart('${book.id}')" class="py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition flex items-center justify-center gap-1.5 border border-slate-200">
+              <i data-lucide="shopping-bag" class="w-3.5 h-3.5 text-blue-600"></i>
               <span>Panier</span>
             </button>
 
-            <button onclick="orderOnWhatsApp('${book.id}')" class="py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-outfit font-extrabold text-xs shadow-lg shadow-emerald-900/40 transition flex items-center justify-center gap-1.5">
-              <svg class="w-4 h-4 fill-white shrink-0" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+            <button onclick="orderOnWhatsApp('${book.id}')" class="py-2.5 px-3 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-outfit font-extrabold text-xs shadow-md shadow-emerald-700/20 transition flex items-center justify-center gap-1.5">
               <span>Commander</span>
             </button>
           </div>
@@ -418,9 +415,9 @@ function filterCatalog(level) {
   state.activeLevel = level;
   document.querySelectorAll(".level-filter-btn").forEach(btn => {
     if (btn.dataset.level === level) {
-      btn.className = "level-filter-btn active px-4 py-2 rounded-full text-xs font-bold bg-white text-black shadow-lg transition-all";
+      btn.className = "level-filter-btn active px-4 py-2 rounded-full text-xs font-bold bg-blue-600 text-white shadow-md shadow-blue-500/30 transition-all";
     } else {
-      btn.className = "level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white/10 text-slate-300 hover:bg-white/20 transition-all";
+      btn.className = "level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all";
     }
   });
   renderCatalog();
@@ -473,43 +470,43 @@ function openBookModal(bookId) {
   if (!modal || !content) return;
 
   content.innerHTML = `
-    <div class="space-y-6 text-white">
+    <div class="space-y-6 text-slate-800">
       <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-        <div class="md:col-span-5 bg-black/80 p-4 rounded-2xl border border-white/10 flex items-center justify-center">
+        <div class="md:col-span-5 bg-slate-50 p-4 rounded-2xl border border-slate-200 flex items-center justify-center">
           <img src="${book.image}" class="max-h-80 object-contain">
         </div>
         <div class="md:col-span-7 space-y-3">
-          <span class="px-2.5 py-0.5 rounded-full text-xs font-black uppercase bg-amber-500 text-black">${book.level} • ${book.examType}</span>
-          <h2 class="font-outfit text-2xl sm:text-3xl font-extrabold text-white">${book.title}</h2>
-          <p class="text-xs text-slate-400">${book.subtitle}</p>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-black uppercase bg-blue-600 text-white shadow-sm">${book.level} • ${book.examType}</span>
+          <h2 class="font-outfit text-2xl sm:text-3xl font-extrabold text-slate-900">${book.title}</h2>
+          <p class="text-xs text-slate-500">${book.subtitle}</p>
           <div class="flex items-baseline gap-3 pt-1">
-            <span class="font-outfit font-black text-3xl text-white">${book.priceDh} DH</span>
-            ${book.originalPriceDh ? `<span class="text-sm text-slate-500 line-through">${book.originalPriceDh} DH</span>` : ''}
-            <span class="text-xs font-black text-red-400 bg-red-950/60 px-2 py-0.5 rounded-full border border-red-800">-${book.discountPercent}%</span>
+            <span class="font-outfit font-black text-3xl text-blue-700">${book.priceDh} DH</span>
+            ${book.originalPriceDh ? `<span class="text-sm text-slate-400 line-through">${book.originalPriceDh} DH</span>` : ''}
+            <span class="text-xs font-black text-red-600 bg-red-50 px-2 py-0.5 rounded-full border border-red-200">-${book.discountPercent}%</span>
           </div>
-          <div class="p-3 bg-emerald-950/40 border border-emerald-800/60 rounded-xl text-xs text-emerald-300">
+          <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800">
             ✓ <strong>Livraison Gratuite</strong> en 24/48h • Paiement en espèces à la livraison
           </div>
         </div>
       </div>
 
-      <div class="space-y-3 border-t border-white/10 pt-4">
-        <h4 class="font-bold text-sm text-white font-outfit">Caractéristiques & Contenu :</h4>
-        <ul class="space-y-2 text-xs text-slate-300">
+      <div class="space-y-3 border-t border-slate-100 pt-4">
+        <h4 class="font-bold text-sm text-slate-900 font-outfit">Caractéristiques & Contenu :</h4>
+        <ul class="space-y-2 text-xs text-slate-600">
           ${book.features.map(f => `
             <li class="flex items-start gap-2">
-              <i data-lucide="check-circle" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+              <i data-lucide="check-circle" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
               <span>${f}</span>
             </li>
           `).join('')}
         </ul>
       </div>
 
-      <div class="pt-4 border-t border-white/10 flex flex-col sm:flex-row gap-3">
-        <button onclick="addToCart('${book.id}'); closeBookModal();" class="flex-1 py-3 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition">
+      <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
+        <button onclick="addToCart('${book.id}'); closeBookModal();" class="flex-1 py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition border border-slate-200">
           + Ajouter au Panier
         </button>
-        <button onclick="orderOnWhatsApp('${book.id}')" class="flex-1 py-3.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-outfit font-extrabold text-sm shadow-xl flex items-center justify-center gap-2">
+        <button onclick="orderOnWhatsApp('${book.id}')" class="flex-1 py-3.5 px-6 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-outfit font-extrabold text-sm shadow-md flex items-center justify-center gap-2">
           <svg class="w-5 h-5 fill-white shrink-0" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
           <span>Commander sur WhatsApp (${book.priceDh} DH)</span>
         </button>

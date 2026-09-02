@@ -15,56 +15,47 @@
 
   <style>
     body {
-      background-color: #060608;
-      color: #f5f5f7;
+      background-color: #F8FAFC;
+      color: #0F172A;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
-    .apple-gold-text {
-      background: linear-gradient(135deg, #FDE68A 0%, #F59E0B 50%, #D97706 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
     .frosted-glass {
-      background: rgba(18, 18, 22, 0.85);
+      background: rgba(255, 255, 255, 0.90);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
     }
-    .bento-card {
-      background: rgba(18, 18, 24, 0.85);
-      backdrop-filter: blur(25px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
   </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black relative bg-[#060608]">
+<body class="min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white relative bg-[#F8FAFC]">
 
-  <!-- Background Layer -->
-  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-    <img src="assets/site-bg.jpg" alt="Background" class="w-full h-full object-cover object-center filter brightness-[0.75] contrast-115 scale-105 transform">
-    <div class="absolute inset-0 bg-gradient-to-b from-[#060608]/75 via-[#060608]/55 to-[#060608]/85 backdrop-blur-[1px]"></div>
+  <!-- Background Luminous Aura -->
+  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#F8FAFC]">
+    <div class="absolute -top-40 -right-40 w-[600px] h-[600px] bg-blue-100/70 rounded-full blur-[120px]"></div>
+    <div class="absolute top-1/3 -left-40 w-[500px] h-[500px] bg-sky-100/60 rounded-full blur-[100px]"></div>
+    <div class="absolute bottom-10 right-1/4 w-[450px] h-[450px] bg-indigo-50/80 rounded-full blur-[110px]"></div>
   </div>
 
   <!-- Top Navbar -->
-  <header class="fixed top-0 left-0 right-0 z-50 frosted-glass border-b border-white/10">
+  <header class="fixed top-0 left-0 right-0 z-50 frosted-glass border-b border-blue-100 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-2.5 group">
-        <img src="assets/logo.jpg" alt="Logo" class="w-8 h-8 rounded-lg object-cover border border-amber-500/40">
-        <span class="font-outfit font-extrabold text-lg tracking-tight text-white flex items-center">
-          Prüfung<span class="text-amber-400">Store</span>
-          <span class="text-[10px] text-slate-400 font-mono ml-1.5 px-1.5 py-0.2 rounded bg-white/10">PRO</span>
+        <img src="assets/logo.jpg" alt="Logo" class="w-8 h-8 rounded-lg object-cover border border-blue-300">
+        <span class="font-outfit font-extrabold text-lg tracking-tight text-slate-900 flex items-center">
+          Prüfung<span class="text-blue-600">Store</span>
+          <span class="text-[10px] text-blue-700 font-mono ml-1.5 px-1.5 py-0.2 rounded bg-blue-50 border border-blue-200">PRO</span>
         </span>
       </a>
 
-      <nav class="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-400">
-        <a href="index.html" class="hover:text-white transition flex items-center gap-1">
+      <nav class="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-600">
+        <a href="index.html" class="hover:text-blue-600 transition flex items-center gap-1">
           <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Retour au Catalogue
         </a>
-        <a href="index.html#catalog-section" class="hover:text-white transition">Nos Catégories</a>
-        <a href="admin.html" class="hover:text-amber-400 transition">Espace Admin 🔐</a>
+        <a href="index.html#catalog-section" class="hover:text-blue-600 transition">Nos Catégories</a>
+        <a href="admin.html" class="hover:text-blue-600 transition">Espace Admin 🔐</a>
       </nav>
 
       <div class="flex items-center gap-3">
-        <a href="https://api.whatsapp.com/send?phone=212632017446&text=*COMMANDE%20OFFICIELLE%20-%20Pr%C3%BCfungStore*%0A%0ABonjour%2C%20je%20souhaite%20commander%20%3A%0A%E2%80%A2%20*Manuel%20%2F%20Pack*%20%3A%20Pack%20B2%20TELC-Pr%C3%BCfung%20Deutsch%20(Complet)%0A%E2%80%A2%20*Niveau*%20%3A%20Niveau%20B2%20(telc%20GmbH)%0A%E2%80%A2%20*Prix%20Promo*%20%3A%20260%20DH%20(Livraison%20Gratuite)%0A%E2%80%A2%20*Paiement*%20%3A%20%C3%80%20la%20livraison%20(Cash%20on%20Delivery)%0A%0AMerci%20de%20me%20contacter%20pour%20confirmer%20la%20livraison%20%C3%A0%20domicile%20!" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-outfit font-extrabold text-xs transition shadow-lg flex items-center gap-2">
+        <a href="https://api.whatsapp.com/send?phone=212632017446&text=*COMMANDE%20OFFICIELLE%20-%20Pr%C3%BCfungStore*%0A%0ABonjour%2C%20je%20souhaite%20commander%20%3A%0A%E2%80%A2%20*Manuel%20%2F%20Pack*%20%3A%20Pack%20B2%20TELC-Pr%C3%BCfung%20Deutsch%20(Complet)%0A%E2%80%A2%20*Niveau*%20%3A%20Niveau%20B2%20(telc%20GmbH)%0A%E2%80%A2%20*Prix%20Promo*%20%3A%20260%20DH%20(Livraison%20Gratuite)%0A%E2%80%A2%20*Paiement*%20%3A%20%C3%80%20la%20livraison%20(Cash%20on%20Delivery)%0A%0AMerci%20de%20me%20contacter%20pour%20confirmer%20la%20livraison%20%C3%A0%20domicile%20!" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-outfit font-extrabold text-xs transition shadow-md flex items-center gap-2">
           <svg class="w-4 h-4 fill-white shrink-0" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
           <span>Commander (260 DH)</span>
         </a>
@@ -76,12 +67,12 @@
   <main class="relative z-10 pt-28 pb-20 flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
     
     <!-- Breadcrumb -->
-    <div class="flex items-center gap-2 text-xs text-slate-400 mb-8">
-      <a href="index.html" class="hover:text-white transition">Boutique</a>
+    <div class="flex items-center gap-2 text-xs text-slate-500 mb-8">
+      <a href="index.html" class="hover:text-blue-600 transition">Boutique</a>
       <span>/</span>
-      <span class="text-amber-400">Catégorie TELC • Niveau B2</span>
+      <span class="text-blue-600 font-semibold">Catégorie TELC • Niveau B2</span>
       <span>/</span>
-      <span class="text-white font-medium truncate max-w-xs">Pack B2 TELC-Prüfung Deutsch (Complet)</span>
+      <span class="text-slate-900 font-bold truncate max-w-xs">Pack B2 TELC-Prüfung Deutsch (Complet)</span>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
@@ -89,42 +80,42 @@
       <!-- Colonne Gauche : Visuel & Fiche Technique -->
       <div class="lg:col-span-6 space-y-6">
         
-        <div class="relative w-full rounded-3xl bg-black/70 border border-white/15 p-6 flex items-center justify-center overflow-hidden shadow-2xl group">
+        <div class="relative w-full rounded-3xl bg-white border border-blue-100 p-8 flex items-center justify-center overflow-hidden shadow-xl shadow-blue-900/5 group">
           <div class="absolute top-4 left-4 z-10 flex items-center gap-2">
-            <span class="px-3 py-1 rounded-full bg-amber-500 text-black font-outfit font-black text-xs uppercase tracking-wider shadow-md">
+            <span class="px-3 py-1 rounded-full bg-blue-600 text-white font-outfit font-black text-xs uppercase tracking-wider shadow-md">
               Édition 2026
             </span>
-            <span class="px-3 py-1 rounded-full bg-white/10 text-white font-bold text-xs border border-white/15">
+            <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-bold text-xs border border-blue-200">
               100% Conforme
             </span>
           </div>
 
-          <img src="assets/products/telc-real-collection.jpg" alt="Pack B2 TELC-Prüfung Deutsch (Complet)" class="max-h-[380px] w-auto object-contain rounded-xl shadow-2xl group-hover:scale-105 transition-transform duration-500">
+          <img src="assets/products/telc-real-collection.jpg" alt="Pack B2 TELC-Prüfung Deutsch (Complet)" class="max-h-[380px] w-auto object-contain rounded-xl shadow-lg group-hover:scale-105 transition-transform duration-500">
         </div>
 
         <!-- Fiche Caractéristiques -->
-        <div class="p-6 rounded-3xl bg-[#121216]/90 border border-white/10 space-y-3.5 text-xs">
-          <h4 class="font-outfit font-bold text-sm text-white uppercase tracking-wider flex items-center gap-2">
-            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+        <div class="p-6 rounded-3xl bg-white border border-blue-100 shadow-lg shadow-blue-900/5 space-y-3.5 text-xs">
+          <h4 class="font-outfit font-bold text-sm text-slate-900 uppercase tracking-wider flex items-center gap-2">
+            <i data-lucide="shield-check" class="w-4 h-4 text-blue-600"></i>
             <span>Garanties & Spécifications Officielles</span>
           </h4>
 
           <div class="grid grid-cols-2 gap-3 pt-2">
-            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+            <div class="p-3.5 rounded-2xl bg-blue-50/50 border border-blue-100 space-y-1">
               <span class="text-slate-500 block text-[11px]">Format d'étude :</span>
-              <span class="font-bold text-white block">Collection Complète Spirales • 380 Pages</span>
+              <span class="font-bold text-slate-900 block">Collection Complète Spirales • 380 Pages</span>
             </div>
-            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+            <div class="p-3.5 rounded-2xl bg-blue-50/50 border border-blue-100 space-y-1">
               <span class="text-slate-500 block text-[11px]">Volume :</span>
-              <span class="font-bold text-white block">380 Pages</span>
+              <span class="font-bold text-slate-900 block">380 Pages</span>
             </div>
-            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+            <div class="p-3.5 rounded-2xl bg-blue-50/50 border border-blue-100 space-y-1">
               <span class="text-slate-500 block text-[11px]">Fichiers Audio :</span>
-              <span class="font-bold text-amber-400 block">Google Drive HD + Fichiers MP3 Structurés</span>
+              <span class="font-bold text-blue-600 block">Google Drive HD + Fichiers MP3 Structurés</span>
             </div>
-            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+            <div class="p-3.5 rounded-2xl bg-blue-50/50 border border-blue-100 space-y-1">
               <span class="text-slate-500 block text-[11px]">Livraison :</span>
-              <span class="font-bold text-emerald-400 block">Gratuite partout au Maroc</span>
+              <span class="font-bold text-emerald-600 block">Gratuite partout au Maroc</span>
             </div>
           </div>
         </div>
@@ -135,53 +126,53 @@
       <div class="lg:col-span-6 space-y-6">
         
         <div>
-          <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wider">
+          <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 uppercase tracking-wider">
             Catégorie TELC • Niveau B2
           </span>
-          <h1 class="font-outfit text-3xl sm:text-4xl font-black text-white mt-3 leading-tight">
+          <h1 class="font-outfit text-3xl sm:text-4xl font-black text-slate-900 mt-3 leading-tight">
             Pack B2 TELC-Prüfung Deutsch (Complet)
           </h1>
-          <p class="text-sm text-slate-400 mt-2">Collection Intégrale : Lesen + Sprachbaustein + Hören (MP3) + Mündlicher Ausdruck & Schreiben</p>
+          <p class="text-sm text-slate-500 mt-2">Collection Intégrale : Lesen + Sprachbaustein + Hören (MP3) + Mündlicher Ausdruck & Schreiben</p>
         </div>
 
         <!-- Description Complète (الوصف) -->
-        <div class="p-6 rounded-3xl bg-white/5 border border-white/10 space-y-3">
-          <h4 class="font-outfit font-black text-sm text-amber-400 uppercase tracking-wider flex items-center justify-between">
+        <div class="p-6 rounded-3xl bg-white border border-blue-100 shadow-md space-y-3">
+          <h4 class="font-outfit font-black text-sm text-blue-700 uppercase tracking-wider flex items-center justify-between">
             <span>الوصف détaillé du manuel :</span>
-            <span class="text-slate-400 text-xs font-normal">Programme complet 2026</span>
+            <span class="text-slate-400 text-xs font-normal">Programme officiel 2026</span>
           </h4>
-          <p class="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
             La collection officielle complète pour réussir avec mention le niveau avancé TELC Deutsch B2. Recommandé pour les médecins, infirmiers, ingénieurs et professionnels visant la reconnaissance de diplôme en Allemagne. Comprend l'entraînement approfondi aux structures complexes, lettres formelles et présentations orales.
           </p>
         </div>
 
         <!-- Points Clés -->
         <div class="space-y-3">
-          <h4 class="font-outfit font-bold text-xs uppercase tracking-wider text-slate-400">Ce que contient ce pack :</h4>
+          <h4 class="font-outfit font-bold text-xs uppercase tracking-wider text-slate-500">Ce que contient ce pack :</h4>
           <ul class="space-y-2.5">
             
-              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-300">
-                <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-700">
+                <i data-lucide="check-circle" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
                 <span>B2 LESEN + LÖSUNG : Compréhension de textes longs d’actualité, articles scientifiques et correspondance</span>
               </li>
             
-              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-300">
-                <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-700">
+                <i data-lucide="check-circle" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
                 <span>B2 SPRACHBAUSTEIN + LÖSUNG : Maîtrise de la grammaire avancée, verbes à prépositions et connecteurs logiques B2</span>
               </li>
             
-              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-300">
-                <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-700">
+                <i data-lucide="check-circle" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
                 <span>B2 HÖREN TEIL 1-2-3 + LÖSUNG : Dialogues, interviews et conférences avec transcriptions intégrales</span>
               </li>
             
-              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-300">
-                <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-700">
+                <i data-lucide="check-circle" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
                 <span>B2 SCHREIBEN + MÜNDLICHER AUSDRUCK : Modèles de réclamations formelles et exposés oraux structurés</span>
               </li>
             
-              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-300">
-                <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-700">
+                <i data-lucide="check-circle" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
                 <span>Barèmes officiels de notation détaillés pour viser les mentions Gut ou Sehr Gut</span>
               </li>
             
@@ -189,71 +180,71 @@
         </div>
 
         <!-- Pricing Card -->
-        <div class="p-6 rounded-3xl bg-gradient-to-b from-amber-500/10 to-black/60 border border-amber-500/30 space-y-4">
+        <div class="p-6 rounded-3xl bg-gradient-to-br from-blue-50 via-white to-sky-50 border-2 border-blue-200 shadow-lg space-y-4">
           <div class="flex items-baseline justify-between">
             <div>
-              <span class="text-xs uppercase font-bold text-slate-400 block">Tarif promotionnel :</span>
+              <span class="text-xs uppercase font-bold text-slate-500 block">Tarif promotionnel :</span>
               <div class="flex items-baseline gap-3">
-                <span class="font-outfit font-black text-4xl text-amber-400">260 DH</span>
-                <span class="text-base text-slate-500 line-through">390 DH</span>
+                <span class="font-outfit font-black text-4xl text-blue-700">260 DH</span>
+                <span class="text-base text-slate-400 line-through">390 DH</span>
                 <span class="px-2 py-0.5 rounded-full bg-red-600 text-white text-xs font-black">-33%</span>
               </div>
             </div>
             <div class="text-right">
-              <span class="text-xs font-bold text-emerald-400 block">✓ En Stock (9 restants)</span>
-              <span class="text-[11px] text-slate-400">Paiement à la livraison</span>
+              <span class="text-xs font-bold text-emerald-600 block">✓ En Stock (9 restants)</span>
+              <span class="text-[11px] text-slate-500">Paiement à la livraison</span>
             </div>
           </div>
 
           <!-- OPTION 1 : WhatsApp 1-Click Order -->
-          <a href="https://api.whatsapp.com/send?phone=212632017446&text=*COMMANDE%20OFFICIELLE%20-%20Pr%C3%BCfungStore*%0A%0ABonjour%2C%20je%20souhaite%20commander%20%3A%0A%E2%80%A2%20*Manuel%20%2F%20Pack*%20%3A%20Pack%20B2%20TELC-Pr%C3%BCfung%20Deutsch%20(Complet)%0A%E2%80%A2%20*Niveau*%20%3A%20Niveau%20B2%20(telc%20GmbH)%0A%E2%80%A2%20*Prix%20Promo*%20%3A%20260%20DH%20(Livraison%20Gratuite)%0A%E2%80%A2%20*Paiement*%20%3A%20%C3%80%20la%20livraison%20(Cash%20on%20Delivery)%0A%0AMerci%20de%20me%20contacter%20pour%20confirmer%20la%20livraison%20%C3%A0%20domicile%20!" target="_blank" rel="noopener noreferrer" class="w-full py-4 px-6 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-outfit font-extrabold text-sm shadow-xl shadow-emerald-950/60 transition flex items-center justify-center gap-2.5">
+          <a href="https://api.whatsapp.com/send?phone=212632017446&text=*COMMANDE%20OFFICIELLE%20-%20Pr%C3%BCfungStore*%0A%0ABonjour%2C%20je%20souhaite%20commander%20%3A%0A%E2%80%A2%20*Manuel%20%2F%20Pack*%20%3A%20Pack%20B2%20TELC-Pr%C3%BCfung%20Deutsch%20(Complet)%0A%E2%80%A2%20*Niveau*%20%3A%20Niveau%20B2%20(telc%20GmbH)%0A%E2%80%A2%20*Prix%20Promo*%20%3A%20260%20DH%20(Livraison%20Gratuite)%0A%E2%80%A2%20*Paiement*%20%3A%20%C3%80%20la%20livraison%20(Cash%20on%20Delivery)%0A%0AMerci%20de%20me%20contacter%20pour%20confirmer%20la%20livraison%20%C3%A0%20domicile%20!" target="_blank" rel="noopener noreferrer" class="w-full py-4 px-6 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-outfit font-extrabold text-sm shadow-md transition flex items-center justify-center gap-2.5">
             <svg class="w-5 h-5 fill-white shrink-0" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
             <span>Commander en 1 Clic sur WhatsApp</span>
           </a>
         </div>
 
         <!-- OPTION 2 : FORMULAIRE DE COMMANDE EXPRESS DIRECTE (COD) -->
-        <div class="p-6 rounded-3xl bg-[#121216] border border-white/15 space-y-4">
-          <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <div class="p-6 rounded-3xl bg-white border border-blue-100 shadow-xl shadow-blue-900/5 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
             <div>
-              <h4 class="font-outfit font-black text-base text-white">Formulaire de Commande Express</h4>
-              <p class="text-xs text-slate-400">Réglez le livreur en espèces à la livraison (COD)</p>
+              <h4 class="font-outfit font-black text-base text-slate-900">Formulaire de Commande Express</h4>
+              <p class="text-xs text-slate-500">Réglez le livreur en espèces à la livraison (COD)</p>
             </div>
-            <span class="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">Sans Carte Bancaire</span>
+            <span class="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold border border-blue-200">Sans Carte Bancaire</span>
           </div>
 
           <!-- Alert Confirmation Box -->
-          <div id="cod-success-alert" class="hidden p-4 rounded-2xl bg-emerald-600/20 border border-emerald-500 text-emerald-300 text-xs font-semibold space-y-1">
+          <div id="cod-success-alert" class="hidden p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-semibold space-y-1">
             <div class="font-bold flex items-center gap-2">
-              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i>
               <span>Commande enregistrée avec succès !</span>
             </div>
-            <p class="text-slate-300 text-[11px]">Notre équipe vous contactera au numéro fourni sous 24h pour organiser la livraison.</p>
+            <p class="text-emerald-700 text-[11px]">Notre équipe vous contactera au numéro fourni sous 24h pour organiser la livraison.</p>
           </div>
 
           <form onsubmit="handleDirectOrder(event, 'Pack B2 TELC-Prüfung Deutsch (Complet)', 260)" class="space-y-3.5 text-xs">
             <div>
-              <label class="block font-bold text-slate-300 mb-1">Nom et Prénom :</label>
-              <input type="text" id="order-fullname" required placeholder="ex: Yassine Mansouri" class="w-full p-3 rounded-xl bg-black/60 border border-white/15 text-white focus:outline-none focus:border-amber-500 transition">
+              <label class="block font-bold text-slate-700 mb-1">Nom et Prénom :</label>
+              <input type="text" id="order-fullname" required placeholder="ex: Yassine Mansouri" class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 transition">
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label class="block font-bold text-slate-300 mb-1">Téléphone / WhatsApp :</label>
-                <input type="tel" id="order-phone" required placeholder="+212 6..." class="w-full p-3 rounded-xl bg-black/60 border border-white/15 text-white focus:outline-none focus:border-amber-500 transition">
+                <label class="block font-bold text-slate-700 mb-1">Téléphone / WhatsApp :</label>
+                <input type="tel" id="order-phone" required placeholder="+212 6..." class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 transition">
               </div>
               <div>
-                <label class="block font-bold text-slate-300 mb-1">Ville :</label>
-                <input type="text" id="order-city" required placeholder="Casablanca, Rabat, Fès..." class="w-full p-3 rounded-xl bg-black/60 border border-white/15 text-white focus:outline-none focus:border-amber-500 transition">
+                <label class="block font-bold text-slate-700 mb-1">Ville :</label>
+                <input type="text" id="order-city" required placeholder="Casablanca, Rabat, Fès..." class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 transition">
               </div>
             </div>
 
             <div>
-              <label class="block font-bold text-slate-300 mb-1">Adresse de Livraison :</label>
-              <input type="text" id="order-address" required placeholder="Quartier, Boulevard, N° Immeuble / Villa..." class="w-full p-3 rounded-xl bg-black/60 border border-white/15 text-white focus:outline-none focus:border-amber-500 transition">
+              <label class="block font-bold text-slate-700 mb-1">Adresse de Livraison :</label>
+              <input type="text" id="order-address" required placeholder="Quartier, Boulevard, N° Immeuble / Villa..." class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-blue-600 transition">
             </div>
 
-            <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-outfit font-black text-sm shadow-xl shadow-amber-500/20 transition transform active:scale-95 flex items-center justify-center gap-2">
+            <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-outfit font-black text-sm shadow-lg shadow-blue-500/25 transition transform active:scale-95 flex items-center justify-center gap-2">
               <i data-lucide="package-check" class="w-4 h-4"></i>
               <span>Confirmer ma Commande (260 DH • COD)</span>
             </button>
@@ -267,10 +258,10 @@
   </main>
 
   <!-- Footer -->
-  <footer class="relative z-10 bg-black border-t-2 border-red-600 text-slate-400 text-xs">
+  <footer class="relative z-10 bg-[#0A192F] border-t border-blue-900/60 text-slate-400 text-xs">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
       <p>© 2026 ABDEUTSCH CENTER • PrüfungStore Pro. Tous droits réservés.</p>
-      <a href="index.html" class="text-amber-400 hover:underline font-bold">← Revenir au catalogue principal</a>
+      <a href="index.html" class="text-blue-400 hover:underline font-bold">← Revenir au catalogue principal</a>
     </div>
   </footer>
 
@@ -284,7 +275,6 @@
       const city = document.getElementById('order-city').value.trim();
       const address = document.getElementById('order-address').value.trim();
 
-      // Enregistrer dans le stockage local pour le tableau de bord admin
       try {
         const existing = JSON.parse(localStorage.getItem('pruefung_app_orders') || '[]');
         const newOrder = {
@@ -306,7 +296,6 @@
 
       document.getElementById('cod-success-alert').classList.remove('hidden');
 
-      // Optionnel : ouvrir également WhatsApp pré-rempli
       setTimeout(() => {
         const whatsappMsg = encodeURIComponent(
           '*NOUVELLE COMMANDE DIRECTE (SITE)*\n\n' +
