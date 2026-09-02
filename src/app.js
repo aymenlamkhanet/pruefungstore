@@ -341,6 +341,28 @@ function renderCatalog() {
     filtered.sort((a, b) => (b.salesCount || 0) - (a.salesCount || 0));
   }
 
+  const countBadge = document.getElementById("catalog-count-badge");
+  if (countBadge) {
+    countBadge.textContent = `${filtered.length} article${filtered.length > 1 ? 's' : ''}`;
+  }
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="col-span-full text-center py-16 themed-card rounded-3xl p-8 border">
+        <div class="w-14 h-14 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center mx-auto mb-3">
+          <i data-lucide="search-x" class="w-7 h-7"></i>
+        </div>
+        <h3 class="font-outfit font-black text-lg themed-heading">Aucun produit ou pack trouvé</h3>
+        <p class="text-xs themed-subtext mt-1 max-w-sm mx-auto">Essayez un autre mot-clé (ex: TELC, Goethe, B1, B2) ou réinitialisez les filtres.</p>
+        <button onclick="clearCatalogSearch(); filterCatalog('all');" class="mt-4 px-5 py-2 rounded-full bg-blue-600 text-white font-bold text-xs shadow-md">
+          Réinitialiser la recherche
+        </button>
+      </div>
+    `;
+    if (typeof window !== "undefined" && window.lucide) lucide.createIcons();
+    return;
+  }
+
   grid.innerHTML = filtered.map(book => {
     const isWishlisted = state.wishlist.includes(book.id);
 
