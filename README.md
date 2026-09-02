@@ -1,81 +1,81 @@
 # PrüfungStore Pro • ABDEUTSCH CENTER 🇩🇪📚
 
-Plateforme web e-commerce complète et Dashboard d'administration pour la vente et la gestion de manuels de préparation aux examens officiels d'allemand (**TELC B1/B2** et **GOETHE-ÖSD B1/B2**) au Maroc.
+Plateforme web e-commerce complète, pages dédiées de commande, module de recherche & catalogue, et Dashboard d'administration pour les manuels officiels de préparation aux examens d'allemand (**TELC B1/B2** et **GOETHE-ÖSD B1/B2**) au Maroc.
 
 ---
 
-## 📁 Structure Unifiée du Projet
+## 📁 Répertoire Unique & Consolidé du Projet
 
-Tous les fichiers du projet sont regroupés dans ce dossier :
-`C:\Users\HP\.gemini\antigravity\scratch\german-exam-store\`
+Tous les fichiers du projet sont centralisés dans ce même dossier :  
+**`C:\Users\HP\.gemini\antigravity\scratch\german-exam-store\`**
 
 ```text
 german-exam-store/
-├── index.html                   # 🛍️ Boutique publique client (Catalogue, Panier, WhatsApp COD)
-├── admin.html                   # 🔐 Dashboard Administrateur (Login sécurisé, CRUD, Commandes, CRM)
-├── dashboard.html               # 🔐 Alias direct vers le Dashboard Admin
-├── student-assessment.html      # 📊 Dashboard Analytique & Scores des Étudiants
-├── server.js                    # 🚀 Serveur HTTP local Node.js (Anti-cache headers)
-├── README.md                    # 📖 Documentation officielle du projet
-├── assets/                      # 🖼️ Images & Ressources graphiques
-│   ├── germany_bg.jpg           # Arrière-plan crépusculaire Berlin / Brandebourg (Généré par Gemini)
-│   ├── site-bg.jpg              # Arrière-plan bibliothèque du store public
-│   ├── logo.jpg                 # Logo officiel PrüfungStore & ABDEUTSCH
-│   └── products/                # Couvertures des manuels et packs
+├── index.html                   # 🛍️ Boutique Principale épurée (Hero 3D, Bento, 2 Catégories, Comparatif)
+├── categories.html              # 🏛️ Page Catégories Complète avec Recherche en Direct & Filtres
+├── catalog-filter.html          # 🔍 Composant Autonome de Recherche & Filtres Capsules (Style Référence)
+├── pack-b1-telc.html            # 📖 Page Dédiée de Commande du Pack B1 TELC (235 DH)
+├── pack-b2-telc.html            # 📖 Page Dédiée de Commande du Pack B2 TELC (260 DH)
+├── goethe-osd-b1.html           # 📖 Page Dédiée de Commande du Pack B1 GOETHE • ÖSD (235 DH)
+├── goethe-osd-b2.html           # 📖 Page Dédiée de Commande du Pack B2 GOETHE • ÖSD (235 DH)
+├── admin.html                   # 🔐 Dashboard Administrateur (Login sécurisé, Commandes, Stock, CRM)
+├── dashboard.html               # 🔐 Alias d'accès direct vers le Dashboard Admin
+├── student-assessment.html      # 📊 Dashboard Analytique des Résultats & Scores des Étudiants
+├── server.js                    # 🚀 Serveur HTTP Node.js multi-ports (Port par défaut : 3001)
+├── package.json                 # 📦 Définition du projet (scripts npm start / npm run dev)
+├── README.md                    # 📖 Documentation complète et consolidée
+├── assets/                      # 🖼️ Logos et médias officiels
+│   ├── official-logo.png        # 🇩🇪 Logo Officiel B1 B2 Vorbereitung (Haute Définition)
+│   ├── telc-official-logo.svg   # 🟦 Logo Officiel Vectoriel telc gGmbH (Language Tests)
+│   ├── goethe-osd-official-logo.svg # 🟩 Logo Officiel Vectoriel Goethe-Institut & ÖSD
+│   ├── germany-flag.svg         # 🇩🇪 Drapeau Allemand Vectoriel (Coins Arrondis)
+│   ├── site-bg.jpg              # 🏛️ Arrière-plan bibliothèque académique
+│   └── products/                # 📚 Couvertures des manuels et photos réelles
 │       ├── pack-b1.png
 │       ├── goethe-osd-b1-b2.jpg
 │       ├── telc-b1-showcase.jpg
 │       └── telc-real-collection.jpg
 └── src/
-    ├── app.js                   # Moteur JavaScript interactif de la boutique
+    ├── app.js                   # ⚙️ Moteur interactif (3D Three.js, Live Search, Tiroir Panier, WhatsApp)
+    ├── theme.css                # 🎨 Moteur de thèmes dynamique (Variables CSS Mode Sombre & Mode Clair)
+    ├── theme.js                 # 🌓 Gestionnaire de bascule de thème avec persistance localStorage
     └── data/
-        └── books.js             # Base de données initiale des manuels et prix
+        └── books.js             # 🗄️ Base de données des 7 manuels, packs, prix et caractéristiques
 ```
 
 ---
 
-## 🌐 Liens Localhost & Accès
+## 🌐 Liens Localhost & Accès Rapide
 
-Une fois le serveur démarré (`node server.js`), les pages sont accessibles sur le port **3000** :
+Le serveur local écoute sur le port **3001** (pour éviter les conflits de port) :
 
-| Page | URL | Description |
+| Page | URL Directe | Description |
 |---|---|---|
-| **Boutique Client** | `http://localhost:3000/` | Storefront public avec commande WhatsApp et formulaire COD. |
-| **Portail Admin** | `http://localhost:3000/admin.html` | Dashboard sécurisé pour l'administrateur. |
-| **Dashboard BI** | `http://localhost:3000/student-assessment.html` | Suivi et analyse des performances des étudiants. |
+| **Boutique Principale** | [http://localhost:3001/](http://localhost:3001/) | Boutique client épurée avec les deux catégories officielles. |
+| **Catégories & Recherche** | [http://localhost:3001/categories.html](http://localhost:3001/categories.html) | Tous les produits et packs avec recherche et tri en direct. |
+| **Composant Autonome** | [http://localhost:3001/catalog-filter.html](http://localhost:3001/catalog-filter.html) | Module de recherche et filtres capsules isolé. |
+| **Pack B1 TELC** | [http://localhost:3001/pack-b1-telc.html](http://localhost:3001/pack-b1-telc.html) | Fiche produit complète & formulaire WhatsApp (235 DH). |
+| **Pack B2 TELC** | [http://localhost:3001/pack-b2-telc.html](http://localhost:3001/pack-b2-telc.html) | Fiche produit complète & formulaire WhatsApp (260 DH). |
+| **Pack B1 GOETHE • ÖSD** | [http://localhost:3001/goethe-osd-b1.html](http://localhost:3001/goethe-osd-b1.html) | Fiche produit complète & formulaire WhatsApp (235 DH). |
+| **Pack B2 GOETHE • ÖSD** | [http://localhost:3001/goethe-osd-b2.html](http://localhost:3001/goethe-osd-b2.html) | Fiche produit complète & formulaire WhatsApp (235 DH). |
+| **Espace Administrateur** | [http://localhost:3001/admin.html](http://localhost:3001/admin.html) | Portail admin privé (login: `admin` / mdp: `admin2026`). |
 
 ---
 
-## 🔐 Identifiants Administrateur
+## 🚀 Comment Lancer le Projet
 
-* **Nom d'utilisateur** : `admin`
-* **Mot de passe** : `admin2026`
-
----
-
-## ✨ Fonctionnalités Majeures
-
-### 1. 🛍️ Boutique Publique (`index.html`)
-- Présentation des packs B1 & B2 avec prix officiels en Dirhams marocains (DH).
-- Panier dynamique et commande directe sur WhatsApp au **`+212 632-017446`**.
-- Accès discret au portail d'administration via l'icône **`🛡️`** dans la barre supérieure ou le lien **`Espace Admin 🔐`** dans le pied de page.
-
-### 2. 🇩🇪 Dashboard Administrateur (`admin.html`)
-- **Écran de connexion sécurisé** avec alerte animée en cas de mot de passe erroné.
-- **Arrière-plan haute définition de Berlin** avec effets de verre dépoli (*Glassmorphism*).
-- **Importation de photos** : bouton *« Choisir une photo... »* pour uploader n'importe quelle image depuis l'ordinateur/téléphone avec prévisualisation en direct.
-- **Gestion des stocks & Produits** : Ajout, modification, ajustement rapide (+ / -) et suppression.
-- **Suivi des commandes** : Changement de statut en 1 clic (🟡 En attente, 🔵 En cours, 🟣 Expédiée, 🟢 Livrée, 🔴 Annulée).
-- **CRM WhatsApp** : Historique des commandes clients et relance instantanée sur WhatsApp.
-- **Exportations** : Export des données en format CSV (Excel) et JSON.
-- **Verrouillage automatique** : Déconnexion sécurisée dès que vous retournez à la boutique publique.
-
----
-
-## 🚀 Démarrer le Serveur Local
-
-Pour lancer ou relancer le serveur local :
 ```bash
-node server.js
+# Dans le dossier german-exam-store :
+npm run dev
+# Ou bien :
+npm start
 ```
-Le serveur écoute sur **`http://localhost:3000/`**.
+
+---
+
+## 🌓 Fonctionnalités Clés
+
+1. **Bascule Mode Sombre 🌙 / Mode Clair ☀️** : Persistance automatique via `localStorage` et lisibilité textuelle absolue auditée sur tous les écrans.
+2. **Arrière-plan Bibliothèque** : L'image académique s'adapte en temps réel selon le thème sans perdre ses détails.
+3. **Recherche & Tri Instantanés** : Recherche par mots-clés et tri par prix/popularité en temps réel.
+4. **Commande WhatsApp COD (Cash on Delivery)** : Envoi automatisé des détails de commande sur le numéro officiel **+212 632-017446**.
