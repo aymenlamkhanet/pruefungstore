@@ -392,7 +392,7 @@ function renderCatalog() {
           </div>
 
           <div class="grid grid-cols-2 gap-2">
-            <button onclick="addToCart('${book.id}')" class="py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 border border-white/10">
+            <button onclick="addToCart('${book.id}')" class="py-2.5 px-3 rounded-xl themed-quickview-btn font-bold text-xs transition flex items-center justify-center gap-1.5 border border-blue-500/20 rounded-xl py-2.5">
               <i data-lucide="shopping-bag" class="w-3.5 h-3.5 text-blue-600"></i>
               <span>Panier</span>
             </button>
