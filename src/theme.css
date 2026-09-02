@@ -19,8 +19,8 @@ body.theme-dark {
   --navbar-border: rgba(255, 255, 255, 0.10);
   --navbar-text: #E2E8F0;
   --navbar-link-hover: #60A5FA;
-  --library-filter: brightness(0.24) contrast(1.25);
-  --library-overlay: linear-gradient(to bottom, rgba(3,5,8,0.92), rgba(3,5,8,0.82), rgba(3,5,8,0.96));
+  --library-filter: brightness(0.72) contrast(1.15) saturate(1.10);
+  --library-overlay: linear-gradient(to bottom, rgba(6, 6, 8, 0.65) 0%, rgba(6, 6, 8, 0.40) 50%, rgba(6, 6, 8, 0.78) 100%);
   --badge-bg: rgba(23, 37, 84, 0.85);
   --badge-text: #93C5FD;
   --badge-border: rgba(59, 130, 246, 0.4);
@@ -58,8 +58,8 @@ body.theme-light {
   --navbar-border: #E2E8F0;
   --navbar-text: #1E293B;
   --navbar-link-hover: #1D4ED8;
-  --library-filter: brightness(1.08) contrast(1.02) saturate(0.9);
-  --library-overlay: linear-gradient(to bottom, rgba(248,250,252,0.85), rgba(240,246,255,0.78), rgba(248,250,252,0.90));
+  --library-filter: brightness(1.10) contrast(1.02) saturate(0.95);
+  --library-overlay: linear-gradient(to bottom, rgba(248, 250, 252, 0.80) 0%, rgba(240, 246, 255, 0.65) 50%, rgba(248, 250, 252, 0.85) 100%);
   --badge-bg: #EFF6FF;
   --badge-text: #1D4ED8;
   --badge-border: #BFDBFE;
