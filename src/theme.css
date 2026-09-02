@@ -1,0 +1,158 @@
+/* ==============================================
+   PRÜFUNGSTORE THEME ENGINE (DARK / LIGHT)
+   ============================================== */
+
+:root,
+html.theme-dark,
+body.theme-dark {
+  --bg-body: #030508;
+  --text-main: #CBD5E1;
+  --text-muted: #94A3B8;
+  --text-heading: #FFFFFF;
+  --card-bg: rgba(11, 15, 25, 0.92);
+  --card-sub-bg: rgba(6, 9, 19, 0.85);
+  --card-border: rgba(59, 130, 246, 0.25);
+  --card-border-hover: rgba(59, 130, 246, 0.65);
+  --card-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.6);
+  --navbar-bg: rgba(3, 5, 8, 0.88);
+  --navbar-border: rgba(255, 255, 255, 0.10);
+  --navbar-text: #E2E8F0;
+  --library-filter: brightness(0.25) contrast(1.25);
+  --library-overlay: linear-gradient(to bottom, rgba(3,5,8,0.92), rgba(3,5,8,0.82), rgba(3,5,8,0.96));
+  --badge-bg: rgba(23, 37, 84, 0.8);
+  --badge-text: #93C5FD;
+  --badge-border: rgba(59, 130, 246, 0.4);
+  --table-head-bg: rgba(23, 37, 84, 0.85);
+  --table-border: rgba(59, 130, 246, 0.2);
+  --table-row-border: rgba(255, 255, 255, 0.05);
+  --input-bg: rgba(0, 0, 0, 0.6);
+  --input-border: rgba(255, 255, 255, 0.15);
+  --input-text: #FFFFFF;
+  --price-color: #60A5FA;
+  --toggle-btn-bg: rgba(255, 255, 255, 0.10);
+  --toggle-btn-border: rgba(255, 255, 255, 0.15);
+  --toggle-btn-text: #FFFFFF;
+}
+
+html.theme-light,
+body.theme-light {
+  --bg-body: #F8FAFC;
+  --text-main: #334155;
+  --text-muted: #64748B;
+  --text-heading: #0F172A;
+  --card-bg: #FFFFFF;
+  --card-sub-bg: #F0F7FF;
+  --card-border: #DBEAFE;
+  --card-border-hover: #3B82F6;
+  --card-shadow: 0 10px 30px -5px rgba(37, 99, 235, 0.08);
+  --navbar-bg: rgba(255, 255, 255, 0.92);
+  --navbar-border: #E2E8F0;
+  --navbar-text: #334155;
+  --library-filter: brightness(1.05) contrast(1.0) opacity(0.18);
+  --library-overlay: linear-gradient(to bottom, rgba(248,250,252,0.88), rgba(248,250,252,0.94), rgba(248,250,252,0.98));
+  --badge-bg: #EFF6FF;
+  --badge-text: #1D4ED8;
+  --badge-border: #BFDBFE;
+  --table-head-bg: #EFF6FF;
+  --table-border: #E2E8F0;
+  --table-row-border: #F1F5F9;
+  --input-bg: #F8FAFC;
+  --input-border: #CBD5E1;
+  --input-text: #0F172A;
+  --price-color: #1D4ED8;
+  --toggle-btn-bg: #EFF6FF;
+  --toggle-btn-border: #BFDBFE;
+  --toggle-btn-text: #1E40AF;
+}
+
+body {
+  background-color: var(--bg-body) !important;
+  color: var(--text-main) !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.site-bg-img {
+  filter: var(--library-filter) !important;
+  transition: filter 0.4s ease;
+}
+
+.site-bg-overlay {
+  background: var(--library-overlay) !important;
+  transition: background 0.4s ease;
+}
+
+.frosted-glass {
+  background: var(--navbar-bg) !important;
+  border-color: var(--navbar-border) !important;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.bento-card,
+.themed-card {
+  background: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+  box-shadow: var(--card-shadow) !important;
+  color: var(--text-main) !important;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+}
+
+.bento-card:hover,
+.themed-card:hover {
+  border-color: var(--card-border-hover) !important;
+}
+
+.themed-card-sub {
+  background: var(--card-sub-bg) !important;
+  border-color: var(--card-border) !important;
+  color: var(--text-main) !important;
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.themed-text-heading {
+  color: var(--text-heading) !important;
+  transition: color 0.3s ease;
+}
+
+.themed-text-muted {
+  color: var(--text-muted) !important;
+  transition: color 0.3s ease;
+}
+
+.themed-badge {
+  background: var(--badge-bg) !important;
+  color: var(--badge-text) !important;
+  border-color: var(--badge-border) !important;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.themed-table {
+  background: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+}
+
+.themed-table thead {
+  background: var(--table-head-bg) !important;
+  border-color: var(--table-border) !important;
+  color: var(--text-heading) !important;
+}
+
+.themed-table tbody tr {
+  border-color: var(--table-row-border) !important;
+}
+
+.themed-price {
+  color: var(--price-color) !important;
+}
+
+.themed-input {
+  background: var(--input-bg) !important;
+  border-color: var(--input-border) !important;
+  color: var(--input-text) !important;
+}
+
+.theme-toggle-btn {
+  background: var(--toggle-btn-bg) !important;
+  border: 1px solid var(--toggle-btn-border) !important;
+  color: var(--toggle-btn-text) !important;
+  transition: all 0.2s ease;
+}

@@ -31,6 +31,9 @@
 
   <!-- Three.js for 3D WebGL Rendering -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Theme Engine (Dark / Light) -->
+  <link rel="stylesheet" href="src/theme.css">
+  <script src="src/theme.js"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -78,8 +81,8 @@
 
   <!-- ================= GEMINI CINEMATIC LIBRARY BACKGROUND (TRÈS SOMBRE) ================= -->
   <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-    <img src="assets/site-bg.jpg" alt="Gemini Library Background" class="w-full h-full object-cover object-center filter brightness-[0.25] contrast-125 scale-105 transform">
-    <div class="absolute inset-0 bg-gradient-to-b from-[#030508]/92 via-[#030508]/82 to-[#030508]/96 backdrop-blur-[1px]"></div>
+    <img src="assets/site-bg.jpg" alt="Gemini Library Background" class="site-bg-img w-full h-full object-cover object-center filter brightness-[0.25] contrast-125 scale-105 transform">
+    <div class="site-bg-overlay absolute inset-0 bg-gradient-to-b from-[#030508]/92 via-[#030508]/82 to-[#030508]/96 backdrop-blur-[1px]"></div>
   </div>
 
   <!-- ================= APPLE STYLE TOP NAVBAR ================= -->
@@ -116,6 +119,12 @@
           <span id="cart-count" class="bg-blue-600 text-white text-[10px] font-black px-1.5 py-0.2 rounded-full">0</span>
         </button>
 
+        
+        <!-- Theme Toggle Switch (Dark / Light) -->
+        <button id="theme-toggle-btn" onclick="toggleTheme()" class="theme-toggle-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Basculer entre Mode Sombre et Mode Clair">
+          <span class="theme-toggle-icon text-sm">☀️</span>
+          <span class="theme-toggle-label text-[11px] font-bold hidden sm:inline">Clair</span>
+        </button>
         <a href="https://api.whatsapp.com/send?phone=212632017446&text=Bonjour,%20je%20souhaite%20des%20informations%20sur%20les%20manuels%20d%27allemand%20B1/B2." target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-full bg-red-600 hover:bg-red-500 text-white font-outfit font-extrabold text-xs transition shadow-lg shadow-red-950/60 flex items-center gap-1.5">
           <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
           <span>Contactez-nous</span>
@@ -155,7 +164,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto my-10 text-left">
         
         <!-- CARTE NIVEAU B1 -->
-        <div class="group relative rounded-3xl p-6 sm:p-8 bg-[#0B0F19]/92 border-2 border-blue-500/35 hover:border-blue-400 shadow-2xl backdrop-blur-xl transition-all duration-500 hover:-translate-y-2">
+        <div class="group relative rounded-3xl themed-card p-6 sm:p-8 border-2 transition-all duration-500 hover:-translate-y-2 rounded-3xl">
           <!-- Top Badge -->
           <div class="flex items-center justify-between gap-2 mb-4">
             <span class="px-3.5 py-1.5 rounded-full bg-blue-950/80 text-blue-300 border border-blue-500/40 text-xs font-bold font-outfit uppercase tracking-wider flex items-center gap-2">
@@ -172,7 +181,7 @@
 
           <!-- Title & Description -->
           <div class="space-y-2 text-center sm:text-left mt-4">
-            <h3 class="font-outfit font-black text-xl sm:text-2xl text-white">Pack Officiel Deutsch B1</h3>
+            <h3 class="font-outfit font-black text-xl sm:text-2xl themed-text-heading">Pack Officiel Deutsch B1</h3>
             <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
               L'excellence des manuels de préparation <strong>TELC</strong> et <strong>GOETHE-ÖSD</strong> avec 25 Modelltests calibrés, corrigés exhaustifs et audios haute fidélité.
             </p>
@@ -180,7 +189,7 @@
         </div>
 
         <!-- CARTE NIVEAU B2 -->
-        <div class="group relative rounded-3xl p-6 sm:p-8 bg-[#0B0F19]/92 border-2 border-indigo-500/35 hover:border-indigo-400 shadow-2xl backdrop-blur-xl transition-all duration-500 hover:-translate-y-2">
+        <div class="group relative rounded-3xl themed-card p-6 sm:p-8 border-2 transition-all duration-500 hover:-translate-y-2 rounded-3xl">
           <!-- Top Badge -->
           <div class="flex items-center justify-between gap-2 mb-4">
             <span class="px-3.5 py-1.5 rounded-full bg-indigo-950/80 text-indigo-300 border border-indigo-500/40 text-xs font-bold font-outfit uppercase tracking-wider flex items-center gap-2">
@@ -197,7 +206,7 @@
 
           <!-- Title & Description -->
           <div class="space-y-2 text-center sm:text-left mt-4">
-            <h3 class="font-outfit font-black text-xl sm:text-2xl text-white">Pack Officiel Deutsch B2</h3>
+            <h3 class="font-outfit font-black text-xl sm:text-2xl themed-text-heading">Pack Officiel Deutsch B2</h3>
             <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
               L'excellence des manuels de préparation <strong>TELC</strong> et <strong>GOETHE-ÖSD</strong> avec 25 Modelltests calibrés, corrigés exhaustifs et audios haute fidélité.
             </p>
@@ -380,7 +389,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
           <!-- ================= COLONNE 1 : CATÉGORIE TELC ================= -->
-          <div class="rounded-3xl p-6 sm:p-7 bg-[#0B0F19]/92 border-2 border-blue-500/35 shadow-2xl backdrop-blur-xl flex flex-col justify-between relative overflow-hidden">
+          <div class="rounded-3xl p-6 sm:p-7 themed-card border-2 flex flex-col justify-between relative overflow-hidden rounded-3xl p-8">
             <!-- Background glow -->
             <div class="absolute -top-10 -right-10 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -392,7 +401,7 @@
                     🇩🇪
                   </div>
                   <div>
-                    <h4 class="font-outfit font-black text-2xl text-white tracking-tight">Catégorie TELC</h4>
+                    <h4 class="font-outfit font-black text-2xl themed-text-heading tracking-tight">Catégorie TELC</h4>
                     <p class="text-[11px] text-blue-400 font-semibold uppercase tracking-wider">telc Deutsch B1 & B2 Zertifikat</p>
                   </div>
                 </div>
@@ -403,7 +412,7 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 
                 <!-- TELC - PACK B1 -->
-                <div class="rounded-2xl p-4 bg-[#060913]/85 border border-blue-900/50 hover:border-blue-500/60 transition flex flex-col justify-between">
+                <div class="themed-card-sub rounded-2xl p-4 border transition-all transition flex flex-col justify-between">
                   <div class="space-y-3">
                     <div class="flex items-center justify-between">
                       <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-black font-outfit font-black text-[10px]">PACK B1</span>
@@ -436,7 +445,7 @@
                 </div>
 
                 <!-- TELC - PACK B2 -->
-                <div class="rounded-2xl p-4 bg-[#060913]/85 border border-blue-900/50 hover:border-blue-500/60 transition flex flex-col justify-between">
+                <div class="themed-card-sub rounded-2xl p-4 border transition-all transition flex flex-col justify-between">
                   <div class="space-y-3">
                     <div class="flex items-center justify-between">
                       <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-black font-outfit font-black text-[10px]">PACK B2</span>
@@ -473,7 +482,7 @@
           </div>
 
           <!-- ================= COLONNE 2 : CATÉGORIE GOETHE • ÖSD ================= -->
-          <div class="rounded-3xl p-6 sm:p-7 bg-[#0B0F19]/92 border-2 border-indigo-500/35 shadow-2xl backdrop-blur-xl flex flex-col justify-between relative overflow-hidden">
+          <div class="rounded-3xl p-6 sm:p-7 themed-card border-2 flex flex-col justify-between relative overflow-hidden rounded-3xl p-8">
             <!-- Background glow -->
             <div class="absolute -top-10 -right-10 w-48 h-48 bg-red-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -485,7 +494,7 @@
                     🇩🇪
                   </div>
                   <div>
-                    <h4 class="font-outfit font-black text-2xl text-white tracking-tight">Catégorie GOETHE • ÖSD</h4>
+                    <h4 class="font-outfit font-black text-2xl themed-text-heading tracking-tight">Catégorie GOETHE • ÖSD</h4>
                     <p class="text-[11px] text-indigo-400 font-semibold uppercase tracking-wider">Goethe-Zertifikat & ÖSD B1 & B2</p>
                   </div>
                 </div>
@@ -496,7 +505,7 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 
                 <!-- GOETHE-ÖSD - PACK B1 -->
-                <div class="rounded-2xl p-4 bg-[#060913]/85 border border-indigo-900/50 hover:border-indigo-500/60 transition flex flex-col justify-between">
+                <div class="themed-card-sub rounded-2xl p-4 border transition-all transition flex flex-col justify-between">
                   <div class="space-y-3">
                     <div class="flex items-center justify-between">
                       <span class="px-2.5 py-0.5 rounded-full bg-red-600 text-white font-outfit font-black text-[10px]">PACK B1</span>
@@ -529,7 +538,7 @@
                 </div>
 
                 <!-- GOETHE-ÖSD - PACK B2 -->
-                <div class="rounded-2xl p-4 bg-[#060913]/85 border border-indigo-900/50 hover:border-indigo-500/60 transition flex flex-col justify-between">
+                <div class="themed-card-sub rounded-2xl p-4 border transition-all transition flex flex-col justify-between">
                   <div class="space-y-3">
                     <div class="flex items-center justify-between">
                       <span class="px-2.5 py-0.5 rounded-full bg-red-600 text-white font-outfit font-black text-[10px]">PACK B2</span>
@@ -587,7 +596,7 @@
         <p class="text-xs sm:text-sm text-slate-400">Trouvez la formule exacte selon votre examen cible.</p>
       </div>
 
-      <div class="overflow-x-auto rounded-3xl border border-blue-900/40 bg-[#0B0F19]/90 backdrop-blur-xl shadow-2xl">
+      <div class="overflow-x-auto rounded-3xl themed-table border rounded-3xl overflow-hidden shadow-2xl backdrop-blur-xl">
         <table class="w-full text-left text-xs text-slate-300">
           <thead class="bg-blue-50/80 border-b border-blue-100 text-white font-outfit text-sm">
             <tr>

@@ -326,7 +326,7 @@ function renderCatalog() {
     const isWishlisted = state.wishlist.includes(book.id);
 
     return `
-      <div class="apple-tilt-card group relative bg-[#0B0F19]/92 border border-blue-900/40 hover:border-blue-500 rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-2xl backdrop-blur-xl hover:shadow-blue-500/20">
+      <div class="apple-tilt-card group relative themed-card rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between overflow-hidden border hover:shadow-2xl">
         <div>
           <!-- Header Tag -->
           <div class="flex items-center justify-between gap-2 mb-4">
@@ -357,7 +357,7 @@ function renderCatalog() {
 
           <!-- Titles & Description -->
           <div class="space-y-1 mb-3">
-            <h3 onclick="window.location.href=getBookPageUrl('${book.id}')" class="cursor-pointer font-outfit font-extrabold text-lg text-white group-hover:text-blue-400 transition-colors leading-snug line-clamp-2">
+            <h3 onclick="window.location.href=getBookPageUrl('${book.id}')" class="cursor-pointer font-outfit font-extrabold text-lg themed-text-heading group-hover:text-blue-500 transition-colors leading-snug line-clamp-2">
               ${book.title}
             </h3>
             <p class="text-xs text-slate-400 font-medium line-clamp-2">${book.subtitle}</p>
@@ -367,7 +367,7 @@ function renderCatalog() {
           <div class="py-3 border-y border-white/10 space-y-1.5 text-xs text-slate-300 mb-4">
             <div class="flex items-center justify-between">
               <span class="text-slate-400">Format :</span>
-              <span class="font-bold text-white truncate max-w-[170px]">${book.format}</span>
+              <span class="font-bold themed-text-heading truncate max-w-[170px]">${book.format}</span>
             </div>
             <div class="flex items-center justify-between">
               <span class="text-slate-400">Audio :</span>
@@ -382,7 +382,7 @@ function renderCatalog() {
             <div>
               <span class="text-[10px] uppercase font-bold text-slate-400 block">Prix Préférentiel</span>
               <div class="flex items-baseline gap-2">
-                <span class="font-outfit font-black text-2xl text-blue-400">${book.priceDh} DH</span>
+                <span class="font-outfit font-black text-2xl themed-price">${book.priceDh} DH</span>
                 ${book.originalPriceDh ? `<span class="text-xs text-slate-400 line-through">${book.originalPriceDh} DH</span>` : ''}
               </div>
             </div>
