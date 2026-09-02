@@ -45,10 +45,10 @@ body.theme-dark {
 html.theme-light,
 body.theme-light {
   --bg-body: #F8FAFC;
-  --text-main: #334155;
-  --text-muted: #64748B;
+  --text-main: #1E293B;
+  --text-muted: #475569;
   --text-heading: #0F172A;
-  --text-subtext: #334155;
+  --text-subtext: #1E293B;
   --card-bg: #FFFFFF;
   --card-sub-bg: #F0F7FF;
   --card-border: #DBEAFE;
@@ -267,4 +267,41 @@ body.theme-light .navbar-brand-store {
 
 .cart-text-label {
   color: var(--navbar-text) !important;
+}
+
+/* ================= BENTO & CARD EXPLICIT TYPOGRAPHY ================= */
+.bento-card p,
+.themed-card p {
+  color: var(--text-subtext) !important;
+  font-weight: 500 !important;
+  line-height: 1.62 !important;
+}
+
+.bento-card h3,
+.themed-card h3,
+.bento-card h4,
+.themed-card h4,
+.bento-card h5,
+.themed-card h5 {
+  color: var(--text-heading) !important;
+}
+
+.bento-card .text-slate-500,
+.bento-card .text-slate-400,
+.bento-card .text-slate-300,
+.themed-card .text-slate-500,
+.themed-card .text-slate-400,
+.themed-card .text-slate-300 {
+  color: var(--text-subtext) !important;
+}
+
+.bento-card em {
+  color: var(--text-heading) !important;
+  font-style: italic;
+  font-weight: 600;
+}
+
+html.theme-light .bento-card em,
+body.theme-light .bento-card em {
+  color: #1D4ED8 !important;
 }
