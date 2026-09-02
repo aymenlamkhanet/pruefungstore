@@ -311,6 +311,14 @@ function renderCatalog() {
     if (state.activeLevel === "packs" && !b.isPack) return false;
     if (state.activeLevel === "B1" && !b.level.includes("B1")) return false;
     if (state.activeLevel === "B2" && !b.level.includes("B2")) return false;
+    if (state.activeLevel === "telc") {
+      const isTelc = (b.examType && b.examType.toLowerCase().includes("telc")) || b.title.toLowerCase().includes("telc") || b.id.includes("telc");
+      if (!isTelc) return false;
+    }
+    if (state.activeLevel === "goethe") {
+      const isGoethe = (b.examType && (b.examType.toLowerCase().includes("goethe") || b.examType.toLowerCase().includes("ösd"))) || b.title.toLowerCase().includes("goethe") || b.title.toLowerCase().includes("ösd") || b.id.includes("goethe");
+      if (!isGoethe) return false;
+    }
     return true;
   });
 

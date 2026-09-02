@@ -342,8 +342,11 @@
           <button onclick="filterCatalog('all')" data-level="all" class="level-filter-btn active px-4 py-2 rounded-full text-xs font-bold bg-white text-black shadow-lg transition-all">
             Tous les articles
           </button>
-          <button onclick="filterCatalog('packs')" data-level="packs" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white/10 text-slate-300 hover:bg-white/20 transition-all">
-            ★ Packs Complets
+          <button onclick="filterCatalog('telc')" data-level="telc" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white/10 text-slate-300 hover:bg-white/20 transition-all">
+            🇩🇪 Catégorie TELC
+          </button>
+          <button onclick="filterCatalog('goethe')" data-level="goethe" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white/10 text-slate-300 hover:bg-white/20 transition-all">
+            🇩🇪 Catégorie GOETHE • ÖSD
           </button>
           <button onclick="filterCatalog('B1')" data-level="B1" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white/10 text-slate-300 hover:bg-white/20 transition-all">
             Niveau B1
@@ -352,6 +355,207 @@
             Niveau B2
           </button>
         </div>
+      </div>
+
+      <!-- ================= CATÉGORIES SELON LE DESSIN : TELC & GOETHE-ÖSD (B1 & B2) ================= -->
+      <div class="mb-16 space-y-8">
+        
+        <!-- Header explicatif -->
+        <div class="text-center max-w-2xl mx-auto space-y-2">
+          <span class="px-3.5 py-1 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wider">
+            Architecture Officielle par Catégorie
+          </span>
+          <h3 class="font-outfit font-black text-2xl sm:text-3xl text-white">
+            Nos Deux Filières Principales : TELC & GOETHE-ÖSD
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-400">
+            Retrouvez pour chaque organisme votre pack d'examen complet avec corrigés et audios.
+          </p>
+        </div>
+
+        <!-- Grille 2 Grandes Catégories (TELC vs GOETHE-ÖSD) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          
+          <!-- ================= COLONNE 1 : CATÉGORIE TELC ================= -->
+          <div class="rounded-3xl p-6 sm:p-7 bg-[#121216]/90 border-2 border-amber-500/40 shadow-2xl backdrop-blur-xl flex flex-col justify-between relative overflow-hidden">
+            <!-- Background glow -->
+            <div class="absolute -top-10 -right-10 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div>
+              <!-- Header Catégorie TELC -->
+              <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 font-black font-outfit text-base flex items-center justify-center">
+                    🇩🇪
+                  </div>
+                  <div>
+                    <h4 class="font-outfit font-black text-2xl text-white tracking-tight">Catégorie TELC</h4>
+                    <p class="text-[11px] text-amber-400 font-semibold uppercase tracking-wider">telc Deutsch B1 & B2 Zertifikat</p>
+                  </div>
+                </div>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-slate-300 text-xs font-bold">2 Packs Disponibles</span>
+              </div>
+
+              <!-- Sous-grille Pack B1 & Pack B2 -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                
+                <!-- TELC - PACK B1 -->
+                <div class="rounded-2xl p-4 bg-black/50 border border-white/10 hover:border-amber-500/50 transition flex flex-col justify-between">
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                      <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-black font-outfit font-black text-[10px]">PACK B1</span>
+                      <span class="font-outfit font-black text-white text-base">235 DH</span>
+                    </div>
+
+                    <div class="h-36 w-full rounded-xl bg-black/60 p-2 flex items-center justify-center border border-white/5 overflow-hidden">
+                      <img src="assets/products/pack-b1.png" alt="Pack B1 TELC" class="max-h-full object-contain hover:scale-105 transition">
+                    </div>
+
+                    <div>
+                      <h5 class="font-outfit font-extrabold text-sm text-white">Pack B1 TELC (2026)</h5>
+                      <span class="text-[10px] text-amber-400 font-bold block mb-1">الوصف (Description) :</span>
+                      <p class="text-[11px] text-slate-300 leading-relaxed">
+                        Enthält alle Prüfungen : Lesen (Teil 1-3), Sprachbausteine, Hören (Google Drive MP3), Schreiben (modèles) + Sprechen. 25 Modelltests réels avec 100% corrigés.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="pt-3 mt-3 border-t border-white/10 flex items-center gap-2">
+                    <button onclick="orderOnWhatsApp('pack-b1-telc-2026')" class="flex-1 py-2 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-[11px] flex items-center justify-center gap-1.5 shadow-md">
+                      <span>Commander</span>
+                    </button>
+                    <button onclick="openBookModal('pack-b1-telc-2026')" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-[11px]">
+                      Détails
+                    </button>
+                  </div>
+                </div>
+
+                <!-- TELC - PACK B2 -->
+                <div class="rounded-2xl p-4 bg-black/50 border border-white/10 hover:border-amber-500/50 transition flex flex-col justify-between">
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                      <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-black font-outfit font-black text-[10px]">PACK B2</span>
+                      <span class="font-outfit font-black text-white text-base">260 DH</span>
+                    </div>
+
+                    <div class="h-36 w-full rounded-xl bg-black/60 p-2 flex items-center justify-center border border-white/5 overflow-hidden">
+                      <img src="assets/products/telc-real-collection.jpg" alt="Pack B2 TELC" class="max-h-full object-contain hover:scale-105 transition">
+                    </div>
+
+                    <div>
+                      <h5 class="font-outfit font-extrabold text-sm text-white">Pack B2 TELC Complet</h5>
+                      <span class="text-[10px] text-amber-400 font-bold block mb-1">الوصف (Description) :</span>
+                      <p class="text-[11px] text-slate-300 leading-relaxed">
+                        Collection intégrale 4 modules B2 : Lesen, Sprachbausteine (grammaire avancée), Hören (MP3 HD), Schreiben et Mündlicher Ausdruck. Barème officiel telc 2026.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="pt-3 mt-3 border-t border-white/10 flex items-center gap-2">
+                    <button onclick="orderOnWhatsApp('pack-b2-telc-complet')" class="flex-1 py-2 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-[11px] flex items-center justify-center gap-1.5 shadow-md">
+                      <span>Commander</span>
+                    </button>
+                    <button onclick="openBookModal('pack-b2-telc-complet')" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-[11px]">
+                      Détails
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= COLONNE 2 : CATÉGORIE GOETHE • ÖSD ================= -->
+          <div class="rounded-3xl p-6 sm:p-7 bg-[#121216]/90 border-2 border-red-500/40 shadow-2xl backdrop-blur-xl flex flex-col justify-between relative overflow-hidden">
+            <!-- Background glow -->
+            <div class="absolute -top-10 -right-10 w-48 h-48 bg-red-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div>
+              <!-- Header Catégorie Goethe-ÖSD -->
+              <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-red-500/20 border border-red-500/40 text-red-400 font-black font-outfit text-base flex items-center justify-center">
+                    🇩🇪
+                  </div>
+                  <div>
+                    <h4 class="font-outfit font-black text-2xl text-white tracking-tight">Catégorie GOETHE • ÖSD</h4>
+                    <p class="text-[11px] text-red-400 font-semibold uppercase tracking-wider">Goethe-Zertifikat & ÖSD B1 & B2</p>
+                  </div>
+                </div>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-slate-300 text-xs font-bold">2 Packs Disponibles</span>
+              </div>
+
+              <!-- Sous-grille Pack B1 & Pack B2 -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                
+                <!-- GOETHE-ÖSD - PACK B1 -->
+                <div class="rounded-2xl p-4 bg-black/50 border border-white/10 hover:border-red-500/50 transition flex flex-col justify-between">
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                      <span class="px-2.5 py-0.5 rounded-full bg-red-600 text-white font-outfit font-black text-[10px]">PACK B1</span>
+                      <span class="font-outfit font-black text-white text-base">235 DH</span>
+                    </div>
+
+                    <div class="h-36 w-full rounded-xl bg-black/60 p-2 flex items-center justify-center border border-white/5 overflow-hidden">
+                      <img src="assets/products/goethe-osd-b1-b2.jpg" alt="Pack B1 Goethe ÖSD" class="max-h-full object-contain hover:scale-105 transition">
+                    </div>
+
+                    <div>
+                      <h5 class="font-outfit font-extrabold text-sm text-white">Pack B1 GOETHE - ÖSD</h5>
+                      <span class="text-[10px] text-amber-400 font-bold block mb-1">الوصف (Description) :</span>
+                      <p class="text-[11px] text-slate-300 leading-relaxed">
+                        25 Modelltests complets avec toutes les solutions commentées (Mit Lösungen). QR-Codes instantanés pour écouter les audios sur smartphone. Couvre les 4 compétences.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="pt-3 mt-3 border-t border-white/10 flex items-center gap-2">
+                    <button onclick="orderOnWhatsApp('pack-goethe-osd-b1-b2')" class="flex-1 py-2 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-[11px] flex items-center justify-center gap-1.5 shadow-md">
+                      <span>Commander</span>
+                    </button>
+                    <button onclick="openBookModal('pack-goethe-osd-b1-b2')" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-[11px]">
+                      Détails
+                    </button>
+                  </div>
+                </div>
+
+                <!-- GOETHE-ÖSD - PACK B2 -->
+                <div class="rounded-2xl p-4 bg-black/50 border border-white/10 hover:border-red-500/50 transition flex flex-col justify-between">
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                      <span class="px-2.5 py-0.5 rounded-full bg-red-600 text-white font-outfit font-black text-[10px]">PACK B2</span>
+                      <span class="font-outfit font-black text-white text-base">235 DH</span>
+                    </div>
+
+                    <div class="h-36 w-full rounded-xl bg-black/60 p-2 flex items-center justify-center border border-white/5 overflow-hidden">
+                      <img src="assets/products/goethe-osd-b1-b2.jpg" alt="Pack B2 Goethe ÖSD" class="max-h-full object-contain hover:scale-105 transition">
+                    </div>
+
+                    <div>
+                      <h5 class="font-outfit font-extrabold text-sm text-white">Pack B2 GOETHE - ÖSD</h5>
+                      <span class="text-[10px] text-amber-400 font-bold block mb-1">الوصف (Description) :</span>
+                      <p class="text-[11px] text-slate-300 leading-relaxed">
+                        25 examens modèles de niveau avancé B2 avec barèmes officiels et corrigés complets. Format paysage avec reliure spirale ultra-confortable pour les révisions intensives.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="pt-3 mt-3 border-t border-white/10 flex items-center gap-2">
+                    <button onclick="orderOnWhatsApp('pack-goethe-osd-b1-b2')" class="flex-1 py-2 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-[11px] flex items-center justify-center gap-1.5 shadow-md">
+                      <span>Commander</span>
+                    </button>
+                    <button onclick="openBookModal('pack-goethe-osd-b1-b2')" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-[11px]">
+                      Détails
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
       </div>
 
       <!-- Catalog Grid with 3D Tilt Cards -->
