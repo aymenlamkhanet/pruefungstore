@@ -436,3 +436,105 @@ body.theme-light .capsule-pill.active {
   border-color: #1D4ED8 !important;
   box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4) !important;
 }
+
+/* ================= COMPARISON TABLE HIGH CONTRAST TYPOGRAPHY ================= */
+.themed-table table,
+.themed-table td {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  transition: color 0.3s ease;
+}
+
+/* Light Mode: 100% High Contrast & Razor Sharp Legibility */
+html.theme-light .themed-table {
+  background: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.theme-light .themed-table thead {
+  background: #F8FAFC !important;
+  border-bottom: 2px solid #E2E8F0 !important;
+}
+
+html.theme-light .themed-table thead th {
+  color: #0F172A !important;
+  font-weight: 800 !important;
+}
+
+html.theme-light .themed-table thead th:nth-child(2) {
+  color: #B45309 !important; /* Rich Dark Amber */
+}
+
+html.theme-light .themed-table thead th:nth-child(3) {
+  color: #0369A1 !important; /* Rich Deep Cyan */
+}
+
+html.theme-light .themed-table thead th:nth-child(4) {
+  color: #6D28D9 !important; /* Rich Deep Purple */
+}
+
+html.theme-light .themed-table tbody tr {
+  border-bottom: 1px solid #F1F5F9 !important;
+}
+
+html.theme-light .themed-table tbody tr:hover {
+  background: #F8FAFC !important;
+}
+
+html.theme-light .themed-table td {
+  color: #1E293B !important; /* Deep Charcoal Slate - 100% Legible */
+  font-weight: 600 !important;
+}
+
+html.theme-light .themed-table td.themed-heading {
+  color: #0F172A !important; /* Bold Midnight Black */
+  font-weight: 800 !important;
+}
+
+/* Dark Mode: Luminous Silver & White Contrast */
+html.theme-dark .themed-table {
+  background: rgba(10, 15, 26, 0.75) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+html.theme-dark .themed-table thead {
+  background: rgba(15, 23, 42, 0.85) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+html.theme-dark .themed-table thead th {
+  color: #FFFFFF !important;
+  font-weight: 800 !important;
+}
+
+html.theme-dark .themed-table thead th:nth-child(2) {
+  color: #FBBF24 !important;
+}
+
+html.theme-dark .themed-table thead th:nth-child(3) {
+  color: #38BDF8 !important;
+}
+
+html.theme-dark .themed-table thead th:nth-child(4) {
+  color: #C084FC !important;
+}
+
+html.theme-dark .themed-table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+html.theme-dark .themed-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+html.theme-dark .themed-table td {
+  color: #E2E8F0 !important; /* Crisp Luminous Silver */
+  font-weight: 500 !important;
+}
+
+html.theme-dark .themed-table td.themed-heading {
+  color: #FFFFFF !important;
+  font-weight: 800 !important;
+}
