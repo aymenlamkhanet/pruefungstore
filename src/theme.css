@@ -317,3 +317,33 @@ html.theme-dark .category-title-blue,
 body.theme-dark .category-title-blue {
   color: #60A5FA !important;
 }
+
+/* ================= LEVEL FILTER PILL BUTTONS ================= */
+.level-filter-btn {
+  background: var(--card-bg) !important;
+  color: var(--text-heading) !important;
+  border: 1px solid var(--card-border) !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer;
+}
+
+.level-filter-btn:hover {
+  background: var(--quickview-btn-hover) !important;
+  border-color: #3B82F6 !important;
+  color: #2563EB !important;
+}
+
+.level-filter-btn.active {
+  background: #2563EB !important;
+  color: #FFFFFF !important;
+  border-color: #2563EB !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
+}
+
+html.theme-dark .level-filter-btn.active,
+body.theme-dark .level-filter-btn.active {
+  background: #3B82F6 !important;
+  color: #FFFFFF !important;
+  border-color: #60A5FA !important;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.45) !important;
+}

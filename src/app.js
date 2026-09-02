@@ -415,9 +415,9 @@ function filterCatalog(level) {
   state.activeLevel = level;
   document.querySelectorAll(".level-filter-btn").forEach(btn => {
     if (btn.dataset.level === level) {
-      btn.className = "level-filter-btn active px-4 py-2 rounded-full text-xs font-bold bg-blue-600 text-white shadow-md shadow-blue-500/30 transition-all";
+      btn.classList.add("active");
     } else {
-      btn.className = "level-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all";
+      btn.classList.remove("active");
     }
   });
   renderCatalog();
