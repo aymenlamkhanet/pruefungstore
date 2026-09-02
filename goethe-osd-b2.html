@@ -15,43 +15,42 @@
 
   <style>
     body {
-      background-color: #F8FAFC;
+      background-color: #060608;
       color: #0F172A;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
     .frosted-glass {
-      background: rgba(255, 255, 255, 0.90);
+      background: rgba(10, 15, 30, 0.85);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white relative bg-[#F8FAFC]">
+<body class="min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white relative bg-[#060608]">
 
-  <!-- Background Luminous Aura -->
-  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#F8FAFC]">
-    <div class="absolute -top-40 -right-40 w-[600px] h-[600px] bg-blue-100/70 rounded-full blur-[120px]"></div>
-    <div class="absolute top-1/3 -left-40 w-[500px] h-[500px] bg-sky-100/60 rounded-full blur-[100px]"></div>
-    <div class="absolute bottom-10 right-1/4 w-[450px] h-[450px] bg-indigo-50/80 rounded-full blur-[110px]"></div>
+  <!-- ================= GEMINI CINEMATIC LIBRARY BACKGROUND ================= -->
+  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+    <img src="assets/site-bg.jpg" alt="Gemini Library Background" class="w-full h-full object-cover object-center filter brightness-[0.75] contrast-115 scale-105 transform">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#060608]/70 via-[#060608]/50 to-[#060608]/80 backdrop-blur-[1px]"></div>
   </div>
 
   <!-- Top Navbar -->
-  <header class="fixed top-0 left-0 right-0 z-50 frosted-glass border-b border-blue-100 shadow-sm">
+  <header class="fixed top-0 left-0 right-0 z-50 frosted-glass border-b border-white/10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-2.5 group">
-        <img src="assets/logo.jpg" alt="Logo" class="w-8 h-8 rounded-lg object-cover border border-blue-300">
-        <span class="font-outfit font-extrabold text-lg tracking-tight text-slate-900 flex items-center">
-          Prüfung<span class="text-blue-600">Store</span>
-          <span class="text-[10px] text-blue-700 font-mono ml-1.5 px-1.5 py-0.2 rounded bg-blue-50 border border-blue-200">PRO</span>
+        <img src="assets/logo.jpg" alt="Logo" class="w-8 h-8 rounded-lg object-cover border border-blue-400">
+        <span class="font-outfit font-extrabold text-lg tracking-tight text-white flex items-center">
+          Prüfung<span class="text-blue-400">Store</span>
+          <span class="text-[10px] text-blue-300 font-mono ml-1.5 px-1.5 py-0.2 rounded bg-blue-900/60 border border-blue-500/40">PRO</span>
         </span>
       </a>
 
-      <nav class="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-600">
-        <a href="index.html" class="hover:text-blue-600 transition flex items-center gap-1">
+      <nav class="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-300">
+        <a href="index.html" class="hover:text-blue-400 transition flex items-center gap-1">
           <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Retour au Catalogue
         </a>
-        <a href="index.html#catalog-section" class="hover:text-blue-600 transition">Nos Catégories</a>
-        <a href="admin.html" class="hover:text-blue-600 transition">Espace Admin 🔐</a>
+        <a href="index.html#catalog-section" class="hover:text-blue-400 transition">Nos Catégories</a>
+        <a href="admin.html" class="hover:text-blue-400 transition">Espace Admin 🔐</a>
       </nav>
 
       <div class="flex items-center gap-3">
@@ -67,12 +66,12 @@
   <main class="relative z-10 pt-28 pb-20 flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
     
     <!-- Breadcrumb -->
-    <div class="flex items-center gap-2 text-xs text-slate-500 mb-8">
-      <a href="index.html" class="hover:text-blue-600 transition">Boutique</a>
+    <div class="flex items-center gap-2 text-xs text-slate-400 mb-8">
+      <a href="index.html" class="hover:text-blue-400 transition">Boutique</a>
       <span>/</span>
-      <span class="text-blue-600 font-semibold">Catégorie GOETHE • ÖSD • Niveau B2</span>
+      <span class="text-blue-400 font-semibold">Catégorie GOETHE • ÖSD • Niveau B2</span>
       <span>/</span>
-      <span class="text-slate-900 font-bold truncate max-w-xs">Pack B2 GOETHE - ÖSD Prüfung (25 Tests)</span>
+      <span class="text-white font-bold truncate max-w-xs">Pack B2 GOETHE - ÖSD Prüfung (25 Tests)</span>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
@@ -80,7 +79,7 @@
       <!-- Colonne Gauche : Visuel & Fiche Technique -->
       <div class="lg:col-span-6 space-y-6">
         
-        <div class="relative w-full rounded-3xl bg-white border border-blue-100 p-8 flex items-center justify-center overflow-hidden shadow-xl shadow-blue-900/5 group">
+        <div class="relative w-full rounded-3xl bg-white border-2 border-blue-200 p-8 flex items-center justify-center overflow-hidden shadow-2xl shadow-blue-900/20 group">
           <div class="absolute top-4 left-4 z-10 flex items-center gap-2">
             <span class="px-3 py-1 rounded-full bg-blue-600 text-white font-outfit font-black text-xs uppercase tracking-wider shadow-md">
               Édition 2026
@@ -94,26 +93,26 @@
         </div>
 
         <!-- Fiche Caractéristiques -->
-        <div class="p-6 rounded-3xl bg-white border border-blue-100 shadow-lg shadow-blue-900/5 space-y-3.5 text-xs">
+        <div class="p-6 rounded-3xl bg-white border border-blue-100 shadow-xl space-y-3.5 text-xs text-slate-800">
           <h4 class="font-outfit font-bold text-sm text-slate-900 uppercase tracking-wider flex items-center gap-2">
             <i data-lucide="shield-check" class="w-4 h-4 text-blue-600"></i>
             <span>Garanties & Spécifications Officielles</span>
           </h4>
 
           <div class="grid grid-cols-2 gap-3 pt-2">
-            <div class="p-3.5 rounded-2xl bg-blue-50/50 border border-blue-100 space-y-1">
+            <div class="p-3.5 rounded-2xl bg-blue-50/60 border border-blue-100 space-y-1">
               <span class="text-slate-500 block text-[11px]">Format d'étude :</span>
               <span class="font-bold text-slate-900 block">Format Paysage Spirale • 300 Pages</span>
             </div>
-            <div class="p-3.5 rounded-2xl bg-blue-50/50 border border-blue-100 space-y-1">
+            <div class="p-3.5 rounded-2xl bg-blue-50/60 border border-blue-100 space-y-1">
               <span class="text-slate-500 block text-[11px]">Volume :</span>
               <span class="font-bold text-slate-900 block">300 Pages</span>
             </div>
-            <div class="p-3.5 rounded-2xl bg-blue-50/50 border border-blue-100 space-y-1">
+            <div class="p-3.5 rounded-2xl bg-blue-50/60 border border-blue-100 space-y-1">
               <span class="text-slate-500 block text-[11px]">Fichiers Audio :</span>
               <span class="font-bold text-blue-600 block">QR-Codes audio instantanés + Google Drive MP3</span>
             </div>
-            <div class="p-3.5 rounded-2xl bg-blue-50/50 border border-blue-100 space-y-1">
+            <div class="p-3.5 rounded-2xl bg-blue-50/60 border border-blue-100 space-y-1">
               <span class="text-slate-500 block text-[11px]">Livraison :</span>
               <span class="font-bold text-emerald-600 block">Gratuite partout au Maroc</span>
             </div>
@@ -126,53 +125,53 @@
       <div class="lg:col-span-6 space-y-6">
         
         <div>
-          <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 uppercase tracking-wider">
+          <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-blue-900/60 text-blue-300 border border-blue-400/40 uppercase tracking-wider">
             Catégorie GOETHE • ÖSD • Niveau B2
           </span>
-          <h1 class="font-outfit text-3xl sm:text-4xl font-black text-slate-900 mt-3 leading-tight">
+          <h1 class="font-outfit text-3xl sm:text-4xl font-black text-white mt-3 leading-tight drop-shadow">
             Pack B2 GOETHE - ÖSD Prüfung (25 Tests)
           </h1>
-          <p class="text-sm text-slate-500 mt-2">25 Modelltests B2 avancés avec barèmes officiels et corrigés exhaustifs</p>
+          <p class="text-sm text-slate-300 mt-2">25 Modelltests B2 avancés avec barèmes officiels et corrigés exhaustifs</p>
         </div>
 
         <!-- Description Complète (الوصف) -->
-        <div class="p-6 rounded-3xl bg-white border border-blue-100 shadow-md space-y-3">
+        <div class="p-6 rounded-3xl bg-white border border-blue-100 shadow-xl space-y-3">
           <h4 class="font-outfit font-black text-sm text-blue-700 uppercase tracking-wider flex items-center justify-between">
             <span>الوصف détaillé du manuel :</span>
             <span class="text-slate-400 text-xs font-normal">Programme officiel 2026</span>
           </h4>
-          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+          <p class="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
             La préparation d'excellence pour valider le Goethe-Zertifikat B2 ou l'ÖSD Zertifikat B2. Conçu pour développer l'aisance lexicale, la rigueur argumentative et la rapidité requises lors de la session d'examen. Chaque test reproduit fidèlement la durée, la typologie des questions et les critères d'évaluation des jurys.
           </p>
         </div>
 
         <!-- Points Clés -->
         <div class="space-y-3">
-          <h4 class="font-outfit font-bold text-xs uppercase tracking-wider text-slate-500">Ce que contient ce pack :</h4>
+          <h4 class="font-outfit font-bold text-xs uppercase tracking-wider text-slate-300">Ce que contient ce pack :</h4>
           <ul class="space-y-2.5">
             
-              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-700">
-                <i data-lucide="check-circle" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
+              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-200">
+                <i data-lucide="check-circle" class="w-4 h-4 text-blue-400 shrink-0 mt-0.5"></i>
                 <span>25 épreuves blanches complètes calibrées sur les standards Goethe/ÖSD 2026</span>
               </li>
             
-              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-700">
-                <i data-lucide="check-circle" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
+              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-200">
+                <i data-lucide="check-circle" class="w-4 h-4 text-blue-400 shrink-0 mt-0.5"></i>
                 <span>Textes authentiques de haut niveau avec questions à choix multiples et synthèses</span>
               </li>
             
-              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-700">
-                <i data-lucide="check-circle" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
+              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-200">
+                <i data-lucide="check-circle" class="w-4 h-4 text-blue-400 shrink-0 mt-0.5"></i>
                 <span>Module d’expression écrite : fiches modèles de courriers formels et commentaires critiques</span>
               </li>
             
-              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-700">
-                <i data-lucide="check-circle" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
+              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-200">
+                <i data-lucide="check-circle" class="w-4 h-4 text-blue-400 shrink-0 mt-0.5"></i>
                 <span>Épreuve orale B2 : fiches thématiques de débat et techniques d’interaction</span>
               </li>
             
-              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-700">
-                <i data-lucide="check-circle" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
+              <li class="flex items-start gap-3 text-xs sm:text-sm text-slate-200">
+                <i data-lucide="check-circle" class="w-4 h-4 text-blue-400 shrink-0 mt-0.5"></i>
                 <span>Solutions commentées et feuilles de réponses officielles détachables pour s’entraîner en conditions réelles</span>
               </li>
             
