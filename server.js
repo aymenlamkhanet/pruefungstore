@@ -47,9 +47,13 @@ function startServer(portToTry) {
     console.log('\n=============================================================');
     console.log('  🇩🇪  PrüfungStore Pro • ABDEUTSCH CENTER (Serveur Actif)  ');
     console.log('=============================================================');
-    console.log('  🛍️  Boutique Publique : http://localhost:' + portToTry + '/');
-    console.log('  🔐  Espace Admin     : http://localhost:' + portToTry + '/admin.html');
-    console.log('  📊  Dashboard BI     : http://localhost:' + portToTry + '/student-assessment.html');
+    console.log('  🛍️  Boutique Publique   : http://localhost:' + portToTry + '/');
+    console.log('  📖  Pack B1 TELC        : http://localhost:' + portToTry + '/pack-b1-telc.html');
+    console.log('  📖  Pack B2 TELC        : http://localhost:' + portToTry + '/pack-b2-telc.html');
+    console.log('  📖  Pack B1 GOETHE-ÖSD  : http://localhost:' + portToTry + '/goethe-osd-b1.html');
+    console.log('  📖  Pack B2 GOETHE-ÖSD  : http://localhost:' + portToTry + '/goethe-osd-b2.html');
+    console.log('  🔐  Espace Admin        : http://localhost:' + portToTry + '/admin.html');
+    console.log('  📊  Dashboard BI        : http://localhost:' + portToTry + '/student-assessment.html');
     console.log('=============================================================\n');
   });
 }
