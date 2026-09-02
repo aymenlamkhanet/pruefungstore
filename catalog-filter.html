@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filtre & Recherche Indépendants • PrüfungStore Pro</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at 50% 0%, #1a0b2e 0%, #0d0614 45%, #05020a 100%);
+      min-height: 100vh;
+      color: #FFFFFF;
+    }
+
+    /* Search Pill Input */
+    .search-pill-input {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #FFFFFF;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .search-pill-input:focus {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.08);
+    }
+    .search-pill-input::placeholder {
+      color: #94A3B8;
+    }
+
+    /* Featured Button with Amber Glow (Exact match to reference screenshot) */
+    .featured-pill-btn {
+      background: rgba(26, 11, 46, 0.6);
+      color: #FFFFFF;
+      border: 2px solid #F59E0B;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.35);
+      transition: all 0.3s ease;
+    }
+    .featured-pill-btn:hover {
+      background: rgba(245, 158, 11, 0.15);
+      box-shadow: 0 0 24px rgba(245, 158, 11, 0.55);
+      transform: translateY(-1px);
+    }
+
+    /* Capsule Pills (Exact shape and styling from reference screenshot) */
+    .capsule-pill {
+      padding: 0.55rem 1.4rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(255, 255, 255, 0.05);
+      color: #E2E8F0;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      user-select: none;
+    }
+
+    .capsule-pill:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #FFFFFF;
+      border-color: rgba(255, 255, 255, 0.28);
+      transform: translateY(-1px);
+    }
+
+    /* Active Capsule Pill: Signature Vibrant Neon Gradient like screenshot */
+    .capsule-pill.active {
+      background: linear-gradient(135deg, #EC4899 0%, #A855F7 100%) !important;
+      color: #FFFFFF !important;
+      border: 1px solid rgba(255, 255, 255, 0.4) !important;
+      box-shadow: 0 4px 22px rgba(236, 72, 153, 0.6) !important;
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body class="p-4 sm:p-8 flex flex-col justify-between">
+
+  <!-- Top Navigation Header -->
+  <header class="max-w-6xl mx-auto w-full flex items-center justify-between pb-8 border-b border-white/10">
+    <a href="index.html" class="flex items-center gap-3 group">
+      <img src="assets/official-logo.png" alt="Logo" class="w-9 h-9 rounded-xl object-contain bg-white p-0.5 shadow-md border border-white/20">
+      <div>
+        <span class="font-outfit font-black text-lg tracking-tight text-white flex items-center">
+          Prüfung<span class="text-blue-400">Store</span>
+          <span class="text-[10px] text-blue-300 font-mono ml-2 px-1.5 py-0.2 rounded bg-blue-900/60 border border-blue-500/40">COMPOSANT AUTONOME</span>
+        </span>
+      </div>
+    </a>
+
+    <div class="flex items-center gap-3">
+      <a href="index.html" class="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition flex items-center gap-1.5 border border-white/10">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+        <span>Retour Boutique</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ================= COMPOSANT DE RECHERCHE & FILTRES INDÉPENDANT ================= -->
+  <main class="max-w-5xl mx-auto w-full my-auto py-12">
+    
+    <!-- Title & Subtitle Centered (Exact match to screenshot) -->
+    <div class="text-center max-w-2xl mx-auto mb-8 space-y-2">
+      <p class="text-xs sm:text-sm text-slate-300 font-medium tracking-wide">
+        Discover premium exam books designed to make you succeed
+      </p>
+      <h1 class="font-outfit font-black text-3xl sm:text-5xl text-white tracking-tight">
+        Module de Recherche & Filtres
+      </h1>
+    </div>
+
+    <!-- Container Frame -->
+    <div class="rounded-3xl p-6 sm:p-8 bg-black/40 border border-white/10 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+      <!-- Glow ambient light -->
+      <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-80 h-40 bg-pink-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- ROW 1: Search Pill Bar + Featured Pill Dropdown -->
+      <div class="flex flex-col sm:flex-row items-center gap-3 max-w-3xl mx-auto mb-6 relative z-10">
+        <!-- Elongated Pill Search Input -->
+        <div class="relative flex-1 w-full">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+            <i data-lucide="search" class="w-4 h-4"></i>
+          </div>
+          <input 
+            type="text" 
+            id="search-input" 
+            oninput="handleSearch(this.value)"
+            placeholder="Search designs, books, TELC, Goethe, B1, B2..." 
+            class="w-full pl-11 pr-10 py-3 rounded-full text-xs sm:text-sm search-pill-input focus:outline-none"
+          >
+          <button id="clear-btn" onclick="clearSearch()" class="hidden absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-white" title="Effacer">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <!-- Featured / Sort Pill Button with Amber Glowing Border -->
+        <div class="relative w-full sm:w-auto shrink-0">
+          <select 
+            id="sort-select" 
+            onchange="handleSort(this.value)" 
+            class="w-full sm:w-auto featured-pill-btn px-6 py-3 rounded-full text-xs font-bold cursor-pointer focus:outline-none appearance-none pr-10"
+          >
+            <option value="featured">Featured</option>
+            <option value="price-asc">Prix : Moins cher</option>
+            <option value="price-desc">Prix : Plus cher</option>
+            <option value="bestseller">Meilleures ventes</option>
+          </select>
+          <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-amber-400">
+            <i data-lucide="filter" class="w-3.5 h-3.5"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 2: Capsule Filter Pills (Exact layout from user screenshot) -->
+      <div class="flex flex-wrap items-center justify-center gap-2.5 relative z-10">
+        <button onclick="applyFilter('all', this)" class="capsule-pill active">
+          All
+        </button>
+        <button onclick="applyFilter('telc', this)" class="capsule-pill">
+          Catégorie TELC
+        </button>
+        <button onclick="applyFilter('goethe', this)" class="capsule-pill">
+          Catégorie GOETHE • ÖSD
+        </button>
+        <button onclick="applyFilter('B1', this)" class="capsule-pill">
+          Niveau B1
+        </button>
+        <button onclick="applyFilter('B2', this)" class="capsule-pill">
+          Niveau B2
+        </button>
+        <button onclick="applyFilter('packs', this)" class="capsule-pill">
+          Packs Complets
+        </button>
+        <button onclick="applyFilter('audios', this)" class="capsule-pill">
+          Audios MP3
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Interactive Live Results Preview -->
+    <div class="mt-10">
+      <div class="flex items-center justify-between mb-4 px-2">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" id="results-count">4 Manuels Affichés</span>
+        <span class="text-xs text-emerald-400 font-bold flex items-center gap-1">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          Filtrage temps réel actif
+        </span>
+      </div>
+
+      <!-- Product Cards Grid -->
+      <div id="results-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <!-- Injected dynamically by JavaScript below -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-6xl mx-auto w-full pt-8 border-t border-white/10 text-center text-xs text-slate-500">
+    <p>© 2026 PrüfungStore Pro • ABDEUTSCH CENTER. Tous droits réservés.</p>
+  </footer>
+
+  <!-- JavaScript Logic -->
+  <script>
+    const SAMPLE_ITEMS = [
+      {
+        id: "pack-b1-telc",
+        title: "Pack B1 TELC (2026)",
+        subtitle: "25 Modelltests réels avec corrigés complets et audios MP3",
+        category: "telc",
+        level: "B1",
+        isPack: true,
+        price: 235,
+        image: "assets/products/pack-b1.png",
+        url: "pack-b1-telc.html"
+      },
+      {
+        id: "pack-b2-telc",
+        title: "Pack B2 TELC Complet",
+        subtitle: "Collection intégrale 4 modules B2 avec barème officiel 2026",
+        category: "telc",
+        level: "B2",
+        isPack: true,
+        price: 260,
+        image: "assets/products/telc-real-collection.jpg",
+        url: "pack-b2-telc.html"
+      },
+      {
+        id: "goethe-osd-b1",
+        title: "Pack B1 Goethe • ÖSD",
+        subtitle: "Préparation certifiée Goethe-Zertifikat B1 et diplôme ÖSD",
+        category: "goethe",
+        level: "B1",
+        isPack: true,
+        price: 235,
+        image: "assets/products/goethe-osd-b1-b2.jpg",
+        url: "goethe-osd-b1.html"
+      },
+      {
+        id: "goethe-osd-b2",
+        title: "Pack B2 Goethe • ÖSD",
+        subtitle: "Zertifikat B2 & ÖSD Mittelstufe Deutsch avec corrigés",
+        category: "goethe",
+        level: "B2",
+        isPack: true,
+        price: 235,
+        image: "assets/products/goethe-osd-b1-b2.jpg",
+        url: "goethe-osd-b2.html"
+      }
+    ];
+
+    let currentFilter = 'all';
+    let currentSearch = '';
+    let currentSort = 'featured';
+
+    function renderItems() {
+      const grid = document.getElementById("results-grid");
+      const countEl = document.getElementById("results-count");
+      if (!grid) return;
+
+      let filtered = SAMPLE_ITEMS.filter(item => {
+        // Category / Level filter
+        if (currentFilter === 'telc' && item.category !== 'telc') return false;
+        if (currentFilter === 'goethe' && item.category !== 'goethe') return false;
+        if (currentFilter === 'B1' && item.level !== 'B1') return false;
+        if (currentFilter === 'B2' && item.level !== 'B2') return false;
+        if (currentFilter === 'packs' && !item.isPack) return false;
+
+        // Search query filter
+        if (currentSearch) {
+          const matchTitle = item.title.toLowerCase().includes(currentSearch);
+          const matchSub = item.subtitle.toLowerCase().includes(currentSearch);
+          const matchCat = item.category.toLowerCase().includes(currentSearch);
+          const matchLvl = item.level.toLowerCase().includes(currentSearch);
+          if (!matchTitle && !matchSub && !matchCat && !matchLvl) return false;
+        }
+
+        return true;
+      });
+
+      // Sorting
+      if (currentSort === 'price-asc') {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (currentSort === 'price-desc') {
+        filtered.sort((a, b) => b.price - a.price);
+      }
+
+      countEl.textContent = filtered.length + " Manuel(s) Trouvé(s)";
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-12 bg-white/5 rounded-2xl border border-white/10">
+            <p class="text-slate-400 text-sm">Aucun résultat trouvé pour votre recherche.</p>
+            <button onclick="clearSearch()" class="mt-3 px-4 py-1.5 rounded-full bg-blue-600 text-white text-xs font-bold">
+              Réinitialiser
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => `
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-4 hover:border-blue-500/50 transition-all flex flex-col justify-between group">
+          <div>
+            <div class="h-36 w-full rounded-xl bg-black/60 flex items-center justify-center p-2 mb-3 overflow-hidden border border-white/5">
+              <img src="${item.image}" alt="${item.title}" class="max-h-full object-contain group-hover:scale-105 transition duration-300">
+            </div>
+            <div class="flex items-center gap-1.5 mb-1.5">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                ${item.level}
+              </span>
+              <span class="text-[10px] text-slate-400 font-semibold uppercase">
+                ${item.category === 'telc' ? 'TELC' : 'GOETHE • ÖSD'}
+              </span>
+            </div>
+            <h3 class="font-outfit font-extrabold text-sm text-white leading-snug group-hover:text-blue-400 transition">
+              ${item.title}
+            </h3>
+            <p class="text-[11px] text-slate-400 mt-1 line-clamp-2">
+              ${item.subtitle}
+            </p>
+          </div>
+
+          <div class="pt-3 mt-3 border-t border-white/10 flex items-center justify-between">
+            <span class="font-outfit font-black text-base text-amber-400">${item.price} DH</span>
+            <a href="${item.url}" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition">
+              Détails
+            </a>
+          </div>
+        </div>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function applyFilter(filter, el) {
+      currentFilter = filter;
+      document.querySelectorAll(".capsule-pill").forEach(btn => btn.classList.remove("active"));
+      if (el) el.classList.add("active");
+      renderItems();
+    }
+
+    function handleSearch(val) {
+      currentSearch = (val || "").trim().toLowerCase();
+      const clearBtn = document.getElementById("clear-btn");
+      if (clearBtn) {
+        if (currentSearch.length > 0) clearBtn.classList.remove("hidden");
+        else clearBtn.classList.add("hidden");
+      }
+      renderItems();
+    }
+
+    function clearSearch() {
+      const input = document.getElementById("search-input");
+      if (input) input.value = "";
+      handleSearch("");
+    }
+
+    function handleSort(val) {
+      currentSort = val;
+      renderItems();
+    }
+
+    // Initial Render
+    document.addEventListener("DOMContentLoaded", () => {
+      renderItems();
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
