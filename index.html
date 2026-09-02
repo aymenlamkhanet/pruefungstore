@@ -342,52 +342,81 @@
   <section id="catalog-section" class="py-20 border-t border-white/10 relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <!-- ================= CADRE BIEN STRUCTURÉ : HEADER & FILTRES DU CATALOGUE ================= -->
-      <div class="themed-card rounded-3xl p-6 sm:p-8 border shadow-xl mb-12 relative overflow-hidden backdrop-blur-md">
-        <!-- Glow accent inside frame -->
-        <div class="absolute -top-16 -right-16 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <!-- ================= SEARCH & PILL BAR (STYLE RÉFÉRENCE UTILISATEUR) ================= -->
+      <div class="themed-card rounded-3xl p-6 sm:p-8 border shadow-2xl mb-12 relative overflow-hidden backdrop-blur-md">
+        <!-- Glow subtle gradient in background -->
+        <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-48 bg-blue-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
-          
-          <!-- Titre et Sous-titre dans le cadre -->
-          <div class="max-w-xl space-y-2">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-500/40 text-[11px] font-bold uppercase tracking-wider">
-              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-              <span>Collection Officielle</span>
-            </div>
-            <h2 class="font-outfit text-2xl sm:text-4xl font-black themed-heading tracking-tight">
-              Choisissez votre Pack de Réussite.
-            </h2>
-            <p class="text-xs sm:text-sm themed-subtext leading-relaxed font-medium">
-              Tous les livres sont imprimés en haute qualité et accompagnés de leurs corrigés exhaustifs et audios.
-            </p>
-          </div>
-
-          <!-- Filtres intégrés et structurés dans le cadre -->
-          <div class="flex flex-col sm:items-end gap-2.5 shrink-0">
-            <span class="text-[11px] font-bold themed-muted uppercase tracking-wider">
-              Filtrer par examen ou niveau :
-            </span>
-            <div class="flex flex-wrap items-center gap-2">
-              <button onclick="filterCatalog('all')" data-level="all" class="level-filter-btn active px-4 py-2 rounded-full text-xs font-bold transition-all">
-                Tous les articles
-              </button>
-              <button onclick="filterCatalog('telc')" data-level="telc" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold transition-all">
-                Catégorie TELC
-              </button>
-              <button onclick="filterCatalog('goethe')" data-level="goethe" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold transition-all">
-                Catégorie GOETHE • ÖSD
-              </button>
-              <button onclick="filterCatalog('B1')" data-level="B1" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold transition-all">
-                Niveau B1
-              </button>
-              <button onclick="filterCatalog('B2')" data-level="B2" class="level-filter-btn px-4 py-2 rounded-full text-xs font-bold transition-all">
-                Niveau B2
-              </button>
-            </div>
-          </div>
-
+        <!-- Section Title & Subtitle Centered -->
+        <div class="text-center max-w-2xl mx-auto mb-6 space-y-1.5 relative z-10">
+          <span class="text-xs font-black tracking-widest uppercase themed-section-tag">CATALOGUE OFFICIEL</span>
+          <h2 class="font-outfit text-2xl sm:text-4xl font-black themed-heading tracking-tight">
+            Choisissez votre Pack de Réussite.
+          </h2>
+          <p class="text-xs sm:text-sm themed-subtext">
+            Recherchez et filtrez instantanément les manuels, niveaux et packs d'examen.
+          </p>
         </div>
+
+        <!-- Row 1: Search Bar + Featured Pill Dropdown (Exact match with user screenshot) -->
+        <div class="flex flex-col sm:flex-row items-center gap-3 max-w-4xl mx-auto mb-5 relative z-10">
+          <!-- Search Pill Input with Icon -->
+          <div class="relative flex-1 w-full">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+              <i data-lucide="search" class="w-4 h-4"></i>
+            </div>
+            <input 
+              type="text" 
+              id="catalog-search-input" 
+              oninput="handleCatalogSearch(this.value)"
+              placeholder="Search designs, packs, B1, B2, TELC, Goethe..." 
+              class="w-full pl-11 pr-10 py-3.5 rounded-full text-xs sm:text-sm search-pill-input transition-all duration-300 focus:outline-none"
+            >
+            <button id="clear-search-btn" onclick="clearCatalogSearch()" class="hidden absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-white" title="Effacer la recherche">
+              <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <!-- Featured / Sort Pill Button with signature amber glow -->
+          <div class="relative w-full sm:w-auto shrink-0">
+            <select 
+              id="catalog-sort-select" 
+              onchange="handleCatalogSort(this.value)" 
+              class="w-full sm:w-auto featured-pill-btn px-6 py-3.5 rounded-full text-xs font-bold cursor-pointer transition-all duration-300 focus:outline-none appearance-none pr-10"
+            >
+              <option value="featured">Featured ▾</option>
+              <option value="price-asc">Prix : Moins cher</option>
+              <option value="price-desc">Prix : Plus cher</option>
+              <option value="bestseller">Meilleures Ventes</option>
+            </select>
+            <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-amber-400">
+              <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: Centered Capsule Filter Pills (Exact layout from user screenshot) -->
+        <div class="flex flex-wrap items-center justify-center gap-2 relative z-10 pt-1">
+          <button onclick="filterCatalog('all')" data-level="all" class="capsule-pill active">
+            All
+          </button>
+          <button onclick="filterCatalog('telc')" data-level="telc" class="capsule-pill">
+            Catégorie TELC
+          </button>
+          <button onclick="filterCatalog('goethe')" data-level="goethe" class="capsule-pill">
+            Catégorie GOETHE • ÖSD
+          </button>
+          <button onclick="filterCatalog('B1')" data-level="B1" class="capsule-pill">
+            Niveau B1
+          </button>
+          <button onclick="filterCatalog('B2')" data-level="B2" class="capsule-pill">
+            Niveau B2
+          </button>
+          <button onclick="filterCatalog('packs')" data-level="packs" class="capsule-pill">
+            Packs Complets
+          </button>
+        </div>
+
       </div>
 
       <!-- ================= CATÉGORIES SELON LE DESSIN : TELC & GOETHE-ÖSD (B1 & B2) ================= -->

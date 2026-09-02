@@ -307,7 +307,7 @@ function renderCatalog() {
   const grid = document.getElementById("catalog-grid");
   if (!grid || typeof BOOKS === "undefined") return;
 
-  const filtered = BOOKS.filter(b => {
+  let filtered = BOOKS.filter(b => {
     if (state.activeLevel === "packs" && !b.isPack) return false;
     if (state.activeLevel === "B1" && !b.level.includes("B1")) return false;
     if (state.activeLevel === "B2" && !b.level.includes("B2")) return false;
@@ -319,8 +319,27 @@ function renderCatalog() {
       const isGoethe = (b.examType && (b.examType.toLowerCase().includes("goethe") || b.examType.toLowerCase().includes("ösd"))) || b.title.toLowerCase().includes("goethe") || b.title.toLowerCase().includes("ösd") || b.id.includes("goethe");
       if (!isGoethe) return false;
     }
+
+    // Search query filter
+    if (state.searchQuery) {
+      const matchTitle = b.title.toLowerCase().includes(state.searchQuery);
+      const matchSubtitle = (b.subtitle || "").toLowerCase().includes(state.searchQuery);
+      const matchExam = (b.examType || "").toLowerCase().includes(state.searchQuery);
+      const matchLevel = (b.level || "").toLowerCase().includes(state.searchQuery);
+      if (!matchTitle && !matchSubtitle && !matchExam && !matchLevel) return false;
+    }
+
     return true;
   });
+
+  // Sorting
+  if (state.sortOrder === "price-asc") {
+    filtered.sort((a, b) => a.priceDh - b.priceDh);
+  } else if (state.sortOrder === "price-desc") {
+    filtered.sort((a, b) => b.priceDh - a.priceDh);
+  } else if (state.sortOrder === "bestseller") {
+    filtered.sort((a, b) => (b.salesCount || 0) - (a.salesCount || 0));
+  }
 
   grid.innerHTML = filtered.map(book => {
     const isWishlisted = state.wishlist.includes(book.id);
@@ -413,13 +432,37 @@ function renderCatalog() {
 
 function filterCatalog(level) {
   state.activeLevel = level;
-  document.querySelectorAll(".level-filter-btn").forEach(btn => {
+  document.querySelectorAll(".capsule-pill, .level-filter-btn").forEach(btn => {
     if (btn.dataset.level === level) {
       btn.classList.add("active");
     } else {
       btn.classList.remove("active");
     }
   });
+  renderCatalog();
+}
+
+function handleCatalogSearch(query) {
+  state.searchQuery = (query || "").trim().toLowerCase();
+  const clearBtn = document.getElementById("clear-search-btn");
+  if (clearBtn) {
+    if (state.searchQuery.length > 0) {
+      clearBtn.classList.remove("hidden");
+    } else {
+      clearBtn.classList.add("hidden");
+    }
+  }
+  renderCatalog();
+}
+
+function clearCatalogSearch() {
+  const input = document.getElementById("catalog-search-input");
+  if (input) input.value = "";
+  handleCatalogSearch("");
+}
+
+function handleCatalogSort(order) {
+  state.sortOrder = order;
   renderCatalog();
 }
 
