@@ -86,15 +86,15 @@
   </div>
 
   <!-- ================= APPLE STYLE TOP NAVBAR ================= -->
-  <header class="fixed top-0 left-0 right-0 z-50 frosted-glass border-b border-white/10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+  <header class="fixed top-0 left-0 right-0 z-50 frosted-glass border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
       
       <!-- Brand Logo -->
-      <a href="#" class="flex items-center gap-2.5 group">
-        <img src="assets/logo.jpg" alt="Logo" class="w-8 h-8 rounded-lg object-cover border border-blue-300">
-        <span class="font-outfit font-extrabold text-lg tracking-tight text-white flex items-center">
-          Prüfung<span class="text-blue-400">Store</span>
-          <span class="text-[10px] text-blue-300 font-mono ml-1.5 px-1.5 py-0.2 rounded bg-blue-900/60 border border-blue-500/40">PRO</span>
+      <a href="#" class="flex items-center gap-2.5 group shrink-0">
+        <img src="assets/logo.jpg" alt="Logo" class="w-8 h-8 rounded-lg object-cover border border-blue-400">
+        <span class="font-outfit font-extrabold text-lg tracking-tight navbar-brand-text flex items-center">
+          Prüfung<span class="navbar-brand-store">Store</span>
+          <span class="text-[10px] themed-badge font-mono ml-1.5 px-1.5 py-0.2 rounded border">PRO</span>
         </span>
       </a>
 
@@ -104,28 +104,30 @@
         <a href="#bento-section" class="themed-nav-link font-bold">Innovations</a>
         <a href="#catalog-section" class="themed-nav-link font-bold">Les Packs</a>
         <a href="#compare-section" class="themed-nav-link font-bold">Comparatif</a>
-        
       </nav>
 
       <!-- Cart Trigger & Action -->
-      <div class="flex items-center gap-3">
-        <a href="admin.html" class="p-2 rounded-full bg-white/10 hover:bg-blue-600/30 text-slate-300 hover:text-blue-300 border border-white/10 transition flex items-center justify-center" title="Espace Administrateur 🔐">
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        <!-- Admin Shortcut -->
+        <a href="admin.html" class="navbar-btn p-2 rounded-full flex items-center justify-center" title="Espace Administrateur 🔐">
           <i data-lucide="shield" class="w-4 h-4"></i>
         </a>
 
-        <button id="cart-drawer-btn" class="relative p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-2 text-xs font-bold px-3.5 border border-white/10">
-          <i data-lucide="shopping-bag" class="w-4 h-4 text-blue-400"></i>
-          <span class="hidden sm:inline">Panier</span>
+        <!-- Cart Button -->
+        <button id="cart-drawer-btn" class="navbar-btn relative p-2 rounded-full flex items-center gap-2 text-xs font-bold px-3">
+          <i data-lucide="shopping-bag" class="w-4 h-4 text-blue-500"></i>
+          <span class="cart-text-label hidden sm:inline">Panier</span>
           <span id="cart-count" class="bg-blue-600 text-white text-[10px] font-black px-1.5 py-0.2 rounded-full">0</span>
         </button>
 
-        
         <!-- Theme Toggle Switch (Dark / Light) -->
-        <button id="theme-toggle-btn" onclick="toggleTheme()" class="theme-toggle-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 shadow-sm" title="Basculer entre Mode Sombre et Mode Clair">
+        <button id="theme-toggle-btn" onclick="toggleTheme()" class="navbar-btn px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5" title="Basculer entre Mode Sombre et Mode Clair">
           <span class="theme-toggle-icon text-sm">☀️</span>
           <span class="theme-toggle-label text-[11px] font-bold hidden sm:inline">Clair</span>
         </button>
-        <a href="https://api.whatsapp.com/send?phone=212632017446&text=Bonjour,%20je%20souhaite%20des%20informations%20sur%20les%20manuels%20d%27allemand%20B1/B2." target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-full bg-red-600 hover:bg-red-500 text-white font-outfit font-extrabold text-xs transition shadow-lg shadow-red-950/60 flex items-center gap-1.5">
+
+        <!-- Contactez-nous Button (En Rouge) -->
+        <a href="https://api.whatsapp.com/send?phone=212632017446&text=Bonjour,%20je%20souhaite%20des%20informations%20sur%20les%20manuels%20d%27allemand%20B1/B2." target="_blank" rel="noopener noreferrer" class="px-3.5 sm:px-4 py-2 rounded-full bg-red-600 hover:bg-red-500 text-white font-outfit font-extrabold text-xs transition shadow-md flex items-center gap-1.5 shrink-0">
           <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
           <span>Contactez-nous</span>
         </a>

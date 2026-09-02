@@ -235,3 +235,36 @@ body.theme-light .blue-vivid-text {
   color: var(--toggle-btn-text) !important;
   transition: all 0.2s ease;
 }
+
+/* ================= NAVBAR DYNAMIC STYLES ================= */
+.navbar-brand-text {
+  color: var(--text-heading) !important;
+  font-weight: 800;
+  transition: color 0.3s ease;
+}
+
+.navbar-brand-store {
+  color: #38BDF8 !important;
+  transition: color 0.3s ease;
+}
+
+html.theme-light .navbar-brand-store,
+body.theme-light .navbar-brand-store {
+  color: #2563EB !important;
+}
+
+.navbar-btn {
+  background: var(--toggle-btn-bg) !important;
+  border: 1px solid var(--toggle-btn-border) !important;
+  color: var(--navbar-text) !important;
+  transition: all 0.2s ease;
+}
+
+.navbar-btn:hover {
+  background: var(--quickview-btn-hover) !important;
+  color: var(--navbar-link-hover) !important;
+}
+
+.cart-text-label {
+  color: var(--navbar-text) !important;
+}
