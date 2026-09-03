@@ -3,7 +3,7 @@ const BOOKS = [
     "id": "pack-b1-telc-2026",
     "title": "Pack B1 TELC-Prüfung Deutsch",
     "tagline": "L'édition référence 2026. Tout en un.",
-    "subtitle": "Enthält alle Prüfungen: Lesen, Sprachbausteine, Hören, Schreiben + Sprechen (Teil 1-2-3)",
+    "subtitle": "3 Volumes Officiels (2 Schriftlich + 1 Mündliche) • Themen TELC Récurrents • Simulateur d'Examen Inclus",
     "publisher": "Prüfungsvorbereitung B1 & B2",
     "author": "Expertenteam DaF 2026",
     "level": "B1",
@@ -31,17 +31,14 @@ const BOOKS = [
       "solutions": "100% Corrigés commentés"
     },
     "features": [
-      "3 Livres Complets : 📘 2 Livres Schriftlich (Écrit) + 📗 1 Livre Mündliche (Oral)",
-      "Couvre tous les Themen qui se répètent actuellement dans les centres TELC avec corrigés détaillés",
-      "✅ Accès au site web / simulateur officiel d'examen pour vous tester en conditions réelles",
-      "✅ Accès au Groupe WhatsApp VIP pour recevoir les nouveaux sujets et astuces en direct",
-      "💰 Tarif Promotionnel : 235 DH (au lieu de 250 DH)",
-      "🚚 Livraison 100% GRATUITE partout au Maroc avec paiement à la livraison (COD)"
+      "Architecture Complète en 3 Volumes : 📘 2 Manuels pour l'Écrit (Schriftlich) + 📗 1 Manuel pour l'Oral (Mündliche)",
+      "Banque Intégrale des Sujets Officiels : Couvre l'ensemble des Themen actuels des centres TELC avec corrections modèles",
+      "Simulateur d'Examen en Ligne : Accès exclusif à la plateforme numérique d'épreuves blanches en conditions réelles",
+      "Veille & Accompagnement VIP : Groupe WhatsApp privé recevant en avant-première les nouveaux sujets et astuces",
+      "Tarif Promotionnel Garanti : 235 DH (au lieu de 250 DH) sans frais cachés",
+      "Service Livraison Express Gratuite : Expédition sécurisée 24h/48h partout au Maroc avec paiement à la réception"
     ],
-    "description": "بالنسبة لـ Pack B1 فيه ثلاثة ديال الكتب: 📘 جوج ديال Schriftlich و 📗 وكتاب ديال Mündliche كيشملو جميع Themen اللي كيتعاودو دابا فمراكز TELC، مع التصحيح. ✅ موقع محاكي للإمتحان باش تختابر راسك ✅ كروب WhatsApp، إلى كان شي جديد كنصيفطوه ليكم فيه 💰 الثمن: 235 درهم (عوض 250 درهم) 🚚 التوصيل: بالمجان لجميع المدن المغرب."
-  },
-  {
-    "id": "pack-goethe-osd-b1-b2",
+    "description": "Le Pack B1 TELC-Prüfung Deutsch est la collection officielle de référence au Maroc. Il comprend 3 volumes physiques complets (2 manuels dédiés à l'épreuve écrite Schriftlich et 1 manuel dédié à l'expression orale Mündliche), regroupant l'ensemble des sujets récurrents des centres d'examen TELC avec corrigés détaillés, l'accès à une plateforme de simulation d'examen en ligne et à un groupe WhatsApp VIP pour le suivi des nouveaux sujets.",
     "title": "Pack GOETHE - ÖSD B1 & B2 Prüfung",
     "tagline": "25 Modelltests par niveau. Précision absolue.",
     "subtitle": "Die beste Vorbereitung für deinen Erfolg! (25 Modelltests pro Buch + Lösungen)",
