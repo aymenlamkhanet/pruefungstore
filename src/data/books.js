@@ -12,14 +12,14 @@ const BOOKS = [
     "secondaryImage": "assets/products/telc-b1-showcase.jpg",
     "isbn": "TELC-B1-2026-TITANIUM",
     "priceDh": 235,
-    "originalPriceDh": 350,
+    "originalPriceDh": 250,
     "discountPercent": 33,
     "isPromo": true,
     "isBestseller": true,
     "isPack": true,
     "rating": 5,
     "reviewsCount": 2480,
-    "format": "2 Volumes Spirales • 320 Pages • Audios MP3 Inclus",
+    "format": "3 Volumes Spirales • 2 Schriftlich + 1 Mündliche • Audios Inclus",
     "pages": 320,
     "stockCount": 7,
     "badgeText": "PACK N°1 EN VENTES",
@@ -31,13 +31,14 @@ const BOOKS = [
       "solutions": "100% Corrigés commentés"
     },
     "features": [
-      "Volume 1 (Écrit) : LESEN (Teil 1-3), SPRACHBAUSTEINE (Teil 1-2), HÖREN (Teil 1-3), SCHREIBEN (Modèles de rédactions corrigées)",
-      "Volume 2 (Oral) : SPRECHEN (Alle Themen + Lösung Teil 1, 2 & 3 avec arguments types)",
-      "Fichiers Audio MP3 téléchargeables via Google Drive et QR-Codes imprimés",
-      "Format spirales métalliques robustes facilitant les révisions intensives",
-      "Conforme au barème officiel de l'examen telc Deutsch B1 2026"
+      "3 Livres Complets : 📘 2 Livres Schriftlich (Écrit) + 📗 1 Livre Mündliche (Oral)",
+      "Couvre tous les Themen qui se répètent actuellement dans les centres TELC avec corrigés détaillés",
+      "✅ Accès au site web / simulateur officiel d'examen pour vous tester en conditions réelles",
+      "✅ Accès au Groupe WhatsApp VIP pour recevoir les nouveaux sujets et astuces en direct",
+      "💰 Tarif Promotionnel : 235 DH (au lieu de 250 DH)",
+      "🚚 Livraison 100% GRATUITE partout au Maroc avec paiement à la livraison (COD)"
     ],
-    "description": "Le pack complet ultime conçu pour garantir la réussite à l'examen TELC Deutsch B1. Couvre chaque module avec une précision chirurgicale, des explications pas à pas et tous les enregistrements audio."
+    "description": "بالنسبة لـ Pack B1 فيه ثلاثة ديال الكتب: 📘 جوج ديال Schriftlich و 📗 وكتاب ديال Mündliche كيشملو جميع Themen اللي كيتعاودو دابا فمراكز TELC، مع التصحيح. ✅ موقع محاكي للإمتحان باش تختابر راسك ✅ كروب WhatsApp، إلى كان شي جديد كنصيفطوه ليكم فيه 💰 الثمن: 235 درهم (عوض 250 درهم) 🚚 التوصيل: بالمجان لجميع المدن المغرب."
   },
   {
     "id": "pack-goethe-osd-b1-b2",
