@@ -643,7 +643,7 @@
     </div>
   </section>
 
-  <!-- ================= NOTRE ACTUALITÉ SUR INSTAGRAM (SECTION RESTRUCTURÉE & HAUTE DÉFINITION) ================= -->
+  <!-- ================= NOTRE ACTUALITÉ SUR INSTAGRAM (REELS EN LECTURE AUTOMATIQUE NATIVE) ================= -->
   <section id="instagram-section" class="py-20 border-t border-white/10 relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
@@ -655,19 +655,19 @@
         </span>
         
         <h2 class="font-outfit text-3xl sm:text-5xl font-black themed-heading tracking-tight">
-          Notre Actualité & Conseils en Vidéo
+          Nos Reels & Explications en Vidéo
         </h2>
         
         <p class="text-xs sm:text-sm themed-subtext max-w-xl mx-auto font-normal leading-relaxed">
-          Suivez nos explications en direct, astuces pour réussir l'examen et retours d'expérience des candidats au Maroc.
+          Visionnez nos explications en lecture automatique, astuces pour réussir l'examen et retours d'expérience.
         </p>
       </div>
 
-      <!-- 3 Structured Cards Grid with Harmonized Heights & Perfect Themes -->
+      <!-- 3 Structured Cards Grid with Native Autoplay Video Reels -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto items-stretch">
         
         <!-- CARD 1 : Hub Officiel du Profil Instagram -->
-        <div class="themed-card rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl border transition duration-300 hover:-translate-y-1.5 h-[500px]">
+        <div class="themed-card rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl border transition duration-300 hover:-translate-y-1.5 h-[530px]">
           <div>
             <!-- Badge Logo Instagram Dégradé -->
             <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 p-0.5 shadow-xl mb-5">
@@ -692,12 +692,12 @@
             <!-- 3 Atouts Communauté -->
             <div class="space-y-2 mt-4 pt-3 border-t border-white/10 text-xs">
               <div class="flex items-center gap-2 themed-subtext">
-                <i data-lucide="video" class="w-3.5 h-3.5 text-pink-500"></i>
-                <span>Reels & Explications hebdomadaires</span>
+                <i data-lucide="play-circle" class="w-3.5 h-3.5 text-pink-500"></i>
+                <span>Reels & Explications en vidéo continue</span>
               </div>
               <div class="flex items-center gap-2 themed-subtext">
-                <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-400"></i>
-                <span>Astuces pour déjouer les pièges</span>
+                <i data-lucide="volume-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+                <span>Activez le son d'un simple clic</span>
               </div>
             </div>
           </div>
@@ -710,8 +710,8 @@
           </div>
         </div>
 
-        <!-- CARD 2 : Reel N°1 (Deutsch Prüfung Vorbereitungskurs) -->
-        <div class="themed-card rounded-3xl p-5 flex flex-col justify-between shadow-2xl border transition duration-300 hover:-translate-y-1.5 h-[500px] group">
+        <!-- CARD 2 : Reel N°1 (Lecture Automatique / Autoplay) -->
+        <div class="themed-card rounded-3xl p-5 flex flex-col justify-between shadow-2xl border transition duration-300 hover:-translate-y-1.5 h-[530px] group relative">
           <div>
             <!-- Header Reel -->
             <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-3">
@@ -722,45 +722,69 @@
               <span class="px-2 py-0.5 rounded-full bg-pink-500/15 text-pink-500 text-[10px] font-bold">TELC B1/B2</span>
             </div>
 
-            <!-- Video Thumbnail Card with Play Overlay -->
-            <a href="https://www.instagram.com/reel/DUOLdw-DEyJ/" target="_blank" rel="noopener noreferrer" class="block relative w-full h-[280px] rounded-2xl overflow-hidden bg-black/80 border border-white/10 group-hover:border-pink-500/50 transition">
-              <img src="assets/reel1_poster.jpg" alt="Reel Deutsch Prüfung Vorbereitungskurs" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              
-              <!-- Ambient Dark Gradient -->
-              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
+            <!-- Video Player Container avec Autoplay en Boucle -->
+            <div class="relative w-full h-[300px] rounded-2xl overflow-hidden bg-black border border-white/10 group-hover:border-pink-500/50 transition">
+              <!-- Video HTML5 avec Autoplay Muted Loop Playsinline -->
+              <video 
+                id="reel-video-1"
+                class="w-full h-full object-cover cursor-pointer" 
+                autoplay 
+                muted 
+                loop 
+                playsinline 
+                preload="auto"
+                poster="assets/reel1_poster.jpg"
+                onclick="togglePlayPause('reel-video-1', 'reel-play-btn-1')"
+              >
+                <source src="assets/videos/reel1.mp4" type="video/mp4">
+              </video>
 
-              <!-- Glowing Play Button -->
-              <div class="absolute inset-0 flex items-center justify-center">
-                <div class="w-14 h-14 rounded-full bg-white/90 text-pink-600 shadow-2xl flex items-center justify-center group-hover:scale-110 transition duration-300">
+              <!-- Dégradé Léger -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20 pointer-events-none"></div>
+
+              <!-- Bouton Mute / Unmute Interactif -->
+              <button 
+                type="button"
+                onclick="toggleMute('reel-video-1', this)" 
+                class="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-black/70 hover:bg-black/90 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition shadow-lg cursor-pointer"
+                title="Activer / Couper le son"
+              >
+                <i data-lucide="volume-x" class="w-4 h-4 text-slate-200"></i>
+              </button>
+
+              <!-- Bouton Play/Pause Flottant au Clic -->
+              <div id="reel-play-btn-1" class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-200">
+                <div class="w-14 h-14 rounded-full bg-white/90 text-pink-600 shadow-2xl flex items-center justify-center">
                   <i data-lucide="play" class="w-6 h-6 fill-pink-600 translate-x-0.5"></i>
                 </div>
               </div>
 
               <!-- Reel Tag Badge -->
-              <div class="absolute bottom-3 left-3 right-3 text-[11px] text-white font-bold bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 truncate">
-                Deutsch Prüfung Vorbereitungskurs
+              <div class="absolute bottom-3 left-3 right-3 text-[11px] text-white font-bold bg-black/75 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 truncate flex items-center justify-between pointer-events-none">
+                <span>Deutsch Prüfung Vorbereitungskurs</span>
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" title="Lecture en direct"></span>
               </div>
-            </a>
+            </div>
 
             <!-- Titre & Info -->
             <div class="mt-3">
               <h4 class="font-outfit font-extrabold text-sm themed-heading line-clamp-1">
                 Tout savoir sur l'examen TELC B1 & B2
               </h4>
-              <p class="text-[11px] themed-muted mt-0.5">Conseils pour réussir dès votre 1ère tentative</p>
+              <p class="text-[11px] themed-muted mt-0.5">Vidéo officielle en lecture continue • Cliquez pour le son 🔊</p>
             </div>
           </div>
 
           <div class="pt-3">
             <a href="https://www.instagram.com/reel/DUOLdw-DEyJ/" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 rounded-xl themed-card-sub border hover:border-pink-500/50 font-bold text-xs text-center flex items-center justify-center gap-2 transition">
-              <i data-lucide="play" class="w-3.5 h-3.5 text-pink-500 fill-pink-500"></i>
-              <span>Visionner le Reel sur Instagram ↗</span>
+              <i data-lucide="instagram" class="w-3.5 h-3.5 text-pink-500"></i>
+              <span>Ouvrir sur Instagram ↗</span>
             </a>
           </div>
         </div>
 
-        <!-- CARD 3 : Reel N°2 (Structure & Modules d'Examen) -->
-        <div class="themed-card rounded-3xl p-5 flex flex-col justify-between shadow-2xl border transition duration-300 hover:-translate-y-1.5 h-[500px] group">
+        <!-- CARD 3 : Reel N°2 (Lecture Automatique / Autoplay) -->
+        <div class="themed-card rounded-3xl p-5 flex flex-col justify-between shadow-2xl border transition duration-300 hover:-translate-y-1.5 h-[530px] group relative">
           <div>
             <!-- Header Reel -->
             <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-3">
@@ -771,39 +795,63 @@
               <span class="px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-400 text-[10px] font-bold">Épreuves</span>
             </div>
 
-            <!-- Video Thumbnail Card with Play Overlay -->
-            <a href="https://www.instagram.com/reel/DS7_i7ujIuR/" target="_blank" rel="noopener noreferrer" class="block relative w-full h-[280px] rounded-2xl overflow-hidden bg-black/80 border border-white/10 group-hover:border-purple-500/50 transition">
-              <img src="assets/reel2_poster.jpg" alt="Reel Structure et Modules" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              
-              <!-- Ambient Dark Gradient -->
-              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
+            <!-- Video Player Container avec Autoplay en Boucle -->
+            <div class="relative w-full h-[300px] rounded-2xl overflow-hidden bg-black border border-white/10 group-hover:border-purple-500/50 transition">
+              <!-- Video HTML5 avec Autoplay Muted Loop Playsinline -->
+              <video 
+                id="reel-video-2"
+                class="w-full h-full object-cover cursor-pointer" 
+                autoplay 
+                muted 
+                loop 
+                playsinline 
+                preload="auto"
+                poster="assets/reel2_poster.jpg"
+                onclick="togglePlayPause('reel-video-2', 'reel-play-btn-2')"
+              >
+                <source src="assets/videos/reel2.mp4" type="video/mp4">
+              </video>
 
-              <!-- Glowing Play Button -->
-              <div class="absolute inset-0 flex items-center justify-center">
-                <div class="w-14 h-14 rounded-full bg-white/90 text-purple-600 shadow-2xl flex items-center justify-center group-hover:scale-110 transition duration-300">
+              <!-- Dégradé Léger -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20 pointer-events-none"></div>
+
+              <!-- Bouton Mute / Unmute Interactif -->
+              <button 
+                type="button"
+                onclick="toggleMute('reel-video-2', this)" 
+                class="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-black/70 hover:bg-black/90 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition shadow-lg cursor-pointer"
+                title="Activer / Couper le son"
+              >
+                <i data-lucide="volume-x" class="w-4 h-4 text-slate-200"></i>
+              </button>
+
+              <!-- Bouton Play/Pause Flottant au Clic -->
+              <div id="reel-play-btn-2" class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-200">
+                <div class="w-14 h-14 rounded-full bg-white/90 text-purple-600 shadow-2xl flex items-center justify-center">
                   <i data-lucide="play" class="w-6 h-6 fill-purple-600 translate-x-0.5"></i>
                 </div>
               </div>
 
               <!-- Reel Tag Badge -->
-              <div class="absolute bottom-3 left-3 right-3 text-[11px] text-white font-bold bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 truncate">
-                Lesen • Schreiben • Sprachbausteine • Sprechen
+              <div class="absolute bottom-3 left-3 right-3 text-[11px] text-white font-bold bg-black/75 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 truncate flex items-center justify-between pointer-events-none">
+                <span>Lesen • Hören • Schreiben • Sprechen</span>
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" title="Lecture en direct"></span>
               </div>
-            </a>
+            </div>
 
             <!-- Titre & Info -->
             <div class="mt-3">
               <h4 class="font-outfit font-extrabold text-sm themed-heading line-clamp-1">
                 Déroulement & Structure des Modules
               </h4>
-              <p class="text-[11px] themed-muted mt-0.5">Guide complet étape par étape de chaque compétence</p>
+              <p class="text-[11px] themed-muted mt-0.5">Vidéo officielle en lecture continue • Cliquez pour le son 🔊</p>
             </div>
           </div>
 
           <div class="pt-3">
             <a href="https://www.instagram.com/reel/DS7_i7ujIuR/" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 rounded-xl themed-card-sub border hover:border-purple-500/50 font-bold text-xs text-center flex items-center justify-center gap-2 transition">
-              <i data-lucide="play" class="w-3.5 h-3.5 text-purple-500 fill-purple-500"></i>
-              <span>Visionner le Reel sur Instagram ↗</span>
+              <i data-lucide="instagram" class="w-3.5 h-3.5 text-purple-400"></i>
+              <span>Ouvrir sur Instagram ↗</span>
             </a>
           </div>
         </div>
@@ -990,5 +1038,45 @@
       <span class="text-[10px] font-bold">WhatsApp</span>
     </a>
   </nav>
+
+  <script>
+    // Contrôles Interactifs des Vidéos Reels (Autoplay & Son)
+    window.toggleMute = function(videoId, btnEl) {
+      const v = document.getElementById(videoId);
+      if (!v) return;
+      v.muted = !v.muted;
+      if (v.muted) {
+        btnEl.innerHTML = '<i data-lucide="volume-x" class="w-4 h-4 text-slate-200"></i>';
+        btnEl.title = 'Activer le son';
+      } else {
+        btnEl.innerHTML = '<i data-lucide="volume-2" class="w-4 h-4 text-emerald-400"></i>';
+        btnEl.title = 'Couper le son';
+      }
+      if (window.lucide) lucide.createIcons();
+    };
+
+    window.togglePlayPause = function(videoId, btnOverlayId) {
+      const v = document.getElementById(videoId);
+      const overlay = document.getElementById(btnOverlayId);
+      if (!v) return;
+      if (v.paused) {
+        v.play();
+        if (overlay) overlay.classList.add('opacity-0');
+      } else {
+        v.pause();
+        if (overlay) overlay.classList.remove('opacity-0');
+      }
+    };
+
+    // Assurer le lancement automatique fluide
+    document.addEventListener("DOMContentLoaded", () => {
+      ['reel-video-1', 'reel-video-2'].forEach(id => {
+        const vid = document.getElementById(id);
+        if (vid) {
+          vid.play().catch(e => console.log('Autoplay muted fallback ready'));
+        }
+      });
+    });
+  </script>
 </body>
 </html>
