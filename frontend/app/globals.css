@@ -29,9 +29,9 @@ input[placeholder="Image URL (optional fallback)"] { display: none; }
 .hero-art .art-card.back { display: block; }
 .hero-art .art-card.front img { display: none; }
 @media (max-width: 680px) {
-	.reels-section { display: block; width: 100%; margin-bottom: 2.5rem; overflow: hidden; }
+	.reels-section { display: block !important; grid-template-columns: minmax(0, 1fr) !important; width: 100%; margin-bottom: 2.5rem; overflow: hidden; }
 	.reels-section > div:first-child { margin-bottom: 1.5rem; }
-	.reel-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; width: 100%; }
+	.reel-grid { display: grid; grid-template-columns: minmax(0, 1fr) !important; gap: 1rem; width: 100%; }
 	.reel-card.playable { width: 100%; min-width: 0; min-height: 360px !important; }
 	.reel-card.playable iframe { width: 100%; height: 305px !important; }
 }
