@@ -5,6 +5,8 @@ services:
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
     plan: free
+    branch: master
+    autoDeploy: true
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
@@ -31,6 +33,8 @@ services:
     dockerfilePath: ./frontend/Dockerfile
     dockerContext: ./frontend
     plan: free
+    branch: master
+    autoDeploy: true
     envVars:
       - key: NODE_ENV
         value: production
