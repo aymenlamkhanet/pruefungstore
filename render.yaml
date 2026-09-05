@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: pruefungstore-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: starter
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "4000"
+      - key: DB_PATH
+        value: /app/data/pruefungstore.db
+      - key: UPLOADS_DIR
+        value: /app/data/uploads
+      - key: WHATSAPP_NUMBER
+        value: "212621740209"
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: ADMIN_TOKEN
+        sync: false
+      - key: FRONTEND_ORIGIN
+        value: https://pruefungstore-frontend.onrender.com
+    disk:
+      name: pruefungstore-data
+      mountPath: /app/data
+      sizeGB: 1
+
+  - type: web
+    name: pruefungstore-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: BACKEND_URL
+        value: https://pruefungstore-backend.onrender.com
