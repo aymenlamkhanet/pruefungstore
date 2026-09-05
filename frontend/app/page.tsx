@@ -132,9 +132,18 @@ function Store() {
     [examType, setExamType] = useState(""),
     [form, setForm] = useState(initialForm),
     [status, setStatus] = useState(""),
+    [showCheckout, setShowCheckout] = useState(false),
     [submitting, setSubmitting] = useState(false),
-    [language, setLanguage] = useState<"en" | "de" | "ar">("en"),
+    [language, setLanguage] = useState<"en" | "de" | "ar" | "nl">(() => {
+      if (typeof window === "undefined") return "de";
+      return (window.localStorage.getItem("prufung-language") as "en" | "de" | "ar" | "nl") || "de";
+    }),
     [loading, setLoading] = useState(true);
+  useEffect(() => {
+    window.localStorage.setItem("prufung-language", language);
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+  }, [language]);
   useEffect(() => {
     setLoading(true);
     request(`/products?${new URLSearchParams({ search, level, examType })}`)
@@ -179,6 +188,7 @@ function Store() {
       else setStatus("Order created. Please allow pop-ups to open WhatsApp.");
       setCart([]);
       setForm(initialForm);
+      setShowCheckout(false);
       setProducts(
         await request(
           `/products?${new URLSearchParams({ search, level, examType })}`,
@@ -195,16 +205,16 @@ function Store() {
       <section className="hero">
         <div className="hero-copy">
           <div className="language-switcher" aria-label="Language selector">
-            <button className={language === "en" ? "active" : ""} onClick={() => setLanguage("en")}>EN</button>
             <button className={language === "de" ? "active" : ""} onClick={() => setLanguage("de")}>DE</button>
             <button className={language === "ar" ? "active" : ""} onClick={() => setLanguage("ar")}>عربي</button>
+            <button className={language === "nl" ? "active" : ""} onClick={() => setLanguage("nl")}>NL</button>
           </div>
           <div className="kicker">
             <span>{language === "ar" ? "مجموعة 2026" : language === "de" ? "Kollektion 2026" : "2026 collection"}</span>
             <span className="rule" /> curated exam prep
           </div>
           <h1 dir={language === "ar" ? "rtl" : "ltr"}>
-            {language === "ar" ? <>تعلّم الألمانية <em>بثقة.</em><br />ونجح بذكاء.</> : language === "de" ? <>Deutsch lernen mit <em>System.</em><br />Prüfungen sicher bestehen.</> : <>Learn German with <em>confidence.</em><br />Pass with direction.</>}
+            {language === "ar" ? <>تعلّم الألمانية <em>بثقة.</em><br />ونجح بذكاء.</> : language === "nl" ? <>Leer Duits met <em>vertrouwen.</em><br />Slaag met een plan.</> : <>Deutsch lernen mit <em>System.</em><br />Prüfungen sicher bestehen.</>}
           </h1>
           <p dir={language === "ar" ? "rtl" : "ltr"}>
             {language === "ar" ? "كتب تحضير موثوقة لاختبارات TELC وGoethe وÖSD، مختارة لمساعدتك على التقدم بسرعة." : language === "de" ? "Hochwertige Prüfungsvorbereitung für TELC, Goethe und ÖSD. Das richtige Buch für dein nächstes Level." : "Trusted preparation books for TELC, Goethe and ÖSD. Find your level, order in a minute, and move forward."}
@@ -429,8 +439,13 @@ function Store() {
               {total} <small>DH</small>
             </strong>
           </div>
-          <form onSubmit={checkout} className="order-form">
-            <p className="form-title">Delivery details</p>
+          <button className="button primary full order-submit" type="button" disabled={!cart.length} onClick={() => setShowCheckout(true)}>
+            {cart.length ? "Continue to delivery" : "Add a book to order"} <span>→</span>
+          </button>
+          {showCheckout && <div className="checkout-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setShowCheckout(false); }}>
+            <form onSubmit={checkout} className="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+              <button className="modal-close" type="button" onClick={() => setShowCheckout(false)} aria-label="Close checkout">×</button>
+              <p className="form-title" id="checkout-title">Delivery details</p>
             {[
               ["customerName", "Full name"],
               ["customerPhone", "Phone number"],
@@ -445,10 +460,11 @@ function Store() {
                 onChange={(e) => setForm({ ...form, [key]: e.target.value })}
               />
             ))}
-            <button className="button primary full order-submit" type="submit" disabled={submitting}>
-              {submitting ? "Sending order..." : "Place order"} <span>{submitting ? "" : "→"}</span>
-            </button>
-          </form>
+              <button className="button primary full order-submit" type="submit" disabled={submitting}>
+                {submitting ? "Sending order..." : "Place order"} <span>{submitting ? "" : "→"}</span>
+              </button>
+            </form>
+          </div>}
           {status && <div className={`toast ${status.startsWith("Order #") ? "success" : "error"}`} role="status"><span>{status.startsWith("Order #") ? "✓" : "!"}</span><p>{status}</p><button type="button" onClick={() => setStatus("")} aria-label="Dismiss message">×</button></div>}
           <p className="secure">Secure ordering · Confirmation via WhatsApp</p>
         </aside>

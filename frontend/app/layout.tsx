@@ -3,8 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'PrüfungStore Pro',
-  description: 'Catalogue officiel de manuels TELC, Goethe et ÖSD avec commande WhatsApp.',
+  title: 'PrüfungStore | Deutsch lernen mit System',
+  description: 'Originale TELC-, Goethe- und ÖSD-Prüfungsbücher mit schneller Bestellung und WhatsApp-Support.',
 }
 
 export const viewport: Viewport = {
