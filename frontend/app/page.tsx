@@ -22,7 +22,7 @@ function imageSrc(image?: string) {
   if (image.startsWith('http')) return image
   const clean = image.replace(/^\/+/, '')
   if (clean.startsWith('assets/')) return `${API}/${clean}`
-  if (clean.startsWith('api/assets/')) return `/${clean}`
+  if (clean.startsWith('api/')) return `${API.replace(/\/api\/?$/, '')}/${clean}`
   return `/${clean}`
 }
 
