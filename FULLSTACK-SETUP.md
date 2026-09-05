@@ -8,7 +8,7 @@
 ## Key features
 - Products are stored in DB and loaded dynamically.
 - Orders are stored in DB and stock is decremented automatically.
-- After order creation, API returns a WhatsApp URL targeting: `0621740209` (normalized as `212621740209`).
+- After order creation, API returns a WhatsApp URL targeting: `+212 639-985296` (normalized as `212639985296`).
 - Admin dashboard can add/edit/delete books and view stock + recent orders.
 - Admin can upload product image files directly (JPG/PNG/WEBP), not only URL.
 - Admin portal supports username/password login and returns secure admin token.
