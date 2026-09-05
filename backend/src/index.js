@@ -236,6 +236,27 @@ app.get("/api/admin/orders", requireAdmin, (_req, res) => {
   );
 });
 
+app.patch("/api/admin/orders/:id/status", requireAdmin, (req, res) => {
+  const id = Number(req.params.id);
+  const allowedStatuses = ["pending", "confirmed", "shipped", "cancelled"];
+  const status = String(req.body?.status || "");
+  if (!id || !allowedStatuses.includes(status)) {
+    return res.status(400).json({ message: "Invalid order status" });
+  }
+
+  const info = db.prepare("UPDATE orders SET status = ? WHERE id = ?").run(status, id);
+  if (info.changes === 0) return res.status(404).json({ message: "Order not found" });
+  const row = db.prepare("SELECT * FROM orders WHERE id = ?").get(id);
+  res.json({ id: row.id, status: row.status });
+});
+
+app.delete("/api/admin/orders/:id", requireAdmin, (req, res) => {
+  const id = Number(req.params.id);
+  const info = db.prepare("DELETE FROM orders WHERE id = ?").run(id);
+  if (info.changes === 0) return res.status(404).json({ message: "Order not found" });
+  res.status(204).send();
+});
+
 app.listen(config.port, () => {
   console.log(`Backend running on http://localhost:${config.port}`);
 });
