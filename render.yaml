@@ -4,7 +4,7 @@ services:
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
-    plan: starter
+    plan: free
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
@@ -25,11 +25,6 @@ services:
         sync: false
       - key: FRONTEND_ORIGIN
         value: https://pruefungstore-frontend.onrender.com
-    disk:
-      name: pruefungstore-data
-      mountPath: /app/data
-      sizeGB: 1
-
   - type: web
     name: pruefungstore-frontend
     runtime: docker

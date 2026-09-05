@@ -35,6 +35,11 @@ Backend: http://localhost:4000/api/health
    - App: http://localhost:3000
    - API health: http://localhost:4000/api/health
 
+## Free Render deployment
+- The included `render.yaml` uses Render's free plan for both services.
+- Free backend storage is ephemeral: SQLite changes and uploaded images can be lost after a restart or redeploy.
+- Use a paid persistent disk, or move the database and uploads to managed storage, before using this for real orders.
+
 ## Admin access
 - Go to `/admin` in React app.
 - Login with `ADMIN_USERNAME` + `ADMIN_PASSWORD`.
