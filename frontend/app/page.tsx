@@ -133,7 +133,6 @@ function Store() {
     [form, setForm] = useState(initialForm),
     [status, setStatus] = useState(""),
     [submitting, setSubmitting] = useState(false),
-    [language, setLanguage] = useState<"en" | "de" | "ar">("en"),
     [loading, setLoading] = useState(true);
   useEffect(() => {
     setLoading(true);
@@ -194,24 +193,22 @@ function Store() {
     <main className="store-page">
       <section className="hero">
         <div className="hero-copy">
-          <div className="language-switcher" aria-label="Language selector">
-            <button className={language === "en" ? "active" : ""} onClick={() => setLanguage("en")}>EN</button>
-            <button className={language === "de" ? "active" : ""} onClick={() => setLanguage("de")}>DE</button>
-            <button className={language === "ar" ? "active" : ""} onClick={() => setLanguage("ar")}>عربي</button>
-          </div>
           <div className="kicker">
-            <span>{language === "ar" ? "مجموعة 2026" : language === "de" ? "Kollektion 2026" : "2026 collection"}</span>
+            <span>2026 collection</span>
             <span className="rule" /> curated exam prep
           </div>
-          <h1 dir={language === "ar" ? "rtl" : "ltr"}>
-            {language === "ar" ? <>تعلّم الألمانية <em>بثقة.</em><br />ونجح بذكاء.</> : language === "de" ? <>Deutsch lernen mit <em>System.</em><br />Prüfungen sicher bestehen.</> : <>Learn German with <em>confidence.</em><br />Pass with direction.</>}
+          <h1>
+            Pass with <em>confidence.</em>
+            <br />
+            Study with direction.
           </h1>
-          <p dir={language === "ar" ? "rtl" : "ltr"}>
-            {language === "ar" ? "كتب تحضير موثوقة لاختبارات TELC وGoethe وÖSD، مختارة لمساعدتك على التقدم بسرعة." : language === "de" ? "Hochwertige Prüfungsvorbereitung für TELC, Goethe und ÖSD. Das richtige Buch für dein nächstes Level." : "Trusted preparation books for TELC, Goethe and ÖSD. Find your level, order in a minute, and move forward."}
+          <p>
+            Premium preparation books for TELC, Goethe and ÖSD learners. Find
+            the right level, order in a minute, and get it delivered.
           </p>
           <div className="hero-actions">
             <a href="#catalog" className="button primary">
-              {language === "ar" ? "اكتشف الكتب المناسبة" : language === "de" ? "Kollektion entdecken" : "Explore collection"} <span>→</span>
+              Explore collection <span>→</span>
             </a>
             <a
               className="button secondary instagram-button"
@@ -219,9 +216,9 @@ function Store() {
               target="_blank"
               rel="noreferrer"
             >
-              {language === "ar" ? "تابعنا على Instagram" : language === "de" ? "Auf Instagram folgen" : "Follow on Instagram"} <span>↗</span>
+              Follow on Instagram <span>↗</span>
             </a>
-            <span className="hero-note">{language === "ar" ? "يثق بنا أكثر من 2,000 طالب" : language === "de" ? "Von 2.000+ Lernenden gewählt" : "Trusted by 2,000+ learners"}</span>
+            <span className="hero-note">Trusted by 2,000+ learners</span>
           </div>
         </div>
         <div className="hero-art">
@@ -242,13 +239,6 @@ function Store() {
             </span>
           </div>
         </div>
-      </section>
-
-      <section className="hero-benefits" aria-label="Study benefits">
-        <article><span className="benefit-icon">▣</span><div><strong>Original books</strong><small>Authentic, focused material</small></div></article>
-        <article><span className="benefit-icon">✓</span><div><strong>Real exam practice</strong><small>Models with solutions</small></div></article>
-        <article><span className="benefit-icon">↗</span><div><strong>Progress by level</strong><small>B1 to B2, one step at a time</small></div></article>
-        <article><span className="benefit-icon">★</span><div><strong>Human support</strong><small>Fast WhatsApp ordering</small></div></article>
       </section>
 
       <section className="reels-section">
