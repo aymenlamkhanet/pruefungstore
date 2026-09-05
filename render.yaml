@@ -46,3 +46,5 @@ services:
         value: 0.0.0.0
       - key: BACKEND_URL
         value: https://pruefungstore-backend.onrender.com
+      - key: NEXT_PUBLIC_API_URL
+        value: https://pruefungstore-backend.onrender.com/api
