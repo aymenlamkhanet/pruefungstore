@@ -20,7 +20,7 @@ const MIME_TYPES = {
   '.webm': 'video/webm'
 };
 
-const server = http.createServer((req, res) => {
+function requestHandler(req, res) {
   let reqPath = req.url.split('?')[0];
   if (reqPath === '/' || reqPath === '') reqPath = '/index.html';
   const filePath = path.join(PUBLIC_DIR, decodeURIComponent(reqPath));
@@ -61,32 +61,24 @@ const server = http.createServer((req, res) => {
     });
     fs.createReadStream(filePath).pipe(res);
   });
-});
+}
 
-function startServer(portToTry) {
-  server.listen(portToTry, '0.0.0.0', () => {
-    console.log('\n=============================================================');
-    console.log('  🇩🇪  PrüfungStore Pro (Serveur Actif)  ');
-    console.log('=============================================================');
-    console.log('  🛍️  Boutique Publique   : http://localhost:' + portToTry + '/');
-    console.log('  📖  Pack B1 TELC        : http://localhost:' + portToTry + '/pack-b1-telc.html');
-    console.log('  📖  Pack B2 TELC        : http://localhost:' + portToTry + '/pack-b2-telc.html');
-    console.log('  📖  Pack B1 GOETHE-ÖSD  : http://localhost:' + portToTry + '/goethe-osd-b1.html');
-    console.log('  📖  Pack B2 GOETHE-ÖSD  : http://localhost:' + portToTry + '/goethe-osd-b2.html');
-    console.log('  🔐  Espace Admin        : http://localhost:' + portToTry + '/admin.html');
-    console.log('  📊  Dashboard BI        : http://localhost:' + portToTry + '/student-assessment.html');
-    console.log('=============================================================\n');
+function listenOnPort(p) {
+  const s = http.createServer(requestHandler);
+  s.listen(p, '0.0.0.0', () => {
+    console.log(`  🛍️  Boutique Publique   : http://localhost:${p}/`);
+  });
+  s.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.log(`Port ${p} déjà en cours d'utilisation.`);
+    }
   });
 }
 
-server.on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.warn(`⚠️  Le port ${PORT} est déjà occupé. Basculement automatique sur le port ${PORT + 1}...`);
-    PORT += 1;
-    startServer(PORT);
-  } else {
-    console.error('Erreur serveur:', err);
-  }
-});
+console.log('\n=============================================================');
+console.log('  🇩🇪  PrüfungStore Pro (Serveur Actif)  ');
+console.log('=============================================================');
+listenOnPort(3000);
+listenOnPort(3001);
+console.log('=============================================================\n');
 
-startServer(PORT);
