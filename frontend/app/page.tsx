@@ -8,7 +8,7 @@ type Order = { id: number; totalDh: number; customerName: string; customerPhone:
 
 const fallbackImage = '/api/assets/products/pack-b1.png'
 const initialForm = { customerName: '', customerPhone: '', customerCity: '', customerAddress: '' }
-const API = process.env.NEXT_PUBLIC_API_URL || '/api'
+const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== 'undefined' && window.location.hostname.endsWith('onrender.com') ? 'https://pruefungstore-backend.onrender.com/api' : '/api')
 
 async function request(path: string, options?: RequestInit) {
   const response = await fetch(`${API}${path}`, options)
