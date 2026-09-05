@@ -38,6 +38,14 @@ input[placeholder="Image URL (optional fallback)"] { display: none; }
 .pulse.on, .inventory-item b { background-color: transparent; color: #2d73c5; }
 .admin-card input[type="file"] { padding: .7rem; border: 1px dashed #b9b5aa; border-radius: 9px; background: #f5f1e9; color: var(--muted); cursor: pointer; }
 .admin-card input[type="file"]::file-selector-button { margin-right: .8rem; border: 0; border-radius: 999px; padding: .55rem .9rem; background: var(--primary); color: var(--paper); font-size: .72rem; font-weight: 800; cursor: pointer; }
+.order-submit { min-height: 52px; touch-action: manipulation; }
+.order-submit:disabled { opacity: .7; cursor: wait; transform: none; box-shadow: none; }
+.toast { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .65rem; margin-top: .75rem; padding: .75rem .8rem; border-radius: 8px; font-size: .72rem; line-height: 1.4; }
+.toast.success { background: #e6f5ed; color: #1e704d; border: 1px solid #b9dfca; }
+.toast.error { background: #fff0ee; color: #a53e37; border: 1px solid #efc2bd; }
+.toast > span { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: currentColor; color: #fff; font-weight: 800; }
+.toast p { margin: 0; font-weight: 700; }
+.toast button { border: 0; background: transparent; color: currentColor; font-size: 1.1rem; line-height: 1; padding: .25rem; }
 .order-status { border: 1px solid var(--line); border-radius: 999px; padding: .45rem .65rem; background: var(--soft); color: var(--foreground); font-size: .68rem; font-weight: 800; }
 .order-status.confirmed { color: #2d73c5; border-color: #a9c7e9; }
 .order-status.shipped { color: #287b58; border-color: #a8d5bd; }

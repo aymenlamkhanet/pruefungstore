@@ -132,6 +132,7 @@ function Store() {
     [examType, setExamType] = useState(""),
     [form, setForm] = useState(initialForm),
     [status, setStatus] = useState(""),
+    [submitting, setSubmitting] = useState(false),
     [loading, setLoading] = useState(true);
   useEffect(() => {
     setLoading(true);
@@ -161,6 +162,8 @@ function Store() {
     e.preventDefault();
     if (!cart.length)
       return setStatus("Add at least one product to your order.");
+    const whatsappWindow = window.open("about:blank", "_blank");
+    setSubmitting(true);
     try {
       const created = await request("/orders", {
         method: "POST",
@@ -171,7 +174,8 @@ function Store() {
         }),
       });
       setStatus(`Order #${created.id} created. Opening WhatsApp...`);
-      window.open(created.whatsappUrl, "_blank");
+      if (whatsappWindow) whatsappWindow.location.href = created.whatsappUrl;
+      else setStatus("Order created. Please allow pop-ups to open WhatsApp.");
       setCart([]);
       setForm(initialForm);
       setProducts(
@@ -181,6 +185,8 @@ function Store() {
       );
     } catch (e) {
       setStatus((e as Error).message);
+    } finally {
+      setSubmitting(false);
     }
   }
   return (
@@ -429,11 +435,11 @@ function Store() {
                 onChange={(e) => setForm({ ...form, [key]: e.target.value })}
               />
             ))}
-            <button className="button primary full" type="submit">
-              Place order <span>→</span>
+            <button className="button primary full order-submit" type="submit" disabled={submitting}>
+              {submitting ? "Sending order..." : "Place order"} <span>{submitting ? "" : "→"}</span>
             </button>
           </form>
-          {status && <p className="status">{status}</p>}
+          {status && <div className={`toast ${status.startsWith("Order #") ? "success" : "error"}`} role="status"><span>{status.startsWith("Order #") ? "✓" : "!"}</span><p>{status}</p><button type="button" onClick={() => setStatus("")} aria-label="Dismiss message">×</button></div>}
           <p className="secure">Secure ordering · Confirmation via WhatsApp</p>
         </aside>
       </div>
