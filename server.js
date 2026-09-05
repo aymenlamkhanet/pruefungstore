@@ -66,7 +66,7 @@ const server = http.createServer((req, res) => {
 function startServer(portToTry) {
   server.listen(portToTry, '0.0.0.0', () => {
     console.log('\n=============================================================');
-    console.log('  🇩🇪  PrüfungStore Pro • ABDEUTSCH CENTER (Serveur Actif)  ');
+    console.log('  🇩🇪  PrüfungStore Pro (Serveur Actif)  ');
     console.log('=============================================================');
     console.log('  🛍️  Boutique Publique   : http://localhost:' + portToTry + '/');
     console.log('  📖  Pack B1 TELC        : http://localhost:' + portToTry + '/pack-b1-telc.html');
