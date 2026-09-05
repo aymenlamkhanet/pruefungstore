@@ -27,6 +27,13 @@ input[placeholder="Image URL (optional fallback)"] { display: none; }
 .pulse.on { background: #2d73c5; }
 .app-shell { background: radial-gradient(circle at 80% 4%, rgba(242,140,40,.16), transparent 24rem), var(--background); }
 .hero-art .art-card.back { display: none; }
+@media (max-width: 680px) {
+	.reels-section { display: block; width: 100%; margin-bottom: 2.5rem; overflow: hidden; }
+	.reels-section > div:first-child { margin-bottom: 1.5rem; }
+	.reel-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; width: 100%; }
+	.reel-card.playable { width: 100%; min-width: 0; min-height: 360px !important; }
+	.reel-card.playable iframe { width: 100%; height: 305px !important; }
+}
 .pulse.on, .inventory-item b { background-color: transparent; color: #2d73c5; }
 .admin-card input[type="file"] { padding: .7rem; border: 1px dashed #b9b5aa; border-radius: 9px; background: #f5f1e9; color: var(--muted); cursor: pointer; }
 .admin-card input[type="file"]::file-selector-button { margin-right: .8rem; border: 0; border-radius: 999px; padding: .55rem .9rem; background: var(--primary); color: var(--paper); font-size: .72rem; font-weight: 800; cursor: pointer; }
