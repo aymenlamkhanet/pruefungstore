@@ -79,7 +79,7 @@
     }
   </style>
 </head>
-<body class="theme-dark min-h-screen relative overflow-x-hidden selection:bg-blue-600 selection:text-white">
+<body class="theme-dark min-h-screen relative overflow-x-hidden selection:bg-blue-600 selection:text-white pb-16 md:pb-0">
 
   <!-- Dynamic Fixed Background (Gemini Academic Library) -->
   <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
@@ -89,7 +89,7 @@
 
   <!-- ================= TOP NAVBAR ================= -->
   <header class="fixed top-0 left-0 right-0 z-50 frosted-glass border-b">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4">
       
       <!-- Brand Logo -->
       <a href="index.html" class="flex items-center gap-2.5 group shrink-0">
@@ -129,7 +129,8 @@
         <!-- Contactez-nous Button (En Rouge) -->
         <a href="https://api.whatsapp.com/send?phone=212632017446&text=Bonjour,%20je%20souhaite%20commander%20un%20manuel%20d%27allemand." target="_blank" rel="noopener noreferrer" class="px-3.5 sm:px-4 py-2 rounded-full bg-red-600 hover:bg-red-500 text-white font-outfit font-extrabold text-xs transition shadow-md flex items-center gap-1.5 shrink-0">
           <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
-          <span>WhatsApp</span>
+          <span class="hidden sm:inline">WhatsApp</span>
+          <span class="sm:hidden text-[11px] font-bold">Contact</span>
         </a>
       </div>
 
@@ -308,5 +309,29 @@
       if (window.lucide) lucide.createIcons();
     });
   </script>
+  <!-- ================= MOBILE APP BOTTOM NAVIGATION BAR (SMARTPHONES) ================= -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 mobile-bottom-bar h-16 px-2 flex items-center justify-around border-t shadow-2xl">
+    <a href="index.html" class="flex flex-col items-center justify-center gap-0.5 text-blue-500 py-1 px-3">
+      <i data-lucide="home" class="w-5 h-5"></i>
+      <span class="text-[10px] font-bold">Accueil</span>
+    </a>
+    <a href="categories.html" class="flex flex-col items-center justify-center gap-0.5 text-slate-400 hover:text-blue-500 py-1 px-3">
+      <i data-lucide="layout-grid" class="w-5 h-5"></i>
+      <span class="text-[10px] font-bold">Catégories</span>
+    </a>
+    <button onclick="openCartDrawer()" class="relative flex flex-col items-center justify-center gap-0.5 text-slate-400 hover:text-blue-500 py-1 px-3">
+      <i data-lucide="shopping-bag" class="w-5 h-5 text-amber-500"></i>
+      <span id="mobile-cart-badge" class="absolute top-0 right-2 bg-blue-600 text-white text-[9px] font-black px-1.5 py-0.2 rounded-full">0</span>
+      <span class="text-[10px] font-bold">Panier</span>
+    </button>
+    <button onclick="toggleTheme()" class="flex flex-col items-center justify-center gap-0.5 text-slate-400 hover:text-blue-500 py-1 px-3">
+      <span class="theme-toggle-icon text-base leading-none">☀️</span>
+      <span class="text-[10px] font-bold">Thème</span>
+    </button>
+    <a href="https://api.whatsapp.com/send?phone=212632017446&text=Bonjour,%20je%20souhaite%20des%20informations%20sur%20les%20manuels%20d%27allemand." target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center gap-0.5 text-[#25D366] py-1 px-3">
+      <i data-lucide="message-circle" class="w-5 h-5"></i>
+      <span class="text-[10px] font-bold">WhatsApp</span>
+    </a>
+  </nav>
 </body>
 </html>

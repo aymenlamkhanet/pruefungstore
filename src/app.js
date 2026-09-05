@@ -630,6 +630,8 @@ function updateCartUI() {
   const totalCount = state.cart.reduce((s, i) => s + i.quantity, 0);
   if (countEl) countEl.textContent = totalCount;
   if (badgeEl) badgeEl.textContent = totalCount;
+  const mobileBadgeEl = document.getElementById("mobile-cart-badge");
+  if (mobileBadgeEl) mobileBadgeEl.textContent = totalCount;
 
   let totalDh = 0;
 

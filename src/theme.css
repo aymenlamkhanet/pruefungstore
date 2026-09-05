@@ -538,3 +538,65 @@ html.theme-dark .themed-table td.themed-heading {
   color: #FFFFFF !important;
   font-weight: 800 !important;
 }
+
+
+/* ==============================================
+   MOBILE & SMARTPHONE OPTIMIZATIONS (RESPONSIVE)
+   ============================================== */
+
+/* Empêche tout défilement horizontal parasite sur smartphone */
+html, body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Amélioration des zones de tap tactile (Apple HIG standard) */
+button, a, input, select, textarea {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Empêche l'auto-zoom intrusif d'iOS Safari sur les champs de saisie */
+@media screen and (max-width: 767px) {
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  input[type="number"],
+  input[type="search"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Défilement fluide et inertiel sur mobile pour les tableaux et carrousels */
+.overflow-x-auto,
+.overflow-y-auto,
+.themed-table {
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: thin;
+}
+
+/* Barre de navigation mobile inférieure (Style Application Native) */
+.mobile-bottom-bar {
+  background: var(--navbar-bg) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--navbar-border) !important;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.25);
+}
+
+html.theme-light .mobile-bottom-bar {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-top-color: #E2E8F0 !important;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Prise en compte de la barre d'accueil / encoche des iPhones modernes (Safe Area) */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .mobile-bottom-bar {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

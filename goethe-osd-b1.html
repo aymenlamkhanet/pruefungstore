@@ -27,7 +27,7 @@
 
   <!-- Top Navbar -->
   <header class="fixed top-0 left-0 right-0 z-50 frosted-glass border-b">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4">
       <a href="index.html" class="flex items-center gap-2.5 group shrink-0">
         <img src="assets/official-logo.png" alt="Logo Officiel PrüfungStore" class="w-9 h-9 rounded-xl object-contain border border-blue-400/50 shadow-md bg-white p-0.5">
         <span class="font-outfit font-extrabold text-lg tracking-tight navbar-brand-text flex items-center">
@@ -226,23 +226,23 @@
           <form onsubmit="handleDirectOrder(event, 'Pack B1 GOETHE - ÖSD Prüfung (25 Tests)', 235)" class="space-y-3.5 text-xs">
             <div>
               <label class="block font-bold themed-heading mb-1">Nom et Prénom :</label>
-              <input type="text" id="order-fullname" required placeholder="ex: Yassine Mansouri" class="themed-input w-full p-3 rounded-xl border focus:outline-none focus:border-blue-500 transition">
+              <input type="text" id="order-fullname" required placeholder="ex: Yassine Mansouri" class="themed-input w-full p-3 rounded-xl border text-base sm:text-xs focus:outline-none focus:border-blue-500 transition">
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label class="block font-bold themed-heading mb-1">Téléphone / WhatsApp :</label>
-                <input type="tel" id="order-phone" required placeholder="+212 6..." class="themed-input w-full p-3 rounded-xl border focus:outline-none focus:border-blue-500 transition">
+                <input type="tel" id="order-phone" required placeholder="+212 6..." class="themed-input w-full p-3 rounded-xl border text-base sm:text-xs focus:outline-none focus:border-blue-500 transition">
               </div>
               <div>
                 <label class="block font-bold themed-heading mb-1">Ville :</label>
-                <input type="text" id="order-city" required placeholder="Casablanca, Rabat, Fès..." class="themed-input w-full p-3 rounded-xl border focus:outline-none focus:border-blue-500 transition">
+                <input type="text" id="order-city" required placeholder="Casablanca, Rabat, Fès..." class="themed-input w-full p-3 rounded-xl border text-base sm:text-xs focus:outline-none focus:border-blue-500 transition">
               </div>
             </div>
 
             <div>
               <label class="block font-bold themed-heading mb-1">Adresse de Livraison :</label>
-              <input type="text" id="order-address" required placeholder="Quartier, Boulevard, N° Immeuble / Villa..." class="themed-input w-full p-3 rounded-xl border focus:outline-none focus:border-blue-500 transition">
+              <input type="text" id="order-address" required placeholder="Quartier, Boulevard, N° Immeuble / Villa..." class="themed-input w-full p-3 rounded-xl border text-base sm:text-xs focus:outline-none focus:border-blue-500 transition">
             </div>
 
             <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-outfit font-black text-sm shadow-lg shadow-blue-500/25 transition transform active:scale-95 flex items-center justify-center gap-2">
@@ -311,5 +311,29 @@
       }, 1200);
     }
   </script>
+  <!-- ================= MOBILE APP BOTTOM NAVIGATION BAR (SMARTPHONES) ================= -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 mobile-bottom-bar h-16 px-2 flex items-center justify-around border-t shadow-2xl">
+    <a href="index.html" class="flex flex-col items-center justify-center gap-0.5 text-blue-500 py-1 px-3">
+      <i data-lucide="home" class="w-5 h-5"></i>
+      <span class="text-[10px] font-bold">Accueil</span>
+    </a>
+    <a href="categories.html" class="flex flex-col items-center justify-center gap-0.5 text-slate-400 hover:text-blue-500 py-1 px-3">
+      <i data-lucide="layout-grid" class="w-5 h-5"></i>
+      <span class="text-[10px] font-bold">Catégories</span>
+    </a>
+    <button onclick="openCartDrawer()" class="relative flex flex-col items-center justify-center gap-0.5 text-slate-400 hover:text-blue-500 py-1 px-3">
+      <i data-lucide="shopping-bag" class="w-5 h-5 text-amber-500"></i>
+      <span id="mobile-cart-badge" class="absolute top-0 right-2 bg-blue-600 text-white text-[9px] font-black px-1.5 py-0.2 rounded-full">0</span>
+      <span class="text-[10px] font-bold">Panier</span>
+    </button>
+    <button onclick="toggleTheme()" class="flex flex-col items-center justify-center gap-0.5 text-slate-400 hover:text-blue-500 py-1 px-3">
+      <span class="theme-toggle-icon text-base leading-none">☀️</span>
+      <span class="text-[10px] font-bold">Thème</span>
+    </button>
+    <a href="https://api.whatsapp.com/send?phone=212632017446&text=Bonjour,%20je%20souhaite%20des%20informations%20sur%20les%20manuels%20d%27allemand." target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center gap-0.5 text-[#25D366] py-1 px-3">
+      <i data-lucide="message-circle" class="w-5 h-5"></i>
+      <span class="text-[10px] font-bold">WhatsApp</span>
+    </a>
+  </nav>
 </body>
 </html>
