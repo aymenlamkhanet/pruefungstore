@@ -6,7 +6,9 @@ type Product = { id: number; title: string; level: string; examType: string; pri
 type CartItem = Pick<Product, 'id' | 'title' | 'priceDh'> & { qty: number }
 type Order = { id: number; totalDh: number; customerName: string; customerPhone: string; customerCity: string; items: { title: string; qty: number }[] }
 
-const fallbackImage = '/api/assets/products/pack-b1.png'
+const fallbackImage = typeof window !== 'undefined' && window.location.hostname.endsWith('onrender.com')
+  ? 'https://pruefungstore-backend.onrender.com/api/assets/products/pack-b1.png'
+  : '/api/assets/products/pack-b1.png'
 const initialForm = { customerName: '', customerPhone: '', customerCity: '', customerAddress: '' }
 const API = process.env.NEXT_PUBLIC_API_URL || (typeof window !== 'undefined' && window.location.hostname.endsWith('onrender.com') ? 'https://pruefungstore-backend.onrender.com/api' : '/api')
 
