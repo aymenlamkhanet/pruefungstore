@@ -26,7 +26,8 @@ input[placeholder="Image URL (optional fallback)"] { display: none; }
 .pulse { background: var(--accent); }
 .pulse.on { background: #2d73c5; }
 .app-shell { background: radial-gradient(circle at 80% 4%, rgba(242,140,40,.16), transparent 24rem), var(--background); }
-.hero-art .art-card.back { display: none; }
+.hero-art .art-card.back { display: block; }
+.hero-art .art-card.front img { display: none; }
 @media (max-width: 680px) {
 	.reels-section { display: block; width: 100%; margin-bottom: 2.5rem; overflow: hidden; }
 	.reels-section > div:first-child { margin-bottom: 1.5rem; }
