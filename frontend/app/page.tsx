@@ -31,6 +31,12 @@ const initialForm = {
   customerCity: "",
   customerAddress: "",
 };
+
+const copy = {
+  de: { collection: "Kollektion 2026", kicker: "Prüfungsvorbereitung mit System", title: <>Deutsch lernen? <em>Wir helfen dir dabei.</em></>, subtitle: "Originale Bücher für TELC, Goethe und ÖSD — sorgfältig ausgewählt für deinen nächsten Prüfungserfolg.", cta: "Passende Bücher entdecken", instagram: "Auf Instagram folgen", trust: "Von 2.000+ Lernenden gewählt", original: "Originale Bücher", originalSub: "Authentisch und fokussiert", practice: "Echte Prüfungspraxis", practiceSub: "Modelle mit Lösungen", progress: "Fortschritt nach Niveau", progressSub: "A1 bis C1, Schritt für Schritt", support: "Persönliche Unterstützung", supportSub: "Schnelle Bestellung per WhatsApp", library: "Die Bibliothek", libraryTitle: "Bereit für deinen Erfolg?", search: "Titel oder Niveau suchen...", allLevels: "Alle Niveaus", allExams: "Alle Prüfungen", add: "Hinzufügen", inStock: "Auf Lager", soldOut: "Ausverkauft", order: "Bestellung", empty: "Deine Auswahl wartet.", emptySub: "Füge ein Buch hinzu, um zu starten.", delivery: "Lieferdaten", place: "Bestellung aufgeben", sending: "Wird gesendet..." },
+  ar: { collection: "مجموعة 2026", kicker: "تحضير للامتحان بثقة", title: <>تعلّم الألمانية؟ <em>نساعدك على النجاح.</em></>, subtitle: "كتب أصلية لاختبارات TELC وGoethe وÖSD، مختارة بعناية لخطوتك القادمة.", cta: "اكتشف الكتب المناسبة", instagram: "تابعنا على Instagram", trust: "يثق بنا أكثر من 2,000 طالب", original: "كتب أصلية", originalSub: "محتوى موثوق ومركّز", practice: "تدريب واقعي", practiceSub: "نماذج مع الحلول", progress: "تقدم حسب المستوى", progressSub: "من A1 إلى C1 خطوة بخطوة", support: "دعم شخصي", supportSub: "طلب سريع عبر WhatsApp", library: "المكتبة", libraryTitle: "جاهز لنجاحك؟", search: "ابحث عن العنوان أو المستوى...", allLevels: "كل المستويات", allExams: "كل الاختبارات", add: "أضف", inStock: "متوفر", soldOut: "نفد", order: "طلبك", empty: "اختيارك بانتظارك.", emptySub: "أضف كتاباً للبدء.", delivery: "بيانات التوصيل", place: "إرسال الطلب", sending: "جارٍ الإرسال..." },
+  nl: { collection: "Collectie 2026", kicker: "Examenvoorbereiding met vertrouwen", title: <>Duits leren? <em>Wij helpen je slagen.</em></>, subtitle: "Originele boeken voor TELC, Goethe en ÖSD — zorgvuldig gekozen voor jouw volgende examen.", cta: "Ontdek passende boeken", instagram: "Volg ons op Instagram", trust: "Vertrouwd door 2.000+ cursisten", original: "Originele boeken", originalSub: "Authentiek en doelgericht", practice: "Echte examentraining", practiceSub: "Modellen met oplossingen", progress: "Vooruitgang per niveau", progressSub: "A1 tot C1, stap voor stap", support: "Persoonlijke hulp", supportSub: "Snel bestellen via WhatsApp", library: "De bibliotheek", libraryTitle: "Klaar voor succes?", search: "Zoek titels of niveaus...", allLevels: "Alle niveaus", allExams: "Alle examens", add: "Toevoegen", inStock: "Op voorraad", soldOut: "Uitverkocht", order: "Jouw bestelling", empty: "Je selectie wacht.", emptySub: "Voeg een boek toe om te beginnen.", delivery: "Bezorggegevens", place: "Bestelling plaatsen", sending: "Wordt verzonden..." },
+} as const;
 const API =
   process.env.NEXT_PUBLIC_API_URL ||
   (typeof window !== "undefined" &&
@@ -133,7 +139,7 @@ function Store() {
     [form, setForm] = useState(initialForm),
     [status, setStatus] = useState(""),
     [submitting, setSubmitting] = useState(false),
-    [language, setLanguage] = useState<"en" | "de" | "ar">("en"),
+    [language, setLanguage] = useState<"de" | "ar" | "nl">("de"),
     [loading, setLoading] = useState(true);
   useEffect(() => {
     setLoading(true);
@@ -191,27 +197,23 @@ function Store() {
     }
   }
   return (
-    <main className="store-page">
+    <main className="store-page" dir={language === "ar" ? "rtl" : "ltr"}>
       <section className="hero">
         <div className="hero-copy">
           <div className="language-switcher" aria-label="Language selector">
-            <button className={language === "en" ? "active" : ""} onClick={() => setLanguage("en")}>EN</button>
             <button className={language === "de" ? "active" : ""} onClick={() => setLanguage("de")}>DE</button>
             <button className={language === "ar" ? "active" : ""} onClick={() => setLanguage("ar")}>عربي</button>
+            <button className={language === "nl" ? "active" : ""} onClick={() => setLanguage("nl")}>NL</button>
           </div>
           <div className="kicker">
-            <span>{language === "ar" ? "مجموعة 2026" : language === "de" ? "Kollektion 2026" : "2026 collection"}</span>
-            <span className="rule" /> curated exam prep
+            <span>{copy[language].collection}</span>
+            <span className="rule" /> {copy[language].kicker}
           </div>
-          <h1 dir={language === "ar" ? "rtl" : "ltr"}>
-            {language === "ar" ? <>تعلّم الألمانية <em>بثقة.</em><br />ونجح بذكاء.</> : language === "de" ? <>Deutsch lernen mit <em>System.</em><br />Prüfungen sicher bestehen.</> : <>Learn German with <em>confidence.</em><br />Pass with direction.</>}
-          </h1>
-          <p dir={language === "ar" ? "rtl" : "ltr"}>
-            {language === "ar" ? "كتب تحضير موثوقة لاختبارات TELC وGoethe وÖSD، مختارة لمساعدتك على التقدم بسرعة." : language === "de" ? "Hochwertige Prüfungsvorbereitung für TELC, Goethe und ÖSD. Das richtige Buch für dein nächstes Level." : "Trusted preparation books for TELC, Goethe and ÖSD. Find your level, order in a minute, and move forward."}
-          </p>
+          <h1 dir={language === "ar" ? "rtl" : "ltr"}>{copy[language].title}<br /><span className="hero-subtitle">TELC · Goethe · ÖSD</span></h1>
+          <p dir={language === "ar" ? "rtl" : "ltr"}>{copy[language].subtitle}</p>
           <div className="hero-actions">
             <a href="#catalog" className="button primary">
-              {language === "ar" ? "اكتشف الكتب المناسبة" : language === "de" ? "Kollektion entdecken" : "Explore collection"} <span>→</span>
+              {copy[language].cta} <span>→</span>
             </a>
             <a
               className="button secondary instagram-button"
@@ -219,36 +221,25 @@ function Store() {
               target="_blank"
               rel="noreferrer"
             >
-              {language === "ar" ? "تابعنا على Instagram" : language === "de" ? "Auf Instagram folgen" : "Follow on Instagram"} <span>↗</span>
+              {copy[language].instagram} <span>↗</span>
             </a>
-            <span className="hero-note">{language === "ar" ? "يثق بنا أكثر من 2,000 طالب" : language === "de" ? "Von 2.000+ Lernenden gewählt" : "Trusted by 2,000+ learners"}</span>
+            <span className="hero-note">{copy[language].trust}</span>
           </div>
         </div>
-        <div className="hero-art">
-          <div className="art-card back" />
-          <div className="art-card front">
-            <img src={fallbackImage} alt="Open study book" />
-            <div className="art-label">
-              <strong>DEUTSCH</strong>
-              <span>PREP / 2026</span>
-            </div>
-          </div>
-          <div className="floating-badge">
-            <b>01</b>
-            <span>
-              Find your
-              <br />
-              next level
-            </span>
-          </div>
+        <div className="hero-art" aria-label="TELC, Goethe and ÖSD preparation books">
+          <div className="book-shadow" />
+          <div className="book-cover book-telc"><strong>telc</strong><span>DEUTSCH<br />PRÜFUNGSTRAINING</span><b>A1–C1</b></div>
+          <div className="book-cover book-goethe"><strong>GOETHE</strong><span>ZERTIFIKAT<br />PRÜFUNGSBUCH</span><b>A1–C2</b></div>
+          <div className="book-cover book-osd"><strong>ÖSD</strong><span>Prüfungstraining</span><b>A1–C1</b></div>
+          <div className="floating-badge"><b>✓</b><span>Ready for<br />your next level</span></div>
         </div>
       </section>
 
       <section className="hero-benefits" aria-label="Study benefits">
-        <article><span className="benefit-icon">▣</span><div><strong>Original books</strong><small>Authentic, focused material</small></div></article>
-        <article><span className="benefit-icon">✓</span><div><strong>Real exam practice</strong><small>Models with solutions</small></div></article>
-        <article><span className="benefit-icon">↗</span><div><strong>Progress by level</strong><small>B1 to B2, one step at a time</small></div></article>
-        <article><span className="benefit-icon">★</span><div><strong>Human support</strong><small>Fast WhatsApp ordering</small></div></article>
+        <article><span className="benefit-icon">▣</span><div><strong>{copy[language].original}</strong><small>{copy[language].originalSub}</small></div></article>
+        <article><span className="benefit-icon">✓</span><div><strong>{copy[language].practice}</strong><small>{copy[language].practiceSub}</small></div></article>
+        <article><span className="benefit-icon">↗</span><div><strong>{copy[language].progress}</strong><small>{copy[language].progressSub}</small></div></article>
+        <article><span className="benefit-icon">★</span><div><strong>{copy[language].support}</strong><small>{copy[language].supportSub}</small></div></article>
       </section>
 
       <section className="reels-section">
@@ -288,14 +279,14 @@ function Store() {
 
       <section className="toolbar" id="catalog">
         <div>
-          <p className="eyebrow">The library</p>
-          <h2>Build your advantage.</h2>
+          <p className="eyebrow">{copy[language].library}</p>
+          <h2>{copy[language].libraryTitle}</h2>
         </div>
         <div className="filters">
           <label className="search-box">
             <span>⌕</span>
             <input
-              placeholder="Search titles, levels..."
+              placeholder={copy[language].search}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -449,7 +440,7 @@ function Store() {
               {submitting ? "Sending order..." : "Place order"} <span>{submitting ? "" : "→"}</span>
             </button>
           </form>
-          {status && <div className={`toast ${status.startsWith("Order #") ? "success" : "error"}`} role="status"><span>{status.startsWith("Order #") ? "✓" : "!"}</span><p>{status}</p><button type="button" onClick={() => setStatus("")} aria-label="Dismiss message">×</button></div>}
+          {status && <div className={`toast ${status.startsWith("Order #") ? "success" : "error"}`} role="alert" aria-live="assertive"><span>{status.startsWith("Order #") ? "✓" : "!"}</span><p>{status}</p><button type="button" onClick={() => setStatus("")} aria-label="Dismiss message">×</button></div>}
           <p className="secure">Secure ordering · Confirmation via WhatsApp</p>
         </aside>
       </div>

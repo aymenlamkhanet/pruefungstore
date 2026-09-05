@@ -3,8 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'PrüfungStore Pro',
-  description: 'Catalogue officiel de manuels TELC, Goethe et ÖSD avec commande WhatsApp.',
+  title: 'PrüfungStore — Deutsch lernen, Prüfungen bestehen',
+  description: 'Originale TELC-, Goethe- und ÖSD-Prüfungsbücher mit schneller Bestellung per WhatsApp.',
 }
 
 export const viewport: Viewport = {
@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="de">
       <body className="antialiased">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
