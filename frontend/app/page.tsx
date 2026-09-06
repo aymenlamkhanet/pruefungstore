@@ -22,6 +22,7 @@ type Order = {
   status: string;
   items: { title: string; qty: number }[];
 };
+type ConfirmAction = { title: string; message: string; confirmLabel: string; action: () => void };
 
 const fallbackImage =
   "https://pruefungstore-backend.onrender.com/api/assets/products/pack-b1.png";
@@ -507,6 +508,7 @@ function Admin() {
     [status, setStatus] = useState(""),
     [editingId, setEditingId] = useState<number | null>(null),
     [imageFile, setImageFile] = useState<File | null>(null),
+    [confirmAction, setConfirmAction] = useState<ConfirmAction | null>(null),
     [form, setForm] = useState({
       title: "",
       level: "B1",
@@ -603,7 +605,6 @@ function Admin() {
   };
   async function removeProduct(id: number) {
     if (!adminSession) return;
-    if (!confirm("Delete this product?")) return;
     try {
       await request(`/admin/products/${id}`, {
         method: "DELETE",
@@ -645,7 +646,6 @@ function Admin() {
     }
   }
   async function removeOrder(id: number) {
-    if (!confirm("Delete this order?")) return;
     try {
       await request(`/admin/orders/${id}`, {
         method: "DELETE",
@@ -657,10 +657,12 @@ function Admin() {
       setStatus((e as Error).message);
     }
   }
+  const askToDeleteProduct = (id: number) => setConfirmAction({ title: "Delete this title?", message: "This removes the title from your catalog. This action cannot be undone.", confirmLabel: "Delete title", action: () => { setConfirmAction(null); void removeProduct(id); } });
+  const askToDeleteOrder = (id: number) => setConfirmAction({ title: "Delete this order?", message: "The order will be permanently removed from your activity history.", confirmLabel: "Delete order", action: () => { setConfirmAction(null); void removeOrder(id); } });
   return (
     <main className="admin-page">
       {adminSession && (
-        <OrderManagement orders={orders} onStatus={updateOrderStatus} onDelete={removeOrder} />
+        <OrderManagement orders={orders} onStatus={updateOrderStatus} onDelete={askToDeleteOrder} />
       )}
       <div className="admin-heading">
         <div>
@@ -898,7 +900,7 @@ function Admin() {
                 <button onClick={() => edit(p)}>Edit</button>
                 <button
                   className="danger-link"
-                  onClick={() => removeProduct(p.id)}
+                  onClick={() => askToDeleteProduct(p.id)}
                 >
                   Delete
                 </button>
@@ -929,7 +931,8 @@ function Admin() {
           </article>
         ))}
       </section>
-      {status && <p className="status">{status}</p>}
+      {status && <div className={`toast admin-toast ${/error|invalid|failed|could not|not found/i.test(status) ? "error" : "success"}`} role="status"><span>{/error|invalid|failed|could not|not found/i.test(status) ? "!" : "✓"}</span><p>{status}</p><button type="button" onClick={() => setStatus("")} aria-label="Dismiss message">×</button></div>}
+      {confirmAction && <div className="modal-backdrop" role="presentation" onClick={() => setConfirmAction(null)}><section className="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title" onClick={event => event.stopPropagation()}><span className="confirm-icon">!</span><h2 id="confirm-title">{confirmAction.title}</h2><p>{confirmAction.message}</p><div className="confirm-actions"><button type="button" className="button secondary" onClick={() => setConfirmAction(null)}>Cancel</button><button type="button" className="button danger-button" onClick={confirmAction.action}>{confirmAction.confirmLabel}</button></div></section></div>}
     </main>
   );
 }
@@ -961,7 +964,7 @@ export default function Page() {
       />
       {admin ? <Admin /> : <Store />}
       <footer>
-        PrüfungStore <span>· Study seriously. Order simply.</span>
+        StoreDeutsch <span>· Study seriously. Order simply.</span>
       </footer>
     </div>
   );

@@ -46,6 +46,15 @@ input[placeholder="Image URL (optional fallback)"] { display: none; }
 .toast > span { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: currentColor; color: #fff; font-weight: 800; }
 .toast p { margin: 0; font-weight: 700; }
 .toast button { border: 0; background: transparent; color: currentColor; font-size: 1.1rem; line-height: 1; padding: .25rem; }
+.admin-toast { max-width: 520px; margin: 1.25rem auto 0; }
+.modal-backdrop { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 1.25rem; background: rgba(12, 29, 56, .48); backdrop-filter: blur(8px); animation: modal-in .18s ease-out; }
+.confirm-modal { width: min(100%, 420px); padding: 1.6rem; background: var(--paper); border: 1px solid var(--line); border-top: 4px solid var(--danger); border-radius: 12px; box-shadow: 0 24px 70px rgba(14, 42, 83, .25); }
+.confirm-icon { display: grid; place-items: center; width: 38px; height: 38px; margin-bottom: .9rem; border-radius: 50%; background: #fff0ee; color: var(--danger); font-weight: 900; }
+.confirm-modal h2 { margin: 0; color: var(--foreground); font-size: 1.45rem; }
+.confirm-modal p { margin: .55rem 0 1.35rem; color: var(--muted); font-size: .78rem; line-height: 1.55; }
+.confirm-actions { display: flex; justify-content: flex-end; gap: .6rem; }
+.danger-button { background: var(--danger); color: #fff; }
+@keyframes modal-in { from { opacity: 0; transform: scale(.98); } to { opacity: 1; transform: scale(1); } }
 .order-status { border: 1px solid var(--line); border-radius: 999px; padding: .45rem .65rem; background: var(--soft); color: var(--foreground); font-size: .68rem; font-weight: 800; }
 .order-status.confirmed { color: #2d73c5; border-color: #a9c7e9; }
 .order-status.shipped { color: #287b58; border-color: #a8d5bd; }

@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'PrüfungStore Pro',
+  title: 'StoreDeutsch',
   description: 'Catalogue officiel de manuels TELC, Goethe et ÖSD avec commande WhatsApp.',
 }
 
