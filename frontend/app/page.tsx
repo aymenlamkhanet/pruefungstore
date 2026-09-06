@@ -196,14 +196,18 @@ function Store() {
             <span>Deutsch lernen</span>
             <span className="rule" /> Prüfungsvorbereitung
           </div>
+          <div className="hero-markers" aria-label="Exam preparation levels">
+            <span className="marker-dot" />
+            <span>A1 — C1</span>
+            <span className="marker-line" />
+            <span>TELC · GOETHE · ÖSD</span>
+          </div>
           <h1 dir="auto">
-            Deutsch lernen? <em>Wir helfen dir dabei.</em> 🇩🇪
+            Deutsch lernen? <em>Wir helfen dir dabei.</em>
             <br />
-            <span>من أول خطوة حتى Prüfungserfolg</span> 📚
+            <span>من أول خطوة حتى Prüfungserfolg</span>
           </h1>
           <p dir="auto">
-            TELC • Goethe • ÖSD | A1 → C1
-            <br />
             كتب مناسبة لمستواك، طلب سريع، وتوصيل حتى باب دارك.
           </p>
           <div className="hero-actions">
@@ -277,9 +281,10 @@ function Store() {
       </section>
 
       <section className="toolbar" id="catalog">
-        <div>
+        <div className="catalog-heading">
           <p className="eyebrow">مكتبة Prüfungsvorbereitung</p>
           <h2>Finde dein passendes Buch.</h2>
+          <p className="catalog-description" dir="auto">اختَر كتابك، وابدأ التحضير بثقة — von A1 bis C1.</p>
         </div>
         <div className="filters">
           <label className="search-box">
@@ -309,14 +314,10 @@ function Store() {
       <div className="shop-grid">
         <section>
           <div className="results-line">
-            <span>
-              {loading
-                ? "Loading collection..."
-                : `${products.length} titles available`}
+            <span className="results-count">
+              <b>{loading ? "—" : products.length}</b> Titel für deine Prüfung
             </span>
-            <span>
-              New arrivals first <span className="sort-arrow">↓</span>
-            </span>
+            <span className="results-note">Ausgewählte Prüfungsvorbereitung · New arrivals first <span className="sort-arrow">↓</span></span>
           </div>
           <div className="product-grid">
             {loading
