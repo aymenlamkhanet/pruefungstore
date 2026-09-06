@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 type Product = {
   id: number;
@@ -557,8 +557,11 @@ function Admin() {
     [orders, setOrders] = useState<Order[]>([]),
     [status, setStatus] = useState(""),
     [editingId, setEditingId] = useState<number | null>(null),
-    [imageFile, setImageFile] = useState<File | null>(null),
+    [imageFiles, setImageFiles] = useState<File[]>([]),
+    [imagePreviews, setImagePreviews] = useState<string[]>([]),
+    [existingImageUrls, setExistingImageUrls] = useState<string[]>([]),
     [confirmAction, setConfirmAction] = useState<ConfirmAction | null>(null),
+    imageInputRef = useRef<HTMLInputElement>(null),
     [form, setForm] = useState({
       title: "",
       level: "B1",
@@ -596,21 +599,54 @@ function Admin() {
       setStatus((e as Error).message);
     }
   }
+  function handleImageFiles(event: ChangeEvent<HTMLInputElement>) {
+    const selected = Array.from(event.target.files || []);
+    if (!selected.length) return;
+    if (selected.length > 6) {
+      setStatus("You can select up to 6 images.");
+      event.target.value = "";
+      return;
+    }
+    const invalid = selected.find((file) => !file.type.startsWith("image/"));
+    if (invalid) {
+      setStatus("Please select image files only.");
+      event.target.value = "";
+      return;
+    }
+    setImageFiles(selected);
+    setImagePreviews(selected.map((file) => URL.createObjectURL(file)));
+  }
+
+  function removeImage(index: number) {
+    setImageFiles((current) => current.filter((_, itemIndex) => itemIndex !== index));
+    setImagePreviews((current) => current.filter((_, itemIndex) => itemIndex !== index));
+    if (imageInputRef.current) imageInputRef.current.value = "";
+  }
+
+  function resetImagePicker() {
+    imagePreviews.forEach((preview) => URL.revokeObjectURL(preview));
+    setImageFiles([]);
+    setImagePreviews([]);
+    if (imageInputRef.current) imageInputRef.current.value = "";
+  }
+
   async function submit(e: FormEvent) {
     e.preventDefault();
     try {
-      if (!editingId && !imageFile)
-        throw new Error("Please choose a product image");
-      let payload = { ...form };
-      if (imageFile) {
+      if (!editingId && !imageFiles.length && !form.imageUrl)
+        throw new Error("Please choose at least one product image");
+      let payload: typeof form & { imageUrls?: string[] } = { ...form };
+      if (existingImageUrls.length) payload.imageUrls = existingImageUrls;
+      if (imageFiles.length) {
         const body = new FormData();
-        body.append("image", imageFile);
-        const upload = await request("/admin/upload-image", {
+        imageFiles.forEach((file) => body.append("images", file));
+        const upload = await request("/admin/upload-images", {
           method: "POST",
           headers: { "x-admin-token": adminSession },
           body,
         });
-        payload.imageUrl = upload.imageUrl;
+        payload.imageUrl = upload.imageUrls[0];
+        payload.imageUrls = upload.imageUrls;
       }
       await request(
         editingId ? `/admin/products/${editingId}` : "/admin/products",
@@ -633,7 +669,8 @@ function Admin() {
         description: "",
       });
       setEditingId(null);
-      setImageFile(null);
+      setExistingImageUrls([]);
+      resetImagePicker();
       await load();
       setStatus("Saved successfully");
     } catch (e) {
@@ -641,9 +678,10 @@ function Admin() {
     }
   }
   const edit = (p: Product) => {
-    setEditingId(p.id);
-    setImageFile(null);
-    setForm({
+      setEditingId(p.id);
+      resetImagePicker();
+      setExistingImageUrls(p.imageUrls?.length ? p.imageUrls : p.imageUrl ? [p.imageUrl] : []);
+      setForm({
       title: p.title,
       level: p.level,
       examType: p.examType,
@@ -909,10 +947,23 @@ function Admin() {
             />
           </div>
           <input
+            ref={imageInputRef}
             type="file"
-            accept="image/*"
-            onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+            accept="image/jpeg,image/png,image/webp"
+            multiple
+            onChange={handleImageFiles}
           />
+          {(imagePreviews.length > 0 || existingImageUrls.length > 0) && (
+            <div className="admin-image-gallery" aria-live="polite">
+              {(imagePreviews.length ? imagePreviews : existingImageUrls).map((src, index) => (
+                <div className="admin-image-thumb" key={`${src}-${index}`}>
+                  <img src={imagePreviews.length ? src : imageSrc(src)} alt={`Product image ${index + 1}`} />
+                  <button type="button" onClick={() => imagePreviews.length ? removeImage(index) : setExistingImageUrls((current) => current.filter((_, itemIndex) => itemIndex !== index))} aria-label={`Remove image ${index + 1}`}>×</button>
+                  {index === 0 && <span>Cover</span>}
+                </div>
+              ))}
+            </div>
+          )}
           <input
             placeholder="Image URL (optional fallback)"
             value={form.imageUrl}
