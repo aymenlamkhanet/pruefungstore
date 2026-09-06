@@ -91,7 +91,7 @@ input[placeholder="Image URL (optional fallback)"] { display: none; }
 .hero-subline { display: flex; align-items: center; justify-content: flex-start; gap: .4rem; margin: 1.25rem 0 1rem; color: #183b69; font-family: 'Noto Sans Arabic', Arial, sans-serif; font-size: clamp(1rem, 1.8vw, 1.35rem); font-weight: 700; direction: rtl; }
 .hero-subline::before { content: ""; width: 1.25rem; height: 1.25rem; background: linear-gradient(135deg, #e77e16 0 50%, #183b69 50%); clip-path: polygon(0 50%, 100% 0, 68% 100%, 43% 63%); }
 .hero-subline strong { color: #e77e16; }
-.hero-exams { display: flex; align-items: center; flex-wrap: wrap; gap: .55rem; width: fit-content; padding: .75rem 1.25rem; border-radius: .7rem; background: #173d6c; color: #fff; font-size: .8rem; font-weight: 800; letter-spacing: .03em; box-shadow: 0 7px 0 #102c50, 0 14px 25px rgba(23,61,108,.18); }
+.hero-exams { display: flex; align-items: center; flex-wrap: wrap; gap: .55rem; width: fit-content; padding: .75rem 1.25rem; border-radius: .7rem; background: #173d35; color: #fffdf9; font-size: .8rem; font-weight: 800; letter-spacing: .03em; box-shadow: 0 7px 0 #0d2c26, 0 14px 25px rgba(23,61,53,.18); }
 .hero-exams i { width: .25rem; height: .25rem; border-radius: 50%; background: #e77e16; }
 .hero-exams b { color: #e77e16; font-weight: 400; }
 .hero-benefits { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .65rem; max-width: 620px; margin-top: 1.8rem; color: #183b69; font-family: 'Noto Sans Arabic', Arial, sans-serif; font-size: .68rem; line-height: 1.4; text-align: center; direction: rtl; }
