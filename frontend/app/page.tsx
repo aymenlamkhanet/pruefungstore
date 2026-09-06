@@ -193,21 +193,22 @@ function Store() {
       <section className="hero">
         <div className="hero-copy">
           <div className="kicker">
-            <span>2026 collection</span>
-            <span className="rule" /> curated exam prep
+            <span>Deutsch lernen</span>
+            <span className="rule" /> Prüfungsvorbereitung
           </div>
-          <h1>
-            Pass with <em>confidence.</em>
+          <h1 dir="auto">
+            Deutsch lernen? <em>Wir helfen dir dabei.</em> 🇩🇪
             <br />
-            Study with direction.
+            <span>من أول خطوة حتى Prüfungserfolg</span> 📚
           </h1>
-          <p>
-            Premium preparation books for TELC, Goethe and ÖSD learners. Find
-            the right level, order in a minute, and get it delivered.
+          <p dir="auto">
+            TELC • Goethe • ÖSD | A1 → C1
+            <br />
+            كتب مناسبة لمستواك، طلب سريع، وتوصيل حتى باب دارك.
           </p>
           <div className="hero-actions">
             <a href="#catalog" className="button primary">
-              Explore collection <span>→</span>
+              اكتشف الكتب المناسبة لك <span>→</span>
             </a>
             <a
               className="button secondary instagram-button"
@@ -215,9 +216,9 @@ function Store() {
               target="_blank"
               rel="noreferrer"
             >
-              Follow on Instagram <span>↗</span>
+              تابعنا على Instagram <span>↗</span>
             </a>
-            <span className="hero-note">Trusted by 2,000+ learners</span>
+            <span className="hero-note">مع أكثر من 2,000 متعلم</span>
           </div>
         </div>
         <div className="hero-art">
@@ -242,10 +243,10 @@ function Store() {
 
       <section className="reels-section">
         <div>
-          <p className="eyebrow">From our study community</p>
-          <h2>Study smarter, together.</h2>
+          <p className="eyebrow">من مجتمع المتعلمين</p>
+          <h2>Gemeinsam besser lernen.</h2>
           <p>
-            Watch quick preparation tips and book recommendations on Instagram.
+            نصائح سريعة للتحضير واقتراحات كتب على Instagram.
           </p>
         </div>
         <div className="reel-grid">
@@ -277,8 +278,8 @@ function Store() {
 
       <section className="toolbar" id="catalog">
         <div>
-          <p className="eyebrow">The library</p>
-          <h2>Build your advantage.</h2>
+          <p className="eyebrow">مكتبة Prüfungsvorbereitung</p>
+          <h2>Finde dein passendes Buch.</h2>
         </div>
         <div className="filters">
           <label className="search-box">
@@ -375,9 +376,9 @@ function Store() {
         <aside className="checkout">
           <div className="checkout-head">
             <div>
-              <p className="eyebrow">Your selection</p>
-              <h2>
-                Order desk <span>{cart.length}</span>
+              <p className="eyebrow">اختيارك</p>
+              <h2 dir="auto">
+                طلبك <span>{cart.length}</span>
               </h2>
             </div>
             <span className="bag-icon">◒</span>
@@ -386,9 +387,9 @@ function Store() {
             <div className="empty-cart">
               <span>＋</span>
               <p>
-                Your order is waiting.
+                طلبك في انتظارك.
                 <br />
-                <small>Add a title to get started.</small>
+                <small>أضف كتابًا للبدء.</small>
               </p>
             </div>
           ) : (
@@ -413,18 +414,18 @@ function Store() {
             </div>
           )}
           <div className="total">
-            <span>Total</span>
+            <span>المجموع Gesamt</span>
             <strong>
               {total} <small>DH</small>
             </strong>
           </div>
           <form onSubmit={checkout} className="order-form">
-            <p className="form-title">Delivery details</p>
+            <p className="form-title">بيانات التوصيل Lieferung</p>
             {[
-              ["customerName", "Full name"],
-              ["customerPhone", "Phone number"],
-              ["customerCity", "City"],
-              ["customerAddress", "Address"],
+              ["customerName", "الاسم الكامل / Vollständiger Name"],
+              ["customerPhone", "رقم الهاتف / Telefonnummer"],
+              ["customerCity", "المدينة / Stadt"],
+              ["customerAddress", "العنوان / Adresse"],
             ].map(([key, placeholder]) => (
               <input
                 key={key}
@@ -435,7 +436,7 @@ function Store() {
               />
             ))}
             <button className="button primary full order-submit" type="submit" disabled={submitting}>
-              {submitting ? "Sending order..." : "Place order"} <span>{submitting ? "" : "→"}</span>
+              {submitting ? "جار إرسال الطلب..." : "أكد الطلب Bestellung aufgeben"} <span>{submitting ? "" : "→"}</span>
             </button>
           </form>
           {status && <div className={`toast ${status.startsWith("Order #") ? "success" : "error"}`} role="status"><span>{status.startsWith("Order #") ? "✓" : "!"}</span><p>{status}</p><button type="button" onClick={() => setStatus("")} aria-label="Dismiss message">×</button></div>}
