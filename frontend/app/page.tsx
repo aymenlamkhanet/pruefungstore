@@ -227,11 +227,16 @@ function Store() {
         </div>
         <div className="hero-art">
           <div className="art-card back" />
-          <div className="art-card front">
-            <img src={fallbackImage} alt="Open study book" />
-            <div className="art-label">
-              <strong>DEUTSCH</strong>
-              <span>PREP / 2026</span>
+          <div className="art-card front" aria-label="Deutsch Prüfung Vorbereitung study book">
+            <div className="cover-shine" />
+            <div className="cover-title">
+              <span>Deutsch</span>
+              <span>Prüfung</span>
+              <span>Vorbereitung</span>
+            </div>
+            <div className="cover-meta">
+              <span>A1 — C1</span>
+              <span>Prüfungserfolg</span>
             </div>
           </div>
           <div className="floating-badge">
