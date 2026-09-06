@@ -717,6 +717,7 @@
       <form onsubmit="handleSaveProductForm(event)" class="space-y-4 text-xs">
         <input type="hidden" id="prod-form-id">
         <input type="hidden" id="prod-form-image" value="assets/products/pack-b1.png">
+        <input type="hidden" id="prod-form-images" value="[]">
 
         <!-- PHOTO DU PRODUIT -->
         <div>
@@ -730,6 +731,7 @@
               <div class="w-20 h-20 rounded-2xl bg-black/80 border-2 border-amber-500/40 p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-lg relative group">
                 <img id="prod-image-preview" src="assets/products/pack-b1.png" alt="Aperçu" class="w-full h-full object-contain">
               </div>
+              <div id="prod-image-gallery" class="flex flex-wrap gap-2 max-h-20 overflow-y-auto min-w-0" aria-live="polite"></div>
 
               <div class="flex-1 space-y-2">
                 <div class="flex flex-wrap items-center gap-2">
@@ -744,7 +746,8 @@
                     <span>Couvertures Types</span>
                   </button>
                 </div>
-                <p class="text-[10px] text-slate-400">Importez depuis votre PC/Téléphone (JPG, PNG, WEBP)</p>
+                <p class="text-[10px] text-slate-400">Importez plusieurs images (JPG, PNG, WEBP). La première sera la couverture.</p>
+                <p id="prod-image-count" class="text-[10px] text-amber-400 font-bold">1 image sélectionnée</p>
               </div>
             </div>
 
@@ -1255,23 +1258,42 @@
     }
 
     // ================= IMAGE UPLOAD & PREVIEW HANDLERS =================
+    function getProductImages() {
+      try { return JSON.parse(document.getElementById("prod-form-images").value || "[]"); } catch { return []; }
+    }
+
+    function renderProductImageGallery() {
+      const images = getProductImages();
+      const gallery = document.getElementById("prod-image-gallery");
+      const preview = document.getElementById("prod-image-preview");
+      const count = document.getElementById("prod-image-count");
+      const primary = images[0] || document.getElementById("prod-form-image").value || "assets/products/pack-b1.png";
+      document.getElementById("prod-form-image").value = primary;
+      preview.src = primary;
+      count.textContent = `${images.length || 1} image${images.length > 1 ? "s" : ""} sélectionnée${images.length > 1 ? "s" : ""}`;
+      gallery.innerHTML = images.slice(1).map((src, index) => `<div class="relative w-12 h-12 rounded-lg bg-black/80 border border-white/15 p-1 group"><img src="${src}" alt="Image ${index + 2}" class="w-full h-full object-contain"><button type="button" onclick="removeProductImage(${index + 1})" class="absolute -right-1.5 -top-1.5 hidden group-hover:grid place-items-center w-4 h-4 rounded-full bg-red-500 text-white text-[10px]">×</button></div>`).join("");
+    }
+
     function handleImageFileSelect(event) {
-      const file = event.target.files[0];
-      if (!file) return;
+      const files = Array.from(event.target.files || []);
+      if (!files.length) return;
+      const invalid = files.find(file => !file.type.startsWith("image/"));
+      if (invalid) { showToast("Veuillez sélectionner uniquement des images JPG, PNG ou WEBP.", "error"); event.target.value = ""; return; }
+      const current = getProductImages();
+      if (current.length + files.length > 6) { showToast("Vous pouvez ajouter 6 images maximum.", "error"); event.target.value = ""; return; }
+      Promise.all(files.map(file => new Promise(resolve => { const reader = new FileReader(); reader.onload = e => resolve(e.target.result); reader.readAsDataURL(file); }))).then(newImages => {
+        document.getElementById("prod-form-images").value = JSON.stringify([...current, ...newImages]);
+        renderProductImageGallery();
+        event.target.value = "";
+        showToast(`${files.length} image${files.length > 1 ? "s" : ""} ajoutée${files.length > 1 ? "s" : ""} !`);
+      });
+    }
 
-      if (!file.type.startsWith('image/')) {
-        alert("Veuillez sélectionner un fichier image valide (JPG, PNG, WEBP).");
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const base64Data = e.target.result;
-        document.getElementById("prod-form-image").value = base64Data;
-        document.getElementById("prod-image-preview").src = base64Data;
-        showToast("Photo importée avec succès !");
-      };
-      reader.readAsDataURL(file);
+    function removeProductImage(index) {
+      const images = getProductImages();
+      images.splice(index, 1);
+      document.getElementById("prod-form-images").value = JSON.stringify(images);
+      renderProductImageGallery();
     }
 
     function togglePresetGallery() {
@@ -1280,8 +1302,10 @@
     }
 
     function selectPresetImage(imgPath) {
-      document.getElementById("prod-form-image").value = imgPath;
-      document.getElementById("prod-image-preview").src = imgPath;
+      const images = getProductImages();
+      if (!images.length) images.push(imgPath); else images[0] = imgPath;
+      document.getElementById("prod-form-images").value = JSON.stringify(images);
+      renderProductImageGallery();
       showToast("Couverture sélectionnée !");
     }
 
@@ -1301,8 +1325,10 @@
         document.getElementById("prod-form-price").value = p.price;
         document.getElementById("prod-form-orig-price").value = p.originalPrice || "";
         document.getElementById("prod-form-stock").value = p.stock;
-        document.getElementById("prod-form-image").value = p.image || "assets/products/pack-b1.png";
-        document.getElementById("prod-image-preview").src = p.image || "assets/products/pack-b1.png";
+        const existingImages = p.images || p.imageUrls || [p.image || "assets/products/pack-b1.png"];
+        document.getElementById("prod-form-images").value = JSON.stringify(existingImages);
+        document.getElementById("prod-form-image").value = existingImages[0];
+        document.getElementById("prod-image-preview").src = existingImages[0];
         document.getElementById("prod-form-desc").value = p.description || "";
       } else {
         titleEl.textContent = "Ajouter un Nouveau Manuel";
@@ -1312,11 +1338,13 @@
         document.getElementById("prod-form-price").value = "235";
         document.getElementById("prod-form-orig-price").value = "350";
         document.getElementById("prod-form-stock").value = "20";
+        document.getElementById("prod-form-images").value = JSON.stringify(["assets/products/pack-b1.png"]);
         document.getElementById("prod-form-image").value = "assets/products/pack-b1.png";
         document.getElementById("prod-image-preview").src = "assets/products/pack-b1.png";
         document.getElementById("prod-form-desc").value = "";
       }
 
+      renderProductImageGallery();
       modal.classList.remove("hidden");
       if (window.lucide) window.lucide.createIcons();
     }
@@ -1333,8 +1361,12 @@
       const price = parseFloat(document.getElementById("prod-form-price").value) || 0;
       const origPrice = parseFloat(document.getElementById("prod-form-orig-price").value) || null;
       const stock = parseInt(document.getElementById("prod-form-stock").value, 10) || 0;
-      const image = document.getElementById("prod-form-image").value.trim() || "assets/products/pack-b1.png";
+      const images = getProductImages();
+      const image = images[0] || document.getElementById("prod-form-image").value.trim() || "assets/products/pack-b1.png";
       const desc = document.getElementById("prod-form-desc").value.trim();
+
+      if (!name) { showToast("Veuillez ajouter un titre au manuel.", "error"); return; }
+      if (!images.length) { showToast("Ajoutez au moins une image du produit.", "error"); return; }
 
       if (id) {
         const p = state.products.find(x => x.id === id);
@@ -1345,16 +1377,20 @@
           p.originalPrice = origPrice;
           p.stock = stock;
           p.image = image;
+          p.images = images;
           p.description = desc;
           showToast("Manuel modifié avec succès !");
         }
       } else {
         const newId = "PRD-" + String(state.products.length + 1).padStart(3, '0');
-        state.products.unshift({ id: newId, name, category, price, originalPrice: origPrice, stock, image, description: desc, sales: 0 });
+        state.products.unshift({ id: newId, name, category, price, originalPrice: origPrice, stock, image, images, description: desc, sales: 0 });
         showToast("Nouveau manuel ajouté au catalogue !");
       }
 
       saveProducts();
+      document.getElementById("prod-file-input").value = "";
+      document.getElementById("prod-form-images").value = "[]";
+      document.getElementById("prod-image-gallery").innerHTML = "";
       closeProductModal();
       renderProductsTable();
       renderOverview();
