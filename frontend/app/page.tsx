@@ -212,11 +212,19 @@ function Store() {
             <b>|</b>
             <span>A1 → C1</span>
           </div>
+          <div className="hero-levels" aria-label="German levels">
+            <span className="level-chip beginner">A1</span>
+            <span className="level-chip beginner">A2</span>
+            <span className="level-chip">B1</span>
+            <span className="level-chip">B2</span>
+            <span className="level-chip advanced">C1</span>
+            <small>dein Weg, Schritt für Schritt</small>
+          </div>
           <div className="hero-benefits" dir="auto">
-            <span><b>01</b> كتب أصلية ومحدثة</span>
-            <span><b>02</b> نماذج امتحانات واقعية</span>
-            <span><b>03</b> تطور مستواك بخطوات ثابتة</span>
-            <span><b>04</b> نجاحك هو هدفنا</span>
+            <span><b>📖</b> كتب أصلية ومحدثة</span>
+            <span><b>✓</b> نماذج امتحانات واقعية</span>
+            <span><b>↗</b> تطور مستواك بخطوات ثابتة</span>
+            <span><b>★</b> نجاحك هو هدفنا</span>
           </div>
           <div className="hero-actions">
             <a href="#catalog" className="button primary">
@@ -310,8 +318,11 @@ function Store() {
           </label>
           <select value={level} onChange={(e) => setLevel(e.target.value)}>
             <option value="">All levels</option>
+            <option>A1</option>
+            <option>A2</option>
             <option>B1</option>
             <option>B2</option>
+            <option>C1</option>
           </select>
           <select
             value={examType}
@@ -838,9 +849,12 @@ function Admin() {
               value={form.level}
               onChange={(e) => setForm({ ...form, level: e.target.value })}
             >
-              <option>B1</option>
-              <option>B2</option>
-              <option>B1 & B2</option>
+  <option>A1</option>
+  <option>A2</option>
+  <option>B1</option>
+  <option>B2</option>
+  <option>C1</option>
+  <option>B1 & B2</option>
             </select>
             <select
               value={form.examType}

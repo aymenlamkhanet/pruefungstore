@@ -280,16 +280,17 @@ function renderCharts() {
   if (ctxLevels && typeof Chart !== "undefined") {
     if (chartInstanceLevels) chartInstanceLevels.destroy();
 
-    const b1Count = adminState.books.filter(b => b.level.includes("B1")).length;
-    const b2Count = adminState.books.filter(b => b.level.includes("B2")).length;
+    const levelCounts = ["A1", "A2", "B1", "B2", "C1"].map(level =>
+      adminState.books.filter(b => b.level.includes(level)).length
+    );
 
     chartInstanceLevels = new Chart(ctxLevels, {
       type: "doughnut",
       data: {
-        labels: ["Niveau B1", "Niveau B2"],
+        labels: ["Niveau A1", "Niveau A2", "Niveau B1", "Niveau B2", "Niveau C1"],
         datasets: [{
-          data: [b1Count || 4, b2Count || 3],
-          backgroundColor: ["#f59e0b", "#3b82f6"],
+          data: levelCounts.map((count, index) => count || [2, 2, 4, 3, 1][index]),
+          backgroundColor: ["#86efac", "#4ade80", "#f59e0b", "#3b82f6", "#8b5cf6"],
           borderWidth: 0
         }]
       },
@@ -329,6 +330,8 @@ function renderProductsTable() {
 
   let list = adminState.books.filter(b => {
     const matchFilter = filter === "all" || 
+      (filter === "A1" && b.level.includes("A1")) ||
+      (filter === "A2" && b.level.includes("A2")) ||
       (filter === "B1" && b.level.includes("B1")) || 
       (filter === "B2" && b.level.includes("B2")) || 
       (filter === "pack" && b.isPack);

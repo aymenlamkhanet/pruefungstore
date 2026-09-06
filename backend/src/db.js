@@ -44,6 +44,24 @@ if (existing.count === 0) {
 
   const products = [
     {
+      title: "Deutsch Start A1 — Wortschatz & Prüfung",
+      level: "A1",
+      exam_type: "Goethe",
+      price_dh: 145,
+      stock: 14,
+      image_url: "assets/products/pack-b1.png",
+      description: "Der sanfte Einstieg: Grundlagen, Alltagssprache und erste Prüfungsschritte für A1."
+    },
+    {
+      title: "Deutsch Weiter A2 — Modelltests & Grammatik",
+      level: "A2",
+      exam_type: "telc",
+      price_dh: 165,
+      stock: 12,
+      image_url: "assets/products/goethe-osd-b1-b2.jpg",
+      description: "Gezielte A2-Übungen für Grammatik, Wortschatz und sichere Prüfungsvorbereitung."
+    },
+    {
       title: "Pack B1 TELC-Prüfung Deutsch",
       level: "B1",
       exam_type: "telc",

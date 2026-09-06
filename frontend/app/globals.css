@@ -94,6 +94,11 @@ input[placeholder="Image URL (optional fallback)"] { display: none; }
 .hero-exams { display: flex; align-items: center; flex-wrap: wrap; gap: .55rem; width: fit-content; padding: .75rem 1.25rem; border-radius: .7rem; background: #173d35; color: #fffdf9; font-size: .8rem; font-weight: 800; letter-spacing: .03em; box-shadow: 0 7px 0 #0d2c26, 0 14px 25px rgba(23,61,53,.18); }
 .hero-exams i { width: .25rem; height: .25rem; border-radius: 50%; background: #e77e16; }
 .hero-exams b { color: #e77e16; font-weight: 400; }
+.hero-levels { display: flex; align-items: center; flex-wrap: wrap; gap: .4rem; margin-top: .9rem; color: var(--muted); }
+.level-chip { display: grid; place-items: center; width: 2rem; height: 2rem; border: 1px solid rgba(23,61,53,.18); border-radius: 50%; background: rgba(255,253,249,.8); color: var(--primary); font-size: .6rem; font-weight: 900; box-shadow: 0 3px 0 rgba(23,61,53,.08); }
+.level-chip.beginner { border-color: #6eb889; background: #e8f4e9; color: #1d6b48; }
+.level-chip.advanced { border-color: #c96d3d; background: #fff0e7; color: #aa4d27; }
+.hero-levels small { margin-left: .3rem; font-size: .6rem; letter-spacing: .05em; }
 .hero-benefits { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .65rem; max-width: 620px; margin-top: 1.8rem; color: #183b69; font-family: 'Noto Sans Arabic', Arial, sans-serif; font-size: .68rem; line-height: 1.4; text-align: center; direction: rtl; }
 .hero-benefits span { display: grid; justify-items: center; gap: .45rem; }
 .hero-benefits b { display: grid; place-items: center; width: 2.35rem; height: 2.35rem; border-radius: 50%; background: #fffaf2; border: 1px solid rgba(23,61,108,.12); color: #e77e16; font-size: .65rem; box-shadow: 0 6px 15px rgba(23,61,108,.08); }
@@ -139,6 +144,8 @@ input[placeholder="Image URL (optional fallback)"] { display: none; }
   .hero-heading-reference { font-size: 3.35rem !important; }
   .hero-subline { margin-top: 1rem; font-size: 1rem; }
   .hero-exams { width: 100%; justify-content: center; padding-inline: .7rem; font-size: .72rem; }
+  .hero-levels { justify-content: center; }
+  .hero-levels small { width: 100%; margin: .25rem 0 0; text-align: center; }
   .hero-benefits { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1.35rem; }
   .hero-art { min-height: 345px; margin-top: 2.5rem; }
   .hero-art::before { width: 285px; height: 285px; }
