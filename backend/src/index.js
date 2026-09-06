@@ -46,6 +46,7 @@ app.use("/assets", express.static(legacyAssetsDir));
 app.use("/api/uploads", express.static(uploadsDir));
 
 function mapProduct(row) {
+  const images = db.prepare("SELECT image_url FROM product_images WHERE product_id = ? ORDER BY sort_order, id").all(row.id).map((item) => item.image_url);
   return {
     id: row.id,
     title: row.title,
@@ -54,6 +55,7 @@ function mapProduct(row) {
     priceDh: row.price_dh,
     stock: row.stock,
     imageUrl: row.image_url,
+    imageUrls: images.length ? images : row.image_url ? [row.image_url] : [],
     description: row.description,
     createdAt: row.created_at
   };
@@ -171,17 +173,22 @@ app.get("/api/admin/products", requireAdmin, (_req, res) => {
   res.json(rows.map(mapProduct));
 });
 
-app.post("/api/admin/upload-image", requireAdmin, upload.single("image"), (req, res) => {
-  if (!req.file) return res.status(400).json({ message: "No image uploaded" });
+app.post("/api/admin/upload-images", requireAdmin, upload.array("images", 6), (req, res) => {
+  if (!req.files?.length) return res.status(400).json({ message: "Select at least one image" });
   res.status(201).json({
-    imageUrl: `/api/uploads/${req.file.filename}`,
-    fileName: req.file.filename
+    imageUrls: req.files.map((file) => `/api/uploads/${file.filename}`)
   });
 });
 
+app.post("/api/admin/upload-image", requireAdmin, upload.single("image"), (req, res) => {
+  if (!req.file) return res.status(400).json({ message: "No image uploaded" });
+  res.status(201).json({ imageUrl: `/api/uploads/${req.file.filename}`, fileName: req.file.filename });
+});
+
 app.post("/api/admin/products", requireAdmin, (req, res) => {
-  const { title, level, examType, priceDh, stock, imageUrl = "", description = "" } = req.body || {};
-  if (!title || !level || !examType || !imageUrl || Number(priceDh) <= 0 || Number(stock) < 0) {
+  const { title, level, examType, priceDh, stock, imageUrl = "", imageUrls = [], description = "" } = req.body || {};
+  const gallery = Array.isArray(imageUrls) && imageUrls.length ? imageUrls : imageUrl ? [imageUrl] : [];
+  if (!title || !level || !examType || !gallery.length || Number(priceDh) <= 0 || Number(stock) < 0) {
     return res.status(400).json({ message: "Invalid payload" });
   }
 
@@ -190,14 +197,18 @@ app.post("/api/admin/products", requireAdmin, (req, res) => {
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `).run(title, level, examType, Number(priceDh), Number(stock), imageUrl, description);
 
-  const row = db.prepare("SELECT * FROM products WHERE id = ?").get(info.lastInsertRowid);
+  const productId = info.lastInsertRowid;
+  const saveImage = db.prepare("INSERT INTO product_images (product_id, image_url, sort_order) VALUES (?, ?, ?)");
+  gallery.forEach((url, index) => saveImage.run(productId, String(url), index));
+  const row = db.prepare("SELECT * FROM products WHERE id = ?").get(productId);
   res.status(201).json(mapProduct(row));
 });
 
 app.put("/api/admin/products/:id", requireAdmin, (req, res) => {
   const id = Number(req.params.id);
-  const { title, level, examType, priceDh, stock, imageUrl = "", description = "" } = req.body || {};
-  if (!id || !title || !level || !examType || !imageUrl || Number(priceDh) <= 0 || Number(stock) < 0) {
+  const { title, level, examType, priceDh, stock, imageUrl = "", imageUrls = [], description = "" } = req.body || {};
+  const gallery = Array.isArray(imageUrls) && imageUrls.length ? imageUrls : imageUrl ? [imageUrl] : [];
+  if (!id || !title || !level || !examType || !gallery.length || Number(priceDh) <= 0 || Number(stock) < 0) {
     return res.status(400).json({ message: "Invalid payload" });
   }
 
@@ -207,6 +218,9 @@ app.put("/api/admin/products/:id", requireAdmin, (req, res) => {
     WHERE id = ?
   `).run(title, level, examType, Number(priceDh), Number(stock), imageUrl, description, id);
 
+  db.prepare("DELETE FROM product_images WHERE product_id = ?").run(id);
+  const saveImage = db.prepare("INSERT INTO product_images (product_id, image_url, sort_order) VALUES (?, ?, ?)");
+  gallery.forEach((url, index) => saveImage.run(id, String(url), index));
   const row = db.prepare("SELECT * FROM products WHERE id = ?").get(id);
   if (!row) return res.status(404).json({ message: "Product not found" });
   res.json(mapProduct(row));

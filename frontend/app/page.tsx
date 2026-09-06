@@ -10,6 +10,7 @@ type Product = {
   priceDh: number;
   stock: number;
   imageUrl?: string;
+  imageUrls?: string[];
   description?: string;
 };
 type CartItem = Pick<Product, "id" | "title" | "priceDh"> & { qty: number };
@@ -132,7 +133,9 @@ function Store() {
     [form, setForm] = useState(initialForm),
     [status, setStatus] = useState(""),
     [submitting, setSubmitting] = useState(false),
-    [loading, setLoading] = useState(true);
+    [loading, setLoading] = useState(true),
+    [selectedProduct, setSelectedProduct] = useState<Product | null>(null),
+    [selectedImage, setSelectedImage] = useState(0);
   useEffect(() => {
     setLoading(true);
     request(`/products?${new URLSearchParams({ search, level, examType })}`)
@@ -349,7 +352,8 @@ function Store() {
                   <div className="product-card skeleton" key={i} />
                 ))
               : products.map((p, index) => (
-                  <article className="product-card" key={p.id}>
+                  <article className="product-card" key={p.id} onClick={() => { setSelectedProduct(p); setSelectedImage(0); }} tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter") { setSelectedProduct(p); setSelectedImage(0); } }}>
+
                     <div className="product-visual">
                       <img
                         src={imageSrc(p.imageUrl)}
@@ -382,7 +386,7 @@ function Store() {
                         <button
                           className="add-button"
                           disabled={p.stock <= 0}
-                          onClick={() => add(p)}
+                          onClick={(e) => { e.stopPropagation(); add(p); }}
                         >
                           + Add
                         </button>
@@ -468,6 +472,28 @@ function Store() {
           <p className="secure">Secure ordering · Confirmation via WhatsApp</p>
         </aside>
       </div>
+      {selectedProduct && (
+        <div className="product-detail-backdrop" role="presentation" onClick={() => setSelectedProduct(null)}>
+          <section className="product-detail-modal" role="dialog" aria-modal="true" aria-labelledby="product-detail-title" onClick={(e) => e.stopPropagation()}>
+            <button className="detail-close" onClick={() => setSelectedProduct(null)} aria-label="Close product details">×</button>
+            <div className="detail-gallery">
+              <div className="detail-main-image"><img src={imageSrc((selectedProduct.imageUrls?.length ? selectedProduct.imageUrls : [selectedProduct.imageUrl])[selectedImage])} alt={selectedProduct.title} /></div>
+              <div className="detail-thumbnails">
+                {(selectedProduct.imageUrls?.length ? selectedProduct.imageUrls : [selectedProduct.imageUrl]).map((image, index) => (
+                  <button className={index === selectedImage ? "active" : ""} key={`${image}-${index}`} onClick={() => setSelectedImage(index)} aria-label={`View image ${index + 1}`}><img src={imageSrc(image)} alt="" /></button>
+                ))}
+              </div>
+            </div>
+            <div className="detail-copy">
+              <span className="eyebrow">{selectedProduct.examType} · {selectedProduct.level}</span>
+              <h2 id="product-detail-title">{selectedProduct.title}</h2>
+              <p>{selectedProduct.description || "Official preparation material for focused practice."}</p>
+              <strong className="detail-price">{selectedProduct.priceDh} <small>DH</small></strong>
+              <button className="button primary full" disabled={selectedProduct.stock <= 0} onClick={() => { add(selectedProduct); setSelectedProduct(null); }}>Add to cart →</button>
+            </div>
+          </section>
+        </div>
+      )}
     </main>
   );
 }
