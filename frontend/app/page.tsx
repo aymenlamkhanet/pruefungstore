@@ -193,23 +193,31 @@ function Store() {
       <section className="hero">
         <div className="hero-copy">
           <div className="kicker">
-            <span>Deutsch lernen</span>
+            <span>Deutsch lernen?</span>
             <span className="rule" /> Prüfungsvorbereitung
           </div>
-          <div className="hero-markers" aria-label="Exam preparation levels">
-            <span className="marker-dot" />
-            <span>A1 — C1</span>
-            <span className="marker-line" />
-            <span>TELC · GOETHE · ÖSD</span>
-          </div>
-          <h1 dir="auto">
-            Deutsch lernen? <em>Wir helfen dir dabei.</em>
-            <br />
-            <span>من أول خطوة حتى Prüfungserfolg</span>
+          <h1 className="hero-heading-reference" dir="auto">
+            <span>Deutsch lernen?</span>
+            <em>Wir helfen</em> dir dabei.
           </h1>
-          <p dir="auto">
-            كتب مناسبة لمستواك، طلب سريع، وتوصيل حتى باب دارك.
+          <p className="hero-subline" dir="auto">
+            من أول خطوة حتى <strong>Prüfungserfolg</strong>
           </p>
+          <div className="hero-exams" aria-label="Available exam levels">
+            <span>TELC</span>
+            <i />
+            <span>Goethe</span>
+            <i />
+            <span>ÖSD</span>
+            <b>|</b>
+            <span>A1 → C1</span>
+          </div>
+          <div className="hero-benefits" dir="auto">
+            <span><b>01</b> كتب أصلية ومحدثة</span>
+            <span><b>02</b> نماذج امتحانات واقعية</span>
+            <span><b>03</b> تطور مستواك بخطوات ثابتة</span>
+            <span><b>04</b> نجاحك هو هدفنا</span>
+          </div>
           <div className="hero-actions">
             <a href="#catalog" className="button primary">
               اكتشف الكتب المناسبة لك <span>→</span>
