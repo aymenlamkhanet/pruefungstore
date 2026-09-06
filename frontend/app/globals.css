@@ -101,7 +101,13 @@ input[placeholder="Image URL (optional fallback)"] { display: none; }
 .hero-levels small { margin-left: .3rem; font-size: .6rem; letter-spacing: .05em; }
 .hero-benefits { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .65rem; max-width: 620px; margin-top: 1.8rem; color: #183b69; font-family: 'Noto Sans Arabic', Arial, sans-serif; font-size: .68rem; line-height: 1.4; text-align: center; direction: rtl; }
 .hero-benefits span { display: grid; justify-items: center; gap: .45rem; }
-.hero-benefits b { display: grid; place-items: center; width: 2.35rem; height: 2.35rem; border-radius: 50%; background: #fffaf2; border: 1px solid rgba(23,61,108,.12); color: #e77e16; font-size: .65rem; box-shadow: 0 6px 15px rgba(23,61,108,.08); }
+.hero-benefits b { display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 50%; background: #fffaf2; border: 1px solid rgba(23,61,108,.12); color: #183b69; font-size: 1.35rem; font-family: Georgia, serif; line-height: 1; box-shadow: 0 6px 15px rgba(23,61,108,.08); }
+.hero-benefits .benefit-icon { position: relative; }
+.hero-benefits .benefit-icon::after { content: ""; position: absolute; inset: .28rem; border: 1px solid rgba(201,109,61,.22); border-radius: 50%; }
+.hero-benefits .book-icon { font-size: 1.55rem; transform: rotate(-8deg); }
+.hero-benefits .exam-icon { color: #183b69; font-family: Arial, sans-serif; font-size: 1.15rem; font-weight: 900; }
+.hero-benefits .progress-icon { color: #d97818; font-family: Arial, sans-serif; font-size: 1.65rem; font-weight: 700; }
+.hero-benefits .goal-icon { color: #d97818; font-size: 1.25rem; }
 .hero-copy > p { max-width: 390px; font-family: 'Noto Sans Arabic', Arial, sans-serif; font-size: .92rem; }
 .hero-art { min-height: 420px; isolation: isolate; perspective: 1100px; transform-style: preserve-3d; }
 .hero-art::before { content: ""; position: absolute; width: 390px; height: 390px; border: 1px solid rgba(23,61,53,.18); border-radius: 50%; transform: translate(8px, -4px); }

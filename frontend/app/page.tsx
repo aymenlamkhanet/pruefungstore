@@ -221,10 +221,10 @@ function Store() {
             <small>dein Weg, Schritt für Schritt</small>
           </div>
           <div className="hero-benefits" dir="auto">
-            <span><b>📖</b> كتب أصلية ومحدثة</span>
-            <span><b>✓</b> نماذج امتحانات واقعية</span>
-            <span><b>↗</b> تطور مستواك بخطوات ثابتة</span>
-            <span><b>★</b> نجاحك هو هدفنا</span>
+            <span><b className="benefit-icon book-icon" aria-hidden="true">▥</b> كتب أصلية ومحدثة</span>
+            <span><b className="benefit-icon exam-icon" aria-hidden="true">✓</b> نماذج امتحانات واقعية</span>
+            <span><b className="benefit-icon progress-icon" aria-hidden="true">↗</b> تطور مستواك بخطوات ثابتة</span>
+            <span><b className="benefit-icon goal-icon" aria-hidden="true">★</b> نجاحك هو هدفنا</span>
           </div>
           <div className="hero-actions">
             <a href="#catalog" className="button primary">
