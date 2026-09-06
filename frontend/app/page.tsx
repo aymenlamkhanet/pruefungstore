@@ -95,9 +95,7 @@ function Brand({
     <header className="topbar">
       <div className="brand" onClick={() => onNavigate(false)}>
         <span className="brand-mark">P</span>
-        <span>
-          Prüfung<span className="brand-accent">Store</span>
-        </span>
+        <span>StoreDeutsch</span>
       </div>
       <nav>
         <button
