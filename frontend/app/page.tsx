@@ -57,7 +57,7 @@ function imageSrc(image?: string) {
   return `/${clean}`;
 }
 
-function InstagramProfileCard({
+function InstagramSpotlight({
   accountUrl,
   handle,
 }: {
@@ -65,68 +65,67 @@ function InstagramProfileCard({
   handle: string;
 }) {
   return (
-    <article className="reel-card profile-card">
-      <div className="profile-header">
-        <span className="profile-badge">Instagram</span>
+    <div className="instagram-spotlight-card">
+      <div className="ig-spotlight-header">
+        <div className="ig-badge-group">
+          <span className="ig-gradient-pill">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg>
+            Instagram Officiel
+          </span>
+          <span className="ig-community-pill">Communauté TELC</span>
+        </div>
+        <span className="ig-status-dot">● En ligne</span>
       </div>
-      <div className="profile-avatar-wrap">
-        <div className="profile-ring">
-          <img
-            src="/official-logo.png"
-            alt={handle}
-            className="profile-avatar"
-          />
+
+      <div className="ig-spotlight-body">
+        <div className="ig-avatar-wrapper">
+          <div className="ig-gradient-ring">
+            <img
+              src="/official-logo.png"
+              alt={handle}
+              className="ig-avatar-image"
+            />
+          </div>
+          <span className="ig-verified-badge" title="Compte officiel">✓</span>
+        </div>
+
+        <div className="ig-details">
+          <div className="ig-handle-line">
+            <span className="ig-handle">@{handle}</span>
+          </div>
+          <h3 className="ig-title">TELC Vorbereitung B1 &amp; B2</h3>
+          <p className="ig-bio">
+            Conseils pratiques, résumés de cours et préparation complète aux examens de langue allemande (TELC, Goethe, ÖSD).
+          </p>
+          <div className="ig-tags">
+            <span className="ig-tag">📚 Manuels &amp; Corrigés</span>
+            <span className="ig-tag">🗣️ Expression orale</span>
+            <span className="ig-tag">💡 Astuces d&apos;examen</span>
+          </div>
         </div>
       </div>
-      <div className="profile-body">
-        <strong className="profile-handle">@{handle}</strong>
-        <p className="profile-name">TELC Vorbereitung B1 & B2</p>
-        <p className="profile-bio">
-          🇩🇪 Manuels officiels, corrigés & astuces examens TELC B1 & B2.
-          <br />
-          🎥 Vidéos & modèles d'expression orale.
-        </p>
-      </div>
-      <a
-        href={accountUrl}
-        target="_blank"
-        rel="noreferrer"
-        className="profile-btn"
-      >
-        <span>Suivre sur Instagram</span> ↗
-      </a>
-    </article>
-  );
-}
 
-function ReelCard({
-  videoUrl,
-  posterUrl,
-  reelUrl,
-  title,
-}: {
-  videoUrl: string;
-  posterUrl?: string;
-  reelUrl: string;
-  title: string;
-}) {
-  return (
-    <article className="reel-card playable">
-      <div className="reel-frame">
-        <video
-          src={videoUrl}
-          poster={posterUrl}
-          controls
-          playsInline
-          preload="metadata"
-          className="reel-video"
-          title={title}
-        />
+      <div className="ig-spotlight-action">
+        <a
+          href={accountUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="ig-action-btn"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+          </svg>
+          <span>Rejoindre la communauté @{handle}</span>
+          <span className="ig-arrow">↗</span>
+        </a>
       </div>
-      <a href={reelUrl} target="_blank" rel="noreferrer">
-        Open on Instagram ↗
-      </a>
-    </article>
+    </div>
   );
 }
 
@@ -313,29 +312,20 @@ function Store() {
       </section>
 
       <section className="reels-section">
-        <div>
+        <div className="reels-intro">
           <p className="eyebrow">من مجتمع المتعلمين</p>
           <h2>Gemeinsam besser lernen.</h2>
           <p>
-            نصائح سريعة للتحضير واقتراحات كتب على Instagram.
+            تابعنا على إنستغرام للحصول على آخر النصائح، نماذج التعبير الشفوي، ومواد التحضير لامتحانات TELC B1 &amp; B2.
+          </p>
+          <p className="reels-subnote">
+            Rejoignez notre communauté sur Instagram pour réussir vos examens d&apos;allemand.
           </p>
         </div>
-        <div className="reel-grid">
-          <InstagramProfileCard
+        <div className="reels-content">
+          <InstagramSpotlight
             accountUrl="https://www.instagram.com/telc_vorbreitung_b1_b2?stkn=aTZ6eHk1ajBhdHJl&utm_source=qr"
             handle="telc_vorbreitung_b1_b2"
-          />
-          <ReelCard
-            videoUrl="/instagram_reel_1.mp4"
-            posterUrl="/instagram_reel_1.jpg"
-            reelUrl="https://www.instagram.com/telc_vorbreitung_b1_b2?stkn=aTZ6eHk1ajBhdHJl&utm_source=qr"
-            title="Modèles d'expression orale B1/B2"
-          />
-          <ReelCard
-            videoUrl="/instagram_reel_2.mp4"
-            posterUrl="/instagram_reel_2.jpg"
-            reelUrl="https://www.instagram.com/telc_vorbreitung_b1_b2?stkn=aTZ6eHk1ajBhdHJl&utm_source=qr"
-            title="Conseils & Préparation Examens TELC"
           />
         </div>
       </section>
