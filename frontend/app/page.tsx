@@ -57,54 +57,6 @@ function imageSrc(image?: string) {
   return `/${clean}`;
 }
 
-function InstagramEmbedCard({
-  accountUrl,
-}: {
-  accountUrl: string;
-}) {
-  return (
-    <a
-      href={accountUrl}
-      target="_blank"
-      rel="noreferrer"
-      className="reel-card instagram-card"
-    >
-      <div className="ig-card-inner">
-        <div className="ig-card-logo-wrap">
-          <svg viewBox="0 0 24 24" width="52" height="52" fill="none">
-            <defs>
-              <linearGradient id="igCardGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#f09433" />
-                <stop offset="25%" stopColor="#e6683c" />
-                <stop offset="50%" stopColor="#dc2743" />
-                <stop offset="75%" stopColor="#cc2366" />
-                <stop offset="100%" stopColor="#bc1888" />
-              </linearGradient>
-            </defs>
-            <rect x="2" y="2" width="20" height="20" rx="5.8" stroke="url(#igCardGrad)" strokeWidth="2.1" fill="none" />
-            <circle cx="12" cy="12" r="4.6" stroke="url(#igCardGrad)" strokeWidth="2.1" fill="none" />
-            <circle cx="17.4" cy="6.6" r="1.3" fill="url(#igCardGrad)" />
-          </svg>
-        </div>
-
-        <img
-          src="/instagram_wordmark.svg"
-          alt="Instagram"
-          className="ig-card-wordmark"
-        />
-
-        <p className="ig-card-message">
-          Le lien vers cette photo ou cette vidéo peut être brisé ou la publication peut avoir été supprimée.
-        </p>
-
-        <span className="ig-card-link-text">
-          Consulter Instagram
-        </span>
-      </div>
-    </a>
-  );
-}
-
 function ReelCard({
   embedUrl,
   reelUrl,
@@ -283,7 +235,7 @@ function Store() {
             </a>
             <a
               className="button secondary instagram-button"
-              href="https://www.instagram.com/telc_vorbreitung_b1_b2?stkn=aTZ6eHk1ajBhdHJl&utm_source=qr"
+              href="https://instagram.com/prufung_vorbereitung_bucher?igsi=MTkweG5pZnExb2h1Yw%3D%3D"
               target="_blank"
               rel="noreferrer"
             >
@@ -322,8 +274,20 @@ function Store() {
           </p>
         </div>
         <div className="reel-grid">
-          <InstagramEmbedCard
-            accountUrl="https://www.instagram.com/telc_vorbreitung_b1_b2?stkn=aTZ6eHk1ajBhdHJl&utm_source=qr"
+          <ReelCard
+            embedUrl="https://www.instagram.com/reel/DS48G8HjKFO/embed"
+            reelUrl="https://www.instagram.com/prufung_vorbereitung_bucher/reel/DS48G8HjKFO"
+            title="Preparation in motion"
+          />
+          <ReelCard
+            embedUrl="https://www.instagram.com/reel/DU0cnOEjKFq/embed"
+            reelUrl="https://www.instagram.com/prufung_vorbereitung_bucher/reel/DU0cnOEjKFq"
+            title="Find your right book"
+          />
+          <ReelCard
+            embedUrl="https://www.instagram.com/reel/Db8G-5ns-U-/embed"
+            reelUrl="https://www.instagram.com/prufung_vorbereitung_bucher/reel/Db8G-5ns-U-"
+            title="Build your advantage"
           />
         </div>
       </section>
