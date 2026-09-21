@@ -57,23 +57,70 @@ function imageSrc(image?: string) {
   return `/${clean}`;
 }
 
+function InstagramProfileCard({
+  accountUrl,
+  handle,
+}: {
+  accountUrl: string;
+  handle: string;
+}) {
+  return (
+    <article className="reel-card profile-card">
+      <div className="profile-header">
+        <span className="profile-badge">Instagram</span>
+      </div>
+      <div className="profile-avatar-wrap">
+        <div className="profile-ring">
+          <img
+            src="/official-logo.png"
+            alt={handle}
+            className="profile-avatar"
+          />
+        </div>
+      </div>
+      <div className="profile-body">
+        <strong className="profile-handle">@{handle}</strong>
+        <p className="profile-name">TELC Vorbereitung B1 & B2</p>
+        <p className="profile-bio">
+          🇩🇪 Manuels officiels, corrigés & astuces examens TELC B1 & B2.
+          <br />
+          🎥 Vidéos & modèles d'expression orale.
+        </p>
+      </div>
+      <a
+        href={accountUrl}
+        target="_blank"
+        rel="noreferrer"
+        className="profile-btn"
+      >
+        <span>Suivre sur Instagram</span> ↗
+      </a>
+    </article>
+  );
+}
+
 function ReelCard({
-  embedUrl,
+  videoUrl,
+  posterUrl,
   reelUrl,
   title,
 }: {
-  embedUrl: string;
+  videoUrl: string;
+  posterUrl?: string;
   reelUrl: string;
   title: string;
 }) {
   return (
     <article className="reel-card playable">
       <div className="reel-frame">
-        <iframe
-          src={embedUrl}
+        <video
+          src={videoUrl}
+          poster={posterUrl}
+          controls
+          playsInline
+          preload="metadata"
+          className="reel-video"
           title={title}
-          loading="lazy"
-          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
         />
       </div>
       <a href={reelUrl} target="_blank" rel="noreferrer">
@@ -235,7 +282,7 @@ function Store() {
             </a>
             <a
               className="button secondary instagram-button"
-              href="https://instagram.com/prufung_vorbereitung_bucher?igsi=MTkweG5pZnExb2h1Yw%3D%3D"
+              href="https://www.instagram.com/telc_vorbreitung_b1_b2?stkn=aTZ6eHk1ajBhdHJl&utm_source=qr"
               target="_blank"
               rel="noreferrer"
             >
@@ -274,20 +321,21 @@ function Store() {
           </p>
         </div>
         <div className="reel-grid">
-          <ReelCard
-            embedUrl="https://www.instagram.com/reel/DS48G8HjKFO/embed"
-            reelUrl="https://www.instagram.com/prufung_vorbereitung_bucher/reel/DS48G8HjKFO"
-            title="Preparation in motion"
+          <InstagramProfileCard
+            accountUrl="https://www.instagram.com/telc_vorbreitung_b1_b2?stkn=aTZ6eHk1ajBhdHJl&utm_source=qr"
+            handle="telc_vorbreitung_b1_b2"
           />
           <ReelCard
-            embedUrl="https://www.instagram.com/reel/DU0cnOEjKFq/embed"
-            reelUrl="https://www.instagram.com/prufung_vorbereitung_bucher/reel/DU0cnOEjKFq"
-            title="Find your right book"
+            videoUrl="/instagram_reel_1.mp4"
+            posterUrl="/instagram_reel_1.jpg"
+            reelUrl="https://www.instagram.com/telc_vorbreitung_b1_b2?stkn=aTZ6eHk1ajBhdHJl&utm_source=qr"
+            title="Modèles d'expression orale B1/B2"
           />
           <ReelCard
-            embedUrl="https://www.instagram.com/reel/Db8G-5ns-U-/embed"
-            reelUrl="https://www.instagram.com/prufung_vorbereitung_bucher/reel/Db8G-5ns-U-"
-            title="Build your advantage"
+            videoUrl="/instagram_reel_2.mp4"
+            posterUrl="/instagram_reel_2.jpg"
+            reelUrl="https://www.instagram.com/telc_vorbreitung_b1_b2?stkn=aTZ6eHk1ajBhdHJl&utm_source=qr"
+            title="Conseils & Préparation Examens TELC"
           />
         </div>
       </section>
