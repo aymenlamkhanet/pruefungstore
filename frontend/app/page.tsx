@@ -57,75 +57,72 @@ function imageSrc(image?: string) {
   return `/${clean}`;
 }
 
-function InstagramSpotlight({
+function InstagramCardColumn({
   accountUrl,
-  handle,
 }: {
   accountUrl: string;
-  handle: string;
 }) {
   return (
-    <div className="instagram-spotlight-card">
-      <div className="ig-spotlight-header">
-        <div className="ig-badge-group">
-          <span className="ig-gradient-pill">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-            </svg>
-            Instagram Officiel
-          </span>
-          <span className="ig-community-pill">Communauté TELC</span>
-        </div>
-        <span className="ig-status-dot">● En ligne</span>
-      </div>
-
-      <div className="ig-spotlight-body">
-        <div className="ig-avatar-wrapper">
-          <div className="ig-gradient-ring">
-            <img
-              src="/official-logo.png"
-              alt={handle}
-              className="ig-avatar-image"
-            />
-          </div>
-          <span className="ig-verified-badge" title="Compte officiel">✓</span>
+    <article className="ig-reference-card">
+      <div className="ig-ref-inner">
+        <div className="ig-ref-icon">
+          <svg viewBox="0 0 24 24" width="46" height="46" fill="none">
+            <defs>
+              <linearGradient id="ig-grad-ref" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#f09433" />
+                <stop offset="25%" stopColor="#e6683c" />
+                <stop offset="50%" stopColor="#dc2743" />
+                <stop offset="75%" stopColor="#cc2366" />
+                <stop offset="100%" stopColor="#bc1888" />
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="url(#ig-grad-ref)" strokeWidth="2.2" />
+            <circle cx="12" cy="12" r="4.6" stroke="url(#ig-grad-ref)" strokeWidth="2.2" />
+            <circle cx="17.4" cy="6.6" r="1.3" fill="url(#ig-grad-ref)" />
+          </svg>
         </div>
 
-        <div className="ig-details">
-          <div className="ig-handle-line">
-            <span className="ig-handle">@{handle}</span>
-          </div>
-          <h3 className="ig-title">TELC Vorbereitung B1 &amp; B2</h3>
-          <p className="ig-bio">
-            Conseils pratiques, résumés de cours et préparation complète aux examens de langue allemande (TELC, Goethe, ÖSD).
-          </p>
-          <div className="ig-tags">
-            <span className="ig-tag">📚 Manuels &amp; Corrigés</span>
-            <span className="ig-tag">🗣️ Expression orale</span>
-            <span className="ig-tag">💡 Astuces d&apos;examen</span>
-          </div>
-        </div>
-      </div>
+        <img
+          src="/instagram_wordmark.svg"
+          alt="Instagram"
+          className="ig-ref-wordmark"
+        />
 
-      <div className="ig-spotlight-action">
+        <p className="ig-ref-text">
+          Le lien vers cette photo ou cette vidéo peut être brisé ou la publication peut avoir été supprimée.
+        </p>
+
         <a
           href={accountUrl}
           target="_blank"
           rel="noreferrer"
-          className="ig-action-btn"
+          className="ig-ref-link"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-          </svg>
-          <span>Rejoindre la communauté @{handle}</span>
-          <span className="ig-arrow">↗</span>
+          Consulter Instagram
         </a>
       </div>
-    </div>
+    </article>
+  );
+}
+
+function ReelWaitingCard({
+  slotNumber,
+}: {
+  slotNumber: number;
+}) {
+  return (
+    <article className="ig-reel-waiting-card">
+      <div className="reel-waiting-inner">
+        <div className="reel-waiting-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </div>
+        <strong>Reel #{slotNumber}</strong>
+        <p>Bientôt disponible</p>
+        <span className="reel-waiting-badge">En attente de votre publication</span>
+      </div>
+    </article>
   );
 }
 
@@ -311,22 +308,33 @@ function Store() {
         </div>
       </section>
 
-      <section className="reels-section">
-        <div className="reels-intro">
-          <p className="eyebrow">من مجتمع المتعلمين</p>
-          <h2>Gemeinsam besser lernen.</h2>
-          <p>
-            تابعنا على إنستغرام للحصول على آخر النصائح، نماذج التعبير الشفوي، ومواد التحضير لامتحانات TELC B1 &amp; B2.
-          </p>
-          <p className="reels-subnote">
-            Rejoignez notre communauté sur Instagram pour réussir vos examens d&apos;allemand.
-          </p>
-        </div>
-        <div className="reels-content">
-          <InstagramSpotlight
+      <section className="instagram-showcase-section">
+        <h2 className="ig-section-title">Notre Actualité sur Instagram</h2>
+        <div className="german-flag-pill" />
+        <p className="ig-section-subtitle">
+          Découvrez nos dernières publications, photos et vidéos
+        </p>
+
+        <div className="ig-cards-grid">
+          <InstagramCardColumn
             accountUrl="https://www.instagram.com/telc_vorbreitung_b1_b2?stkn=aTZ6eHk1ajBhdHJl&utm_source=qr"
-            handle="telc_vorbreitung_b1_b2"
           />
+          <ReelWaitingCard slotNumber={1} />
+          <ReelWaitingCard slotNumber={2} />
+        </div>
+
+        <div className="ig-bottom-actions">
+          <a
+            href="https://www.instagram.com/telc_vorbreitung_b1_b2?stkn=aTZ6eHk1ajBhdHJl&utm_source=qr"
+            target="_blank"
+            rel="noreferrer"
+            className="ig-red-pill-btn"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+            <span>Suivre @telc_vorbreitung_b1_b2</span>
+          </a>
         </div>
       </section>
 
