@@ -57,29 +57,124 @@ function imageSrc(image?: string) {
   return `/${clean}`;
 }
 
-function ReelCard({
-  embedUrl,
-  reelUrl,
-  title,
+const OFFICIAL_INSTAGRAM_URL =
+  "https://www.instagram.com/telc_vorbreitung_b1_b2?stkn=aTZ6eHk1ajBhdHJl&utm_source=qr";
+const OFFICIAL_INSTAGRAM_INTENT =
+  "intent://instagram.com/_u/telc_vorbreitung_b1_b2?ig_mid=9DA0B11A-AAB5-46A9-8F10-7AFDCA008918&utm_source=instagramweb#Intent;package=com.instagram.lite;action=android.intent.action.VIEW;scheme=https;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.instagram.lite%26referrer%3Dig_mid%253D9DA0B11A-AAB5-46A9-8F10-7AFDCA008918%2526utm_campaign%253Dinstagramlitecarbon%2526utm_content%253Dlo%2526utm_source%253Dinstagramweb;end";
+
+function handleInstagramIntent(e: React.MouseEvent<HTMLAnchorElement>) {
+  if (typeof navigator !== "undefined" && /android/i.test(navigator.userAgent)) {
+    window.location.href = OFFICIAL_INSTAGRAM_INTENT;
+    e.preventDefault();
+  }
+}
+
+function InstagramEmbedCard({
+  accountUrl = OFFICIAL_INSTAGRAM_URL,
 }: {
-  embedUrl: string;
-  reelUrl: string;
-  title: string;
+  accountUrl?: string;
 }) {
   return (
-    <article className="reel-card playable">
-      <div className="reel-frame">
-        <iframe
-          src={embedUrl}
-          title={title}
-          loading="lazy"
-          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+    <a
+      href={accountUrl}
+      target="_blank"
+      rel="noreferrer"
+      onClick={handleInstagramIntent}
+      className="reel-card instagram-card"
+    >
+      <div className="ig-card-inner">
+        <div className="ig-card-logo-wrap">
+          <svg viewBox="0 0 24 24" width="50" height="50" fill="none">
+            <defs>
+              <linearGradient id="igGrad1" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#f09433" />
+                <stop offset="25%" stopColor="#e6683c" />
+                <stop offset="50%" stopColor="#dc2743" />
+                <stop offset="75%" stopColor="#cc2366" />
+                <stop offset="100%" stopColor="#bc1888" />
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="20" height="20" rx="5.8" stroke="url(#igGrad1)" strokeWidth="2.1" fill="none" />
+            <circle cx="12" cy="12" r="4.6" stroke="url(#igGrad1)" strokeWidth="2.1" fill="none" />
+            <circle cx="17.4" cy="6.6" r="1.3" fill="url(#igGrad1)" />
+          </svg>
+        </div>
+
+        <img
+          src="/instagram_wordmark.svg"
+          alt="Instagram"
+          className="ig-card-wordmark"
         />
+
+        <p className="ig-card-message">
+          Le lien vers cette photo ou cette vidéo peut être brisé ou la publication peut avoir été supprimée.
+        </p>
+
+        <span className="ig-card-link-text">
+          Consulter Instagram
+        </span>
       </div>
-      <a href={reelUrl} target="_blank" rel="noreferrer">
-        Open on Instagram ↗
-      </a>
-    </article>
+    </a>
+  );
+}
+
+function InstagramReelCard({
+  reelTitle,
+  reelSubtitle,
+  accountUrl = OFFICIAL_INSTAGRAM_URL,
+}: {
+  reelTitle: string;
+  reelSubtitle: string;
+  accountUrl?: string;
+}) {
+  return (
+    <a
+      href={accountUrl}
+      target="_blank"
+      rel="noreferrer"
+      onClick={handleInstagramIntent}
+      className="reel-card instagram-reel-card"
+    >
+      <div className="ig-card-inner">
+        <div className="ig-card-logo-wrap">
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="none">
+            <defs>
+              <linearGradient id="igReelGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#f09433" />
+                <stop offset="25%" stopColor="#e6683c" />
+                <stop offset="50%" stopColor="#dc2743" />
+                <stop offset="75%" stopColor="#cc2366" />
+                <stop offset="100%" stopColor="#bc1888" />
+              </linearGradient>
+            </defs>
+            <rect x="2.5" y="2.5" width="19" height="19" rx="5" stroke="url(#igReelGrad)" strokeWidth="2" fill="none" />
+            <polygon points="9.8,7.5 16.5,12 9.8,16.5" fill="url(#igReelGrad)" />
+          </svg>
+        </div>
+
+        <img
+          src="/instagram_wordmark.svg"
+          alt="Instagram"
+          className="ig-card-wordmark"
+        />
+
+        <span className="ig-reel-badge">
+          @telc_vorbreitung_b1_b2
+        </span>
+
+        <p className="ig-reel-title">
+          {reelTitle}
+        </p>
+
+        <p className="ig-reel-subtitle">
+          {reelSubtitle}
+        </p>
+
+        <span className="ig-card-link-text">
+          Regarder sur Instagram ↗
+        </span>
+      </div>
+    </a>
   );
 }
 
@@ -235,9 +330,10 @@ function Store() {
             </a>
             <a
               className="button secondary instagram-button"
-              href="https://instagram.com/prufung_vorbereitung_bucher?igsi=MTkweG5pZnExb2h1Yw%3D%3D"
+              href={OFFICIAL_INSTAGRAM_URL}
               target="_blank"
               rel="noreferrer"
+              onClick={handleInstagramIntent}
             >
               تابعنا على Instagram <span>↗</span>
             </a>
@@ -274,20 +370,14 @@ function Store() {
           </p>
         </div>
         <div className="reel-grid">
-          <ReelCard
-            embedUrl="https://www.instagram.com/reel/DS48G8HjKFO/embed"
-            reelUrl="https://www.instagram.com/prufung_vorbereitung_bucher/reel/DS48G8HjKFO"
-            title="Preparation in motion"
+          <InstagramEmbedCard />
+          <InstagramReelCard
+            reelTitle="Reel 1 · Astuces & Préparation TELC"
+            reelSubtitle="نصائح وخطوات النجاح في امتحانات B1 & B2"
           />
-          <ReelCard
-            embedUrl="https://www.instagram.com/reel/DU0cnOEjKFq/embed"
-            reelUrl="https://www.instagram.com/prufung_vorbereitung_bucher/reel/DU0cnOEjKFq"
-            title="Find your right book"
-          />
-          <ReelCard
-            embedUrl="https://www.instagram.com/reel/Db8G-5ns-U-/embed"
-            reelUrl="https://www.instagram.com/prufung_vorbereitung_bucher/reel/Db8G-5ns-U-"
-            title="Build your advantage"
+          <InstagramReelCard
+            reelTitle="Reel 2 · Modèles d'expression & Vocabulaire"
+            reelSubtitle="Modelltests, Grammatik & Redemittel"
           />
         </div>
       </section>
