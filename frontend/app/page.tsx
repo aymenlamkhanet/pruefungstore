@@ -57,71 +57,28 @@ function imageSrc(image?: string) {
   return `/${clean}`;
 }
 
-function InstagramCardColumn({
-  accountUrl,
+function ReelCard({
+  embedUrl,
+  reelUrl,
+  title,
 }: {
-  accountUrl: string;
+  embedUrl: string;
+  reelUrl: string;
+  title: string;
 }) {
   return (
-    <article className="ig-reference-card">
-      <div className="ig-ref-inner">
-        <div className="ig-ref-icon">
-          <svg viewBox="0 0 24 24" width="46" height="46" fill="none">
-            <defs>
-              <linearGradient id="ig-grad-ref" x1="0%" y1="100%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#f09433" />
-                <stop offset="25%" stopColor="#e6683c" />
-                <stop offset="50%" stopColor="#dc2743" />
-                <stop offset="75%" stopColor="#cc2366" />
-                <stop offset="100%" stopColor="#bc1888" />
-              </linearGradient>
-            </defs>
-            <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="url(#ig-grad-ref)" strokeWidth="2.2" />
-            <circle cx="12" cy="12" r="4.6" stroke="url(#ig-grad-ref)" strokeWidth="2.2" />
-            <circle cx="17.4" cy="6.6" r="1.3" fill="url(#ig-grad-ref)" />
-          </svg>
-        </div>
-
-        <img
-          src="/instagram_wordmark.svg"
-          alt="Instagram"
-          className="ig-ref-wordmark"
+    <article className="reel-card playable">
+      <div className="reel-frame">
+        <iframe
+          src={embedUrl}
+          title={title}
+          loading="lazy"
+          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
         />
-
-        <p className="ig-ref-text">
-          Le lien vers cette photo ou cette vidéo peut être brisé ou la publication peut avoir été supprimée.
-        </p>
-
-        <a
-          href={accountUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="ig-ref-link"
-        >
-          Consulter Instagram
-        </a>
       </div>
-    </article>
-  );
-}
-
-function ReelWaitingCard({
-  slotNumber,
-}: {
-  slotNumber: number;
-}) {
-  return (
-    <article className="ig-reel-waiting-card">
-      <div className="reel-waiting-inner">
-        <div className="reel-waiting-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M8 5v14l11-7z" />
-          </svg>
-        </div>
-        <strong>Reel #{slotNumber}</strong>
-        <p>Bientôt disponible</p>
-        <span className="reel-waiting-badge">En attente de votre publication</span>
-      </div>
+      <a href={reelUrl} target="_blank" rel="noreferrer">
+        Open on Instagram ↗
+      </a>
     </article>
   );
 }
@@ -278,7 +235,7 @@ function Store() {
             </a>
             <a
               className="button secondary instagram-button"
-              href="https://www.instagram.com/telc_vorbreitung_b1_b2?stkn=aTZ6eHk1ajBhdHJl&utm_source=qr"
+              href="https://instagram.com/prufung_vorbereitung_bucher?igsi=MTkweG5pZnExb2h1Yw%3D%3D"
               target="_blank"
               rel="noreferrer"
             >
@@ -308,33 +265,30 @@ function Store() {
         </div>
       </section>
 
-      <section className="instagram-showcase-section">
-        <h2 className="ig-section-title">Notre Actualité sur Instagram</h2>
-        <div className="german-flag-pill" />
-        <p className="ig-section-subtitle">
-          Découvrez nos dernières publications, photos et vidéos
-        </p>
-
-        <div className="ig-cards-grid">
-          <InstagramCardColumn
-            accountUrl="https://www.instagram.com/telc_vorbreitung_b1_b2?stkn=aTZ6eHk1ajBhdHJl&utm_source=qr"
-          />
-          <ReelWaitingCard slotNumber={1} />
-          <ReelWaitingCard slotNumber={2} />
+      <section className="reels-section">
+        <div>
+          <p className="eyebrow">من مجتمع المتعلمين</p>
+          <h2>Gemeinsam besser lernen.</h2>
+          <p>
+            نصائح سريعة للتحضير واقتراحات كتب على Instagram.
+          </p>
         </div>
-
-        <div className="ig-bottom-actions">
-          <a
-            href="https://www.instagram.com/telc_vorbreitung_b1_b2?stkn=aTZ6eHk1ajBhdHJl&utm_source=qr"
-            target="_blank"
-            rel="noreferrer"
-            className="ig-red-pill-btn"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-            </svg>
-            <span>Suivre @telc_vorbreitung_b1_b2</span>
-          </a>
+        <div className="reel-grid">
+          <ReelCard
+            embedUrl="https://www.instagram.com/reel/DS48G8HjKFO/embed"
+            reelUrl="https://www.instagram.com/prufung_vorbereitung_bucher/reel/DS48G8HjKFO"
+            title="Preparation in motion"
+          />
+          <ReelCard
+            embedUrl="https://www.instagram.com/reel/DU0cnOEjKFq/embed"
+            reelUrl="https://www.instagram.com/prufung_vorbereitung_bucher/reel/DU0cnOEjKFq"
+            title="Find your right book"
+          />
+          <ReelCard
+            embedUrl="https://www.instagram.com/reel/Db8G-5ns-U-/embed"
+            reelUrl="https://www.instagram.com/prufung_vorbereitung_bucher/reel/Db8G-5ns-U-"
+            title="Build your advantage"
+          />
         </div>
       </section>
 
