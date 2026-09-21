@@ -246,17 +246,13 @@ function Store() {
         </div>
         <div className="hero-art">
           <div className="art-card back" />
-          <div className="art-card front" aria-label="Deutsch Prüfung Vorbereitung study book">
+          <div className="art-card front" aria-label="TELC-Prüfung Deutsch B2 Vorbereitung">
+            <img
+              src="/telc-b2-cover.jpg"
+              alt="TELC-Prüfung Deutsch B2 Vorbereitung"
+              className="art-card-cover"
+            />
             <div className="cover-shine" />
-            <div className="cover-title">
-              <span>Deutsch</span>
-              <span>Prüfung</span>
-              <span>Vorbereitung</span>
-            </div>
-            <div className="cover-meta">
-              <span>A1 — C1</span>
-              <span>Prüfungserfolg</span>
-            </div>
           </div>
           <div className="floating-badge">
             <b>01</b>
