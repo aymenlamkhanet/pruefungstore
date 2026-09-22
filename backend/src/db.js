@@ -138,15 +138,6 @@ if (existing.count === 0) {
       stock: 9,
       image_url: "assets/products/goethe-osd-b1-b2.jpg",
       description: "25 Modelltests avec solutions et QR audio."
-    },
-    {
-      title: "Pack B2 TELC-Prüfung Deutsch",
-      level: "B2",
-      exam_type: "telc",
-      price_dh: 260,
-      stock: 8,
-      image_url: "assets/products/telc-real-collection.jpg",
-      description: "Collection complète B2: Lesen, Hören, Schreiben, Sprachbausteine."
     }
   ];
 
