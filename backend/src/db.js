@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import crypto from "node:crypto";
 import { DatabaseSync } from "node:sqlite";
 import { config } from "./config.js";
 
@@ -41,7 +42,58 @@ db.exec(`
     status TEXT NOT NULL DEFAULT 'pending',
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
   );
+
+  CREATE TABLE IF NOT EXISTS admin_users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    token TEXT,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+  );
 `);
+
+export function hashPassword(password) {
+  const salt = crypto.randomBytes(16).toString("hex");
+  const hash = crypto.scryptSync(password, salt, 64).toString("hex");
+  return `${salt}:${hash}`;
+}
+
+export function verifyPassword(password, stored) {
+  if (!stored) return false;
+  if (!stored.includes(":")) {
+    return password === stored;
+  }
+  const [salt, key] = stored.split(":");
+  const keyBuffer = Buffer.from(key, "hex");
+  const derivedKey = crypto.scryptSync(password, salt, 64);
+  return crypto.timingSafeEqual(keyBuffer, derivedKey);
+}
+
+export function getAdminByUsername(username) {
+  if (!username) return null;
+  return db.prepare("SELECT * FROM admin_users WHERE LOWER(username) = LOWER(?)").get(username.trim());
+}
+
+export function getAdminByToken(token) {
+  if (!token) return null;
+  return db.prepare("SELECT * FROM admin_users WHERE token = ?").get(token);
+}
+
+export function updateAdminPassword(id, passwordHash, newToken) {
+  db.prepare(
+    "UPDATE admin_users SET password_hash = ?, token = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?"
+  ).run(passwordHash, newToken, id);
+}
+
+const existingAdmin = db.prepare("SELECT COUNT(*) as count FROM admin_users").get();
+if (existingAdmin.count === 0) {
+  const initialUsername = config.adminUsername || "admin";
+  const initialPass = config.adminPassword || "admin2026";
+  const initialToken = config.adminToken || "admin-2026";
+  db.prepare(
+    "INSERT INTO admin_users (username, password_hash, token) VALUES (?, ?, ?)"
+  ).run(initialUsername, hashPassword(initialPass), initialToken);
+}
 
 const existing = db.prepare("SELECT COUNT(*) as count FROM products").get();
 if (existing.count === 0) {

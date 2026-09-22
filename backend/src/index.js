@@ -4,10 +4,11 @@ import helmet from "helmet";
 import morgan from "morgan";
 import fs from "fs";
 import path from "path";
+import crypto from "node:crypto";
 import { fileURLToPath } from "url";
 import multer from "multer";
 import { config } from "./config.js";
-import { db } from "./db.js";
+import { db, getAdminByUsername, updateAdminPassword, verifyPassword, hashPassword } from "./db.js";
 import { requireAdmin } from "./auth.js";
 import { toWhatsAppUrl } from "./utils.js";
 
@@ -82,16 +83,71 @@ app.get("/api/products", (req, res) => {
 
 app.post("/api/admin/login", (req, res) => {
   const { username, password } = req.body || {};
-  const okUser = String(username || "").trim().toLowerCase() === config.adminUsername.toLowerCase();
-  const okPass = String(password || "") === config.adminPassword;
+  const cleanUsername = String(username || "").trim();
+  const cleanPassword = String(password || "");
+
+  if (!cleanUsername || !cleanPassword) {
+    return res.status(401).json({ message: "Veuillez renseigner le nom d'utilisateur et le mot de passe" });
+  }
+
+  const user = getAdminByUsername(cleanUsername);
+  if (user) {
+    const valid = verifyPassword(cleanPassword, user.password_hash);
+    if (!valid) {
+      return res.status(401).json({ message: "Identifiants administrateur incorrects" });
+    }
+    return res.json({
+      token: user.token || config.adminToken,
+      username: user.username
+    });
+  }
+
+  const okUser = cleanUsername.toLowerCase() === config.adminUsername.toLowerCase();
+  const okPass = cleanPassword === config.adminPassword;
 
   if (!okUser || !okPass) {
-    return res.status(401).json({ message: "Invalid admin credentials" });
+    return res.status(401).json({ message: "Identifiants administrateur incorrects" });
   }
 
   res.json({
     token: config.adminToken,
     username: config.adminUsername
+  });
+});
+
+app.post("/api/admin/change-password", requireAdmin, (req, res) => {
+  const { currentPassword, newPassword } = req.body || {};
+  const cleanCurrent = String(currentPassword || "");
+  const cleanNew = String(newPassword || "");
+
+  if (!cleanCurrent || !cleanNew) {
+    return res.status(400).json({ message: "Veuillez saisir le mot de passe actuel et le nouveau mot de passe" });
+  }
+
+  if (cleanNew.length < 6) {
+    return res.status(400).json({ message: "Le nouveau mot de passe doit contenir au moins 6 caractères" });
+  }
+
+  const admin = req.adminUser;
+  if (!admin || !admin.id) {
+    return res.status(400).json({ message: "Compte administrateur introuvable" });
+  }
+
+  const isCurrentValid = verifyPassword(cleanCurrent, admin.password_hash);
+  if (!isCurrentValid) {
+    return res.status(400).json({ message: "Le mot de passe actuel est incorrect" });
+  }
+
+  const newHash = hashPassword(cleanNew);
+  const newToken = `admin-${crypto.randomBytes(16).toString("hex")}`;
+
+  updateAdminPassword(admin.id, newHash, newToken);
+
+  res.json({
+    ok: true,
+    message: "Mot de passe mis à jour avec succès dans la base de données",
+    token: newToken,
+    username: admin.username
   });
 });
 

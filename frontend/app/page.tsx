@@ -557,6 +557,10 @@ function Admin() {
     [imagePreviews, setImagePreviews] = useState<string[]>([]),
     [existingImageUrls, setExistingImageUrls] = useState<string[]>([]),
     [confirmAction, setConfirmAction] = useState<ConfirmAction | null>(null),
+    [currentPassword, setCurrentPassword] = useState(""),
+    [newPassword, setNewPassword] = useState(""),
+    [confirmPassword, setConfirmPassword] = useState(""),
+    [passwordSubmitting, setPasswordSubmitting] = useState(false),
     imageInputRef = useRef<HTMLInputElement>(null),
     [form, setForm] = useState({
       title: "",
@@ -578,6 +582,39 @@ function Admin() {
       setStatus("");
     } catch (e) {
       setStatus((e as Error).message);
+    }
+  }
+  async function changePassword(e: FormEvent) {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      setStatus("Les nouveaux mots de passe ne correspondent pas.");
+      return;
+    }
+    if (newPassword.length < 6) {
+      setStatus("Le nouveau mot de passe doit contenir au moins 6 caractères.");
+      return;
+    }
+    setPasswordSubmitting(true);
+    try {
+      const res = await request("/admin/change-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-token": adminSession,
+        },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+      if (res.token) {
+        setAdminSession(res.token);
+      }
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setStatus(res.message || "Mot de passe mis à jour avec succès dans la base de données.");
+    } catch (e) {
+      setStatus((e as Error).message);
+    } finally {
+      setPasswordSubmitting(false);
     }
   }
   async function login(e: FormEvent) {
@@ -759,31 +796,82 @@ function Admin() {
         <div className="admin-state">
           <span className={adminSession ? "pulse on" : "pulse"} />{" "}
           {adminSession ? "Connected" : "Awaiting access"}
+          {adminSession && (
+            <button
+              type="button"
+              className="danger-link"
+              style={{ marginLeft: ".8rem", fontSize: ".75rem" }}
+              onClick={() => {
+                setAdminSession("");
+                setStatus("Déconnecté de l'Admin studio");
+              }}
+            >
+              Déconnexion
+            </button>
+          )}
         </div>
       </div>
       <div className="admin-auth grid-two">
-        <form className="admin-card" onSubmit={login}>
-          <p className="eyebrow">01 / Access</p>
-          <h2>Sign in to studio</h2>
-          <input
-            value={credentials.username}
-            onChange={(e) =>
-              setCredentials({ ...credentials, username: e.target.value })
-            }
-            placeholder="Username"
-            required
-          />
-          <input
-            type="password"
-            value={credentials.password}
-            onChange={(e) =>
-              setCredentials({ ...credentials, password: e.target.value })
-            }
-            placeholder="Password"
-            required
-          />
-          <button className="button primary full">Connect with password</button>
-        </form>
+        {!adminSession ? (
+          <form className="admin-card" onSubmit={login}>
+            <p className="eyebrow">01 / Access</p>
+            <h2>Sign in to studio</h2>
+            <input
+              value={credentials.username}
+              onChange={(e) =>
+                setCredentials({ ...credentials, username: e.target.value })
+              }
+              placeholder="Username"
+              required
+            />
+            <input
+              type="password"
+              value={credentials.password}
+              onChange={(e) =>
+                setCredentials({ ...credentials, password: e.target.value })
+              }
+              placeholder="Password"
+              required
+            />
+            <button className="button primary full">Connect with password</button>
+          </form>
+        ) : (
+          <form className="admin-card" onSubmit={changePassword}>
+            <div className="card-heading">
+              <div>
+                <p className="eyebrow">01 / Sécurité</p>
+                <h2>Changer le mot de passe</h2>
+              </div>
+              <span className="counter">Base SQLite</span>
+            </div>
+            <input
+              type="password"
+              required
+              placeholder="Mot de passe actuel"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+            />
+            <div className="form-row">
+              <input
+                type="password"
+                required
+                placeholder="Nouveau mot de passe"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+              <input
+                type="password"
+                required
+                placeholder="Confirmer nouveau mot de passe"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </div>
+            <button className="button primary full" disabled={passwordSubmitting}>
+              {passwordSubmitting ? "Enregistrement en base..." : "Mettre à jour le mot de passe →"}
+            </button>
+          </form>
+        )}
       </div>
       {adminSession && (
         <section className="dashboard-overview">
