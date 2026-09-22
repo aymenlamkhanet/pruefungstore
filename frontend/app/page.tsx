@@ -152,7 +152,7 @@ function Store() {
       ([entry]) => {
         setCheckoutVisible(entry.isIntersecting);
       },
-      { threshold: 0.15 },
+      { threshold: 0 },
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -169,7 +169,7 @@ function Store() {
     if (!el) return;
 
     if (isMobile || force) {
-      const headerOffset = 75;
+      const headerOffset = window.innerWidth <= 680 ? 115 : 90;
       const elementPosition = el.getBoundingClientRect().top;
       const offsetPosition =
         elementPosition + (window.scrollY || window.pageYOffset || 0) - headerOffset;
@@ -184,6 +184,7 @@ function Store() {
   };
 
   const add = (p: Product) => {
+    if (p.stock <= 0) return;
     setCart((prev) => {
       const existing = prev.find((x) => x.id === p.id);
       return existing
@@ -192,7 +193,7 @@ function Store() {
     });
     setSelectedProduct(null);
     requestAnimationFrame(() => {
-      setTimeout(() => scrollToCheckout(false), 50);
+      setTimeout(() => scrollToCheckout(false), 60);
     });
   };
   const setQty = (id: number, qty: number) =>
@@ -538,6 +539,12 @@ function Store() {
           role="button"
           tabIndex={0}
           aria-label="الانتقال إلى إتمام الطلب"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              scrollToCheckout(true);
+            }
+          }}
         >
           <span>🛒 طلبك ({cart.length}) · {total} DH</span>
           <b>إتمام الطلب ←</b>
