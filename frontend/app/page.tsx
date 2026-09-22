@@ -135,7 +135,8 @@ function Store() {
     [submitting, setSubmitting] = useState(false),
     [loading, setLoading] = useState(true),
     [selectedProduct, setSelectedProduct] = useState<Product | null>(null),
-    [selectedImage, setSelectedImage] = useState(0);
+    [selectedImage, setSelectedImage] = useState(0),
+    [checkoutVisible, setCheckoutVisible] = useState(false);
   useEffect(() => {
     setLoading(true);
     request(`/products?${new URLSearchParams({ search, level, examType })}`)
@@ -143,10 +144,45 @@ function Store() {
       .catch((e) => setStatus(e.message))
       .finally(() => setLoading(false));
   }, [search, level, examType]);
+
+  useEffect(() => {
+    const el = document.getElementById("order-checkout");
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setCheckoutVisible(entry.isIntersecting);
+      },
+      { threshold: 0.15 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [loading]);
+
   const total = useMemo(
     () => cart.reduce((sum, item) => sum + item.priceDh * item.qty, 0),
     [cart],
   );
+  const scrollToCheckout = (force = false) => {
+    if (typeof window === "undefined") return;
+    const isMobile = window.innerWidth <= 980;
+    const el = document.getElementById("order-checkout");
+    if (!el) return;
+
+    if (isMobile || force) {
+      const headerOffset = 75;
+      const elementPosition = el.getBoundingClientRect().top;
+      const offsetPosition =
+        elementPosition + (window.scrollY || window.pageYOffset || 0) - headerOffset;
+      window.scrollTo({
+        top: Math.max(0, offsetPosition),
+        behavior: "smooth",
+      });
+    }
+    el.classList.remove("checkout-highlight");
+    void el.offsetWidth;
+    el.classList.add("checkout-highlight");
+  };
+
   const add = (p: Product) => {
     setCart((prev) => {
       const existing = prev.find((x) => x.id === p.id);
@@ -154,15 +190,10 @@ function Store() {
         ? prev.map((x) => (x.id === p.id ? { ...x, qty: x.qty + 1 } : x))
         : [...prev, { id: p.id, title: p.title, priceDh: p.priceDh, qty: 1 }];
     });
-    setTimeout(() => {
-      const el = document.getElementById("order-checkout");
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-        el.classList.remove("checkout-highlight");
-        void el.offsetWidth;
-        el.classList.add("checkout-highlight");
-      }
-    }, 60);
+    setSelectedProduct(null);
+    requestAnimationFrame(() => {
+      setTimeout(() => scrollToCheckout(false), 50);
+    });
   };
   const setQty = (id: number, qty: number) =>
     setCart((prev) =>
@@ -498,6 +529,18 @@ function Store() {
               <button className="button primary full" disabled={selectedProduct.stock <= 0} onClick={() => { add(selectedProduct); setSelectedProduct(null); }}>Add to cart →</button>
             </div>
           </section>
+        </div>
+      )}
+      {cart.length > 0 && !checkoutVisible && (
+        <div
+          className="mobile-floating-checkout-bar"
+          onClick={() => scrollToCheckout(true)}
+          role="button"
+          tabIndex={0}
+          aria-label="الانتقال إلى إتمام الطلب"
+        >
+          <span>🛒 طلبك ({cart.length}) · {total} DH</span>
+          <b>إتمام الطلب ←</b>
         </div>
       )}
     </main>
