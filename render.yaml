@@ -28,7 +28,7 @@ services:
       - key: ADMIN_TOKEN
         sync: false
       - key: FRONTEND_ORIGIN
-        value: https://pruefungstore-frontend.onrender.com
+        value: https://www.storedeutsch.com,https://storedeutsch.com,https://pruefungstore-frontend.onrender.com
   - type: web
     name: pruefungstore-frontend
     runtime: docker
