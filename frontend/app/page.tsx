@@ -147,13 +147,23 @@ function Store() {
     () => cart.reduce((sum, item) => sum + item.priceDh * item.qty, 0),
     [cart],
   );
-  const add = (p: Product) =>
+  const add = (p: Product) => {
     setCart((prev) => {
       const existing = prev.find((x) => x.id === p.id);
       return existing
         ? prev.map((x) => (x.id === p.id ? { ...x, qty: x.qty + 1 } : x))
         : [...prev, { id: p.id, title: p.title, priceDh: p.priceDh, qty: 1 }];
     });
+    setTimeout(() => {
+      const el = document.getElementById("order-checkout");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        el.classList.remove("checkout-highlight");
+        void el.offsetWidth;
+        el.classList.add("checkout-highlight");
+      }
+    }, 60);
+  };
   const setQty = (id: number, qty: number) =>
     setCart((prev) =>
       qty <= 0
@@ -398,7 +408,7 @@ function Store() {
           )}
         </section>
 
-        <aside className="checkout">
+        <aside className="checkout" id="order-checkout">
           <div className="checkout-head">
             <div>
               <p className="eyebrow">اختيارك</p>
