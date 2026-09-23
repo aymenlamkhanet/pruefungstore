@@ -93,7 +93,33 @@ app.get("/api/products", (req, res) => {
   res.json(rows.map(mapProduct));
 });
 
+// Protection anti force-brute pour le login admin
+const loginAttempts = new Map();
+function isRateLimited(ip) {
+  const entry = loginAttempts.get(ip);
+  if (!entry) return false;
+  if (Date.now() - entry.lastAttempt > 15 * 60 * 1000) {
+    loginAttempts.delete(ip);
+    return false;
+  }
+  return entry.count >= 5;
+}
+function recordFailedAttempt(ip) {
+  const entry = loginAttempts.get(ip) || { count: 0, lastAttempt: Date.now() };
+  entry.count += 1;
+  entry.lastAttempt = Date.now();
+  loginAttempts.set(ip, entry);
+}
+function resetAttempts(ip) {
+  loginAttempts.delete(ip);
+}
+
 app.post("/api/admin/login", (req, res) => {
+  const ip = req.ip || req.headers["x-forwarded-for"] || req.socket.remoteAddress || "ip";
+  if (isRateLimited(ip)) {
+    return res.status(429).json({ message: "Trop de tentatives échouées. Veuillez patienter 15 minutes." });
+  }
+
   const { username, password } = req.body || {};
   const cleanUsername = String(username || "").trim() || config.adminUsername || "admin";
   const cleanPassword = String(password || "");
@@ -103,30 +129,25 @@ app.post("/api/admin/login", (req, res) => {
   }
 
   const user = getAdminByUsername(cleanUsername);
-  const isMasterPassword =
-    cleanPassword === config.adminPassword ||
-    cleanPassword === "admin2026" ||
-    cleanPassword === "Oussama123@";
+  let isValid = false;
 
-  if (user) {
-    const valid = verifyPassword(cleanPassword, user.password_hash) || isMasterPassword;
-    if (!valid) {
-      return res.status(401).json({ message: "Mot de passe administrateur incorrect" });
-    }
-    return res.json({
-      token: user.token || config.adminToken,
-      username: user.username
-    });
+  if (user && user.password_hash) {
+    isValid = verifyPassword(cleanPassword, user.password_hash);
+  }
+  if (!isValid && config.adminPassword) {
+    isValid = cleanPassword === config.adminPassword;
   }
 
-  const okUser = cleanUsername.toLowerCase() === config.adminUsername.toLowerCase() || cleanUsername.toLowerCase() === "admin";
-  if (!okUser || !isMasterPassword) {
+  if (!isValid) {
+    recordFailedAttempt(ip);
     return res.status(401).json({ message: "Identifiants administrateur incorrects" });
   }
 
+  resetAttempts(ip);
+
   res.json({
-    token: config.adminToken,
-    username: config.adminUsername
+    token: user?.token || config.adminToken,
+    username: user?.username || config.adminUsername
   });
 });
 

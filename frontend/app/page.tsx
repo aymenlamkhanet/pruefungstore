@@ -152,9 +152,11 @@ function ReelCard({
 
 function Brand({
   admin,
+  hasAdminAccess,
   onNavigate,
 }: {
   admin: boolean;
+  hasAdminAccess: boolean;
   onNavigate: (admin: boolean) => void;
 }) {
   return (
@@ -170,12 +172,14 @@ function Brand({
         >
           Catalog
         </button>
-        <button
-          className={admin ? "nav-link active" : "nav-link"}
-          onClick={() => onNavigate(true)}
-        >
-          Admin studio
-        </button>
+        {hasAdminAccess && (
+          <button
+            className={admin ? "nav-link active" : "nav-link"}
+            onClick={() => onNavigate(true)}
+          >
+            Admin studio
+          </button>
+        )}
       </nav>
     </header>
   );
@@ -976,7 +980,7 @@ function Admin() {
               onChange={(e) =>
                 setCredentials({ ...credentials, username: e.target.value })
               }
-              placeholder="Nom d'utilisateur (défaut: admin)"
+              placeholder="Identifiant"
             />
             <input
               type="password"
@@ -984,7 +988,7 @@ function Admin() {
               onChange={(e) =>
                 setCredentials({ ...credentials, password: e.target.value })
               }
-              placeholder="Mot de passe administrateur"
+              placeholder="Mot de passe confidentiel"
               required
             />
             <button className="button primary full" disabled={loggingIn}>
@@ -1286,21 +1290,53 @@ function Admin() {
 
 export default function Page() {
   const [admin, setAdmin] = useState(false);
+  const [hasAdminAccess, setHasAdminAccess] = useState(false);
 
   useEffect(() => {
     // Ping health in the background on visit to keep backend warm
     request("/health").catch(() => {});
+
+    // Détecter l'accès admin via URL direct (?admin ou ?admin=true) ou session active
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const hasStoredSession = Boolean(sessionStorage.getItem("adminSession"));
+      if (params.has("admin") || hasStoredSession) {
+        setAdmin(true);
+        setHasAdminAccess(true);
+      }
+    }
   }, []);
 
   return (
     <div className="app-shell">
       <Brand
         admin={admin}
+        hasAdminAccess={hasAdminAccess || admin}
         onNavigate={setAdmin}
       />
       {admin ? <Admin /> : <Store />}
-      <footer>
-        StoreDeutsch <span>· Study seriously. Order simply.</span>
+      <footer style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "10px" }}>
+        <span>StoreDeutsch · Study seriously. Order simply.</span>
+        <button
+          type="button"
+          onClick={() => {
+            setAdmin(true);
+            setHasAdminAccess(true);
+          }}
+          style={{
+            background: "none",
+            border: "none",
+            color: "inherit",
+            opacity: 0.15,
+            cursor: "pointer",
+            fontSize: "12px",
+            padding: "2px 4px"
+          }}
+          aria-label="Accès gestion"
+          title="Accès gestion"
+        >
+          🔒
+        </button>
       </footer>
     </div>
   );
