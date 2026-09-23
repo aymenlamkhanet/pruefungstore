@@ -76,15 +76,27 @@ function imageSrc(image?: string) {
 }
 
 async function compressImage(file: File): Promise<File> {
-  if (typeof window === "undefined" || !file.type.startsWith("image/") || file.type.includes("svg") || file.type.includes("gif")) {
-    return file;
-  }
+  if (typeof window === "undefined") return file;
+  if (file.type === "image/svg+xml" || file.type === "image/gif") return file;
+
   return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        const maxDim = 1400;
+    let objectUrl = "";
+    try {
+      objectUrl = URL.createObjectURL(file);
+    } catch {
+      return resolve(file);
+    }
+
+    const img = new Image();
+    const cleanup = () => {
+      try {
+        if (objectUrl) URL.revokeObjectURL(objectUrl);
+      } catch {}
+    };
+
+    img.onload = () => {
+      try {
+        const maxDim = 1200;
         let { width, height } = img;
         if (width > maxDim || height > maxDim) {
           if (width > height) {
@@ -99,28 +111,53 @@ async function compressImage(file: File): Promise<File> {
         canvas.width = width;
         canvas.height = height;
         const ctx = canvas.getContext("2d");
-        if (!ctx) return resolve(file);
+        if (!ctx) {
+          cleanup();
+          return resolve(file);
+        }
         ctx.drawImage(img, 0, 0, width, height);
+
+        const format = "image/jpeg";
         canvas.toBlob(
           (blob) => {
-            if (!blob || blob.size >= file.size) return resolve(file);
-            const safeName = file.name.replace(/\.[^.]+$/, ".webp");
-            const optimized = new File([blob], safeName, {
-              type: "image/webp",
-            });
-            resolve(optimized);
+            cleanup();
+            if (!blob || blob.size >= file.size) {
+              return resolve(file);
+            }
+            try {
+              const safeName = (file.name || "photo").replace(/\.[^.]+$/, ".jpg");
+              let optimized: File;
+              try {
+                optimized = new File([blob], safeName, { type: format });
+              } catch {
+                const f: any = blob;
+                f.name = safeName;
+                f.lastModified = Date.now();
+                optimized = f as File;
+              }
+              resolve(optimized);
+            } catch {
+              resolve(file);
+            }
           },
-          "image/webp",
+          format,
           0.82
         );
-      };
-      img.onerror = () => resolve(file);
-      img.src = e.target?.result as string;
+      } catch {
+        cleanup();
+        resolve(file);
+      }
     };
-    reader.onerror = () => resolve(file);
-    reader.readAsDataURL(file);
+
+    img.onerror = () => {
+      cleanup();
+      resolve(file);
+    };
+
+    img.src = objectUrl;
   });
 }
+
 
 function ReelCard({
   embedUrl,
@@ -661,16 +698,33 @@ function OrderManagement({
 }
 
 function Admin() {
+  const getStoredSession = () => {
+    if (typeof window === "undefined") return "";
+    try {
+      return sessionStorage.getItem("adminSession") || localStorage.getItem("adminSession") || "";
+    } catch {
+      return "";
+    }
+  };
+
+  const saveStoredSession = (token: string) => {
+    if (typeof window === "undefined") return;
+    try {
+      if (token) {
+        sessionStorage.setItem("adminSession", token);
+        localStorage.setItem("adminSession", token);
+      } else {
+        sessionStorage.removeItem("adminSession");
+        localStorage.removeItem("adminSession");
+      }
+    } catch {}
+  };
+
   const [credentials, setCredentials] = useState({
       username: "admin",
       password: "",
     }),
-    [adminSession, setAdminSession] = useState(() => {
-      if (typeof window !== "undefined") {
-        return sessionStorage.getItem("adminSession") || "";
-      }
-      return "";
-    }),
+    [adminSession, setAdminSession] = useState(() => getStoredSession()),
     [products, setProducts] = useState<Product[]>([]),
     [orders, setOrders] = useState<Order[]>([]),
     [status, setStatus] = useState(""),
@@ -703,13 +757,14 @@ function Admin() {
   }, []);
 
   async function load(t = adminSession) {
+    if (!t) return;
     try {
       const [p, o] = await Promise.all([
         request("/admin/products", { headers: { "x-admin-token": t } }),
         request("/admin/orders", { headers: { "x-admin-token": t } }),
       ]);
-      setProducts(p);
-      setOrders(o);
+      setProducts(p || []);
+      setOrders(o || []);
       setStatus("");
     } catch (e) {
       setStatus((e as Error).message);
@@ -733,13 +788,14 @@ function Admin() {
           "Content-Type": "application/json",
           "x-admin-token": adminSession,
         },
-        body: JSON.stringify({ currentPassword, newPassword }),
+        body: JSON.stringify({
+          currentPassword: currentPassword.trim(),
+          newPassword: newPassword.trim(),
+        }),
       });
       if (res.token) {
         setAdminSession(res.token);
-        if (typeof window !== "undefined") {
-          sessionStorage.setItem("adminSession", res.token);
-        }
+        saveStoredSession(res.token);
       }
       setCurrentPassword("");
       setNewPassword("");
@@ -757,18 +813,17 @@ function Admin() {
     setStatus("Connexion au serveur en cours...");
     try {
       const userToSend = credentials.username.trim() || "admin";
+      const passToSend = credentials.password.trim();
       const data = await request("/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           username: userToSend,
-          password: credentials.password,
+          password: passToSend,
         }),
       });
       setAdminSession(data.token);
-      if (typeof window !== "undefined") {
-        sessionStorage.setItem("adminSession", data.token);
-      }
+      saveStoredSession(data.token);
       await load(data.token);
       setStatus("Connecté avec succès");
     } catch (e) {
@@ -781,13 +836,19 @@ function Admin() {
     const selected = Array.from(event.target.files || []);
     if (!selected.length) return;
     if (selected.length > 6) {
-      setStatus("You can select up to 6 images.");
+      setStatus("Vous pouvez sélectionner jusqu'à 6 images maximum.");
       event.target.value = "";
       return;
     }
-    const invalid = selected.find((file) => !file.type.startsWith("image/"));
+    const invalid = selected.find((file) => {
+      const type = (file.type || "").toLowerCase();
+      const name = (file.name || "").toLowerCase();
+      const isImgType = type.startsWith("image/");
+      const hasImgExt = /\.(jpg|jpeg|png|webp|gif|heic|heif|avif)$/i.test(name);
+      return !isImgType && !hasImgExt;
+    });
     if (invalid) {
-      setStatus("Please select image files only.");
+      setStatus("Veuillez sélectionner uniquement des images (JPG, PNG, WEBP, HEIC).");
       event.target.value = "";
       return;
     }
@@ -802,7 +863,9 @@ function Admin() {
   }
 
   function resetImagePicker() {
-    imagePreviews.forEach((preview) => URL.revokeObjectURL(preview));
+    imagePreviews.forEach((preview) => {
+      try { URL.revokeObjectURL(preview); } catch {}
+    });
     setImageFiles([]);
     setImagePreviews([]);
     if (imageInputRef.current) imageInputRef.current.value = "";
@@ -810,6 +873,10 @@ function Admin() {
 
   async function submit(e: FormEvent) {
     e.preventDefault();
+    if (!adminSession) {
+      setStatus("Veuillez vous connecter à l'Admin studio ci-dessus avant d'enregistrer un produit.");
+      return;
+    }
     setSavingProduct(true);
     try {
       if (!editingId && !imageFiles.length && !form.imageUrl)
@@ -817,8 +884,12 @@ function Admin() {
       let payload: typeof form & { imageUrls?: string[] } = { ...form };
       if (existingImageUrls.length) payload.imageUrls = existingImageUrls;
       if (imageFiles.length) {
-        setStatus("Optimisation et compression des images...");
-        const optimizedFiles = await Promise.all(imageFiles.map(compressImage));
+        const optimizedFiles: File[] = [];
+        for (let i = 0; i < imageFiles.length; i++) {
+          setStatus(`Optimisation de l'image ${i + 1}/${imageFiles.length}...`);
+          const opt = await compressImage(imageFiles[i]);
+          optimizedFiles.push(opt);
+        }
         setStatus("Envoi des images sur le serveur...");
         const body = new FormData();
         optimizedFiles.forEach((file) => body.append("images", file));
@@ -955,9 +1026,7 @@ function Admin() {
               style={{ marginLeft: ".8rem", fontSize: ".75rem" }}
               onClick={() => {
                 setAdminSession("");
-                if (typeof window !== "undefined") {
-                  sessionStorage.removeItem("adminSession");
-                }
+                saveStoredSession("");
                 setStatus("Déconnecté de l'Admin studio");
               }}
             >
@@ -977,6 +1046,9 @@ function Admin() {
                 setCredentials({ ...credentials, username: e.target.value })
               }
               placeholder="Nom d'utilisateur (défaut: admin)"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
             />
             <input
               type="password"
@@ -985,6 +1057,9 @@ function Admin() {
                 setCredentials({ ...credentials, password: e.target.value })
               }
               placeholder="Mot de passe administrateur"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
               required
             />
             <button className="button primary full" disabled={loggingIn}>
@@ -1188,7 +1263,7 @@ function Admin() {
           <input
             ref={imageInputRef}
             type="file"
-            accept="image/jpeg,image/png,image/webp"
+            accept="image/*,.heic,.heif"
             multiple
             onChange={handleImageFiles}
           />
@@ -1213,9 +1288,15 @@ function Admin() {
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
           />
-          <button className="button primary full" disabled={savingProduct}>
+          <button
+            className="button primary full"
+            disabled={savingProduct || !adminSession}
+            title={!adminSession ? "Veuillez d'abord vous connecter à l'Admin studio en haut" : undefined}
+          >
             {savingProduct
               ? "Enregistrement en cours..."
+              : !adminSession
+              ? "Connexion requise pour publier un produit"
               : editingId
               ? "Update title →"
               : "Create title →"}
