@@ -339,6 +339,9 @@ app.delete("/api/admin/orders/:id", requireAdmin, (req, res) => {
   const id = Number(req.params.id);
   const info = db.prepare("DELETE FROM orders WHERE id = ?").run(id);
   if (info.changes === 0) return res.status(404).json({ message: "Order not found" });
+  res.status(204).send();
+});
+
 // Middleware global de gestion des erreurs (Multer et requêtes)
 app.use((err, _req, res, _next) => {
   console.error("Server error:", err);
