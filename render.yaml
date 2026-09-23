@@ -4,15 +4,21 @@ services:
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: .
-    plan: free
+    plan: starter
     branch: master
     autoDeploy: true
     healthCheckPath: /api/health
+    disk:
+      name: pruefungstore-data
+      mountPath: /app/data
+      sizeGB: 1
     envVars:
       - key: NODE_ENV
         value: production
       - key: NODE_VERSION
         value: 24.11.1
+      - key: NODE_OPTIONS
+        value: "--max-old-space-size=384"
       - key: PORT
         value: "4000"
       - key: DB_PATH
@@ -43,6 +49,8 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NODE_OPTIONS
+        value: "--max-old-space-size=384"
       - key: PORT
         value: "10000"
       - key: HOSTNAME

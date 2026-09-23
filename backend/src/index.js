@@ -42,9 +42,10 @@ const upload = multer({
   }
 });
 
-app.use("/api/assets", express.static(legacyAssetsDir));
-app.use("/assets", express.static(legacyAssetsDir));
-app.use("/api/uploads", express.static(uploadsDir));
+const staticOptions = { maxAge: "7d", immutable: true };
+app.use("/api/assets", express.static(legacyAssetsDir, staticOptions));
+app.use("/assets", express.static(legacyAssetsDir, staticOptions));
+app.use("/api/uploads", express.static(uploadsDir, staticOptions));
 
 function mapProduct(row) {
   const images = db.prepare("SELECT image_url FROM product_images WHERE product_id = ? ORDER BY sort_order, id").all(row.id).map((item) => item.image_url);

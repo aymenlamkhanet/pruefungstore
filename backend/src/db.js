@@ -9,6 +9,9 @@ if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
 export const db = new DatabaseSync(config.dbPath);
 db.exec("PRAGMA journal_mode = WAL;");
+db.exec("PRAGMA busy_timeout = 5000;");
+db.exec("PRAGMA synchronous = NORMAL;");
+db.exec("PRAGMA cache_size = -8000;");
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS products (
