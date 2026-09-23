@@ -37,7 +37,7 @@ const API =
   process.env.NEXT_PUBLIC_API_URL ||
   (typeof window !== "undefined" &&
   window.location.hostname.endsWith("onrender.com")
-    ? "https://pruefungstore-backend.onrender.com/api"
+    ? "https://pruefungstore-backend-261a.onrender.com/api"
     : "/api");
 
 async function request(path: string, options?: RequestInit) {

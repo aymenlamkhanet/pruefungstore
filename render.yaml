@@ -48,6 +48,6 @@ services:
       - key: HOSTNAME
         value: 0.0.0.0
       - key: BACKEND_URL
-        value: https://pruefungstore-backend.onrender.com
+        value: https://pruefungstore-backend-261a.onrender.com
       - key: NEXT_PUBLIC_API_URL
-        value: https://pruefungstore-backend.onrender.com/api
+        value: https://pruefungstore-backend-261a.onrender.com/api

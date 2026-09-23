@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 async function proxy(req: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const { path } = await params;
   const targetPath = path ? path.join("/") : "";
-  const backend = (process.env.BACKEND_URL || "https://pruefungstore-backend-8f6d.onrender.com").replace(/\/+$/, "");
+  const backend = (process.env.BACKEND_URL || "https://pruefungstore-backend-261a.onrender.com").replace(/\/+$/, "");
   const url = new URL(req.url);
   const targetUrl = `${backend}/api/${targetPath}${url.search}`;
 
