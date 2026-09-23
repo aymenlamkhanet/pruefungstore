@@ -32,10 +32,11 @@ async function proxy(req: NextRequest, { params }: { params: Promise<{ path: str
       cache: "no-store",
     });
 
-    const data = await res.arrayBuffer();
+    const hasNoBody = [204, 205, 304].includes(res.status);
+    const data = hasNoBody ? null : await res.arrayBuffer();
     const resHeaders = new Headers();
     const contentType = res.headers.get("content-type");
-    if (contentType) resHeaders.set("content-type", contentType);
+    if (contentType && !hasNoBody) resHeaders.set("content-type", contentType);
     const cacheControl = res.headers.get("cache-control");
     if (cacheControl) resHeaders.set("cache-control", cacheControl);
 
