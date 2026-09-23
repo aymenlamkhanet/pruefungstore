@@ -87,11 +87,9 @@ function ReelCard({
 function Brand({
   admin,
   onNavigate,
-  backendOnline,
 }: {
   admin: boolean;
   onNavigate: (admin: boolean) => void;
-  backendOnline: boolean | null;
 }) {
   return (
     <header className="topbar">
@@ -113,14 +111,6 @@ function Brand({
           Admin studio
         </button>
       </nav>
-      <span className={backendOnline ? "live-dot ok" : "live-dot off"}>
-        <i />{" "}
-        {backendOnline === null
-          ? "Checking API..."
-          : backendOnline
-            ? "Backend connected"
-            : "Backend offline"}
-      </span>
     </header>
   );
 }
@@ -1188,20 +1178,10 @@ function Admin() {
 
 export default function Page() {
   const [admin, setAdmin] = useState(false);
-  const [backendOnline, setBackendOnline] = useState<boolean | null>(null);
 
   useEffect(() => {
-    let active = true;
-    request("/health")
-      .then(() => {
-        if (active) setBackendOnline(true);
-      })
-      .catch(() => {
-        if (active) setBackendOnline(false);
-      });
-    return () => {
-      active = false;
-    };
+    // Ping health in the background on visit to keep backend warm
+    request("/health").catch(() => {});
   }, []);
 
   return (
@@ -1209,7 +1189,6 @@ export default function Page() {
       <Brand
         admin={admin}
         onNavigate={setAdmin}
-        backendOnline={backendOnline}
       />
       {admin ? <Admin /> : <Store />}
       <footer>
