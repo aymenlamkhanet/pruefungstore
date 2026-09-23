@@ -75,6 +75,8 @@ function ReelCard({
           title={title}
           loading="lazy"
           allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+          allowFullScreen
+          scrolling="no"
         />
       </div>
       <a href={reelUrl} target="_blank" rel="noreferrer">
@@ -308,19 +310,19 @@ function Store() {
         </div>
         <div className="reel-grid">
           <ReelCard
-            embedUrl="https://www.instagram.com/reel/DS48G8HjKFO/embed"
-            reelUrl="https://www.instagram.com/prufung_vorbereitung_bucher/reel/DS48G8HjKFO"
-            title="Preparation in motion"
+            embedUrl="https://www.instagram.com/reel/DdoZJEwtW1J/embed/"
+            reelUrl="https://www.instagram.com/reel/DdoZJEwtW1J/?stkn=M3U4Z3BlOXB6czB2"
+            title="Prüfungsvorbereitung B1 & B2 TELC"
           />
           <ReelCard
-            embedUrl="https://www.instagram.com/reel/DU0cnOEjKFq/embed"
-            reelUrl="https://www.instagram.com/prufung_vorbereitung_bucher/reel/DU0cnOEjKFq"
-            title="Find your right book"
+            embedUrl="https://www.instagram.com/p/DdZ-yPVjcD0/embed/"
+            reelUrl="https://www.instagram.com/p/DdZ-yPVjcD0/?stkn=emJpbnI3aXg4Yjky"
+            title="Vorbereitung Bücher"
           />
           <ReelCard
-            embedUrl="https://www.instagram.com/reel/Db8G-5ns-U-/embed"
-            reelUrl="https://www.instagram.com/prufung_vorbereitung_bucher/reel/Db8G-5ns-U-"
-            title="Build your advantage"
+            embedUrl="https://www.instagram.com/p/Ddoa7H1DcD8/embed/"
+            reelUrl="https://www.instagram.com/p/Ddoa7H1DcD8/?img_index=5&stkn=dG9ham41ODV6dmRj"
+            title="Modelltests & Tipps"
           />
         </div>
       </section>
