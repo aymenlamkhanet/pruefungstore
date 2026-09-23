@@ -154,10 +154,12 @@ function Brand({
   admin,
   hasAdminAccess,
   onNavigate,
+  onLogout,
 }: {
   admin: boolean;
   hasAdminAccess: boolean;
   onNavigate: (admin: boolean) => void;
+  onLogout: () => void;
 }) {
   return (
     <header className="topbar">
@@ -178,6 +180,16 @@ function Brand({
             onClick={() => onNavigate(true)}
           >
             Admin studio
+          </button>
+        )}
+        {hasAdminAccess && (
+          <button
+            className="nav-link"
+            style={{ color: "#ef4444", marginLeft: "4px" }}
+            onClick={onLogout}
+            title="Quitter et déconnecter"
+          >
+            Quitter ✕
           </button>
         )}
       </nav>
@@ -664,7 +676,13 @@ function OrderManagement({
   );
 }
 
-function Admin() {
+function Admin({
+  onLogout,
+  onLoginSuccess,
+}: {
+  onLogout: () => void;
+  onLoginSuccess: (token: string) => void;
+}) {
   const [password, setPassword] = useState(""),
     [adminSession, setAdminSession] = useState(() => {
       if (typeof window !== "undefined") {
@@ -757,17 +775,20 @@ function Admin() {
     setLoggingIn(true);
     setStatus("Connexion au serveur en cours...");
     try {
+      const cleanPass = password.trim();
       const data = await request("/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          password: password,
+          password: cleanPass,
         }),
       });
       setAdminSession(data.token);
       if (typeof window !== "undefined") {
         sessionStorage.setItem("adminSession", data.token);
+        localStorage.setItem("adminSession", data.token);
       }
+      onLoginSuccess(data.token);
       await load(data.token);
       setStatus("Connecté avec succès");
       setPassword("");
@@ -953,13 +974,7 @@ function Admin() {
               type="button"
               className="danger-link"
               style={{ marginLeft: ".8rem", fontSize: ".75rem" }}
-              onClick={() => {
-                setAdminSession("");
-                if (typeof window !== "undefined") {
-                  sessionStorage.removeItem("adminSession");
-                }
-                setStatus("Déconnecté de l'Admin studio");
-              }}
+              onClick={onLogout}
             >
               Déconnexion
             </button>
@@ -1287,7 +1302,9 @@ export default function Page() {
     // Détecter l'accès admin via URL direct (?admin ou ?admin=true) ou session active
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
-      const hasStoredSession = Boolean(sessionStorage.getItem("adminSession"));
+      const hasStoredSession = Boolean(
+        sessionStorage.getItem("adminSession") || localStorage.getItem("adminSession")
+      );
       if (params.has("admin") || hasStoredSession) {
         setAdmin(true);
         setHasAdminAccess(true);
@@ -1295,15 +1312,40 @@ export default function Page() {
     }
   }, []);
 
+  const handleLogout = () => {
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem("adminSession");
+      localStorage.removeItem("adminSession");
+      const url = new URL(window.location.href);
+      url.searchParams.delete("admin");
+      window.history.replaceState({}, "", url.pathname);
+    }
+    setAdmin(false);
+    setHasAdminAccess(false);
+  };
+
+  const handleLoginSuccess = () => {
+    setHasAdminAccess(true);
+    setAdmin(true);
+  };
+
   return (
     <div className="app-shell">
       <Brand
         admin={admin}
         hasAdminAccess={hasAdminAccess || admin}
         onNavigate={setAdmin}
+        onLogout={handleLogout}
       />
-      {admin ? <Admin /> : <Store />}
-      <footer style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "10px" }}>
+      {admin ? (
+        <Admin
+          onLogout={handleLogout}
+          onLoginSuccess={handleLoginSuccess}
+        />
+      ) : (
+        <Store />
+      )}
+      <footer style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "12px", flexWrap: "wrap", padding: "1.5rem" }}>
         <span>StoreDeutsch · Study seriously. Order simply.</span>
         <button
           type="button"
@@ -1312,18 +1354,18 @@ export default function Page() {
             setHasAdminAccess(true);
           }}
           style={{
-            background: "none",
-            border: "none",
+            background: "rgba(255,255,255,0.06)",
+            border: "1px solid rgba(255,255,255,0.15)",
+            borderRadius: "6px",
             color: "inherit",
-            opacity: 0.15,
+            opacity: 0.6,
             cursor: "pointer",
             fontSize: "12px",
-            padding: "2px 4px"
+            padding: "4px 8px"
           }}
-          aria-label="Accès gestion"
-          title="Accès gestion"
+          aria-label="Accès administration"
         >
-          🔒
+          Espace Admin 🔒
         </button>
       </footer>
     </div>
