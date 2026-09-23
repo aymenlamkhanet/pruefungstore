@@ -8,6 +8,10 @@ services:
     branch: master
     autoDeploy: true
     healthCheckPath: /api/health
+    disk:
+      name: pruefungstore-data
+      mountPath: /app/data
+      sizeGB: 1
     envVars:
       - key: NODE_ENV
         value: production
