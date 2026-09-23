@@ -9,8 +9,18 @@ async function proxy(req: NextRequest, { params }: { params: Promise<{ path: str
   const url = new URL(req.url);
   const targetUrl = `${backend}/api/${targetPath}${url.search}`;
 
-  const headers = new Headers(req.headers);
-  headers.delete("host");
+  const headers = new Headers();
+  const forwardHeaders = [
+    "content-type",
+    "authorization",
+    "x-admin-token",
+    "accept",
+    "accept-language",
+  ];
+  for (const name of forwardHeaders) {
+    const val = req.headers.get(name);
+    if (val) headers.set(name, val);
+  }
 
   const body = ["GET", "HEAD"].includes(req.method) ? undefined : await req.arrayBuffer();
 
@@ -22,14 +32,19 @@ async function proxy(req: NextRequest, { params }: { params: Promise<{ path: str
       cache: "no-store",
     });
 
-    const resHeaders = new Headers(res.headers);
-    return new NextResponse(res.body, {
+    const data = await res.arrayBuffer();
+    const resHeaders = new Headers();
+    const contentType = res.headers.get("content-type");
+    if (contentType) resHeaders.set("content-type", contentType);
+    const cacheControl = res.headers.get("cache-control");
+    if (cacheControl) resHeaders.set("cache-control", cacheControl);
+
+    return new NextResponse(data, {
       status: res.status,
-      statusText: res.statusText,
       headers: resHeaders,
     });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 502 });
+    return NextResponse.json({ error: err.message || "Proxy error" }, { status: 502 });
   }
 }
 

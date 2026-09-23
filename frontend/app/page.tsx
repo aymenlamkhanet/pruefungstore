@@ -26,7 +26,7 @@ type Order = {
 type ConfirmAction = { title: string; message: string; confirmLabel: string; action: () => void };
 
 const fallbackImage =
-  "https://pruefungstore-backend.onrender.com/api/assets/products/pack-b1.png";
+  "https://pruefungstore-backend-261a.onrender.com/api/assets/products/pack-b1.png";
 const initialForm = {
   customerName: "",
   customerPhone: "",
@@ -36,8 +36,9 @@ const initialForm = {
 const API =
   process.env.NEXT_PUBLIC_API_URL ||
   (typeof window !== "undefined" &&
-  window.location.hostname.endsWith("onrender.com")
-    ? "https://pruefungstore-backend-261a.onrender.com/api"
+  (window.location.hostname.endsWith("onrender.com") ||
+    window.location.hostname.includes("storedeutsch.com"))
+    ? "/api"
     : "/api");
 
 async function request(path: string, options?: RequestInit) {
