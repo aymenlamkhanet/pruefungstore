@@ -37,6 +37,9 @@ services:
     plan: free
     branch: master
     autoDeploy: true
+    domains:
+      - storedeutsch.com
+      - www.storedeutsch.com
     envVars:
       - key: NODE_ENV
         value: production
