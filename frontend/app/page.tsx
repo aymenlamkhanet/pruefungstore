@@ -152,14 +152,10 @@ function ReelCard({
 
 function Brand({
   admin,
-  hasAdminAccess,
   onNavigate,
-  onLogout,
 }: {
   admin: boolean;
-  hasAdminAccess: boolean;
   onNavigate: (admin: boolean) => void;
-  onLogout: () => void;
 }) {
   return (
     <header className="topbar">
@@ -174,24 +170,12 @@ function Brand({
         >
           Catalog
         </button>
-        {hasAdminAccess && (
-          <button
-            className={admin ? "nav-link active" : "nav-link"}
-            onClick={() => onNavigate(true)}
-          >
-            Admin studio
-          </button>
-        )}
-        {hasAdminAccess && (
-          <button
-            className="nav-link"
-            style={{ color: "#ef4444", marginLeft: "4px" }}
-            onClick={onLogout}
-            title="Quitter et déconnecter"
-          >
-            Quitter ✕
-          </button>
-        )}
+        <button
+          className={admin ? "nav-link active" : "nav-link"}
+          onClick={() => onNavigate(true)}
+        >
+          Admin studio
+        </button>
       </nav>
     </header>
   );
@@ -676,14 +660,11 @@ function OrderManagement({
   );
 }
 
-function Admin({
-  onLogout,
-  onLoginSuccess,
-}: {
-  onLogout: () => void;
-  onLoginSuccess: (token: string) => void;
-}) {
-  const [password, setPassword] = useState(""),
+function Admin() {
+  const [credentials, setCredentials] = useState({
+      username: "admin",
+      password: "",
+    }),
     [adminSession, setAdminSession] = useState(() => {
       if (typeof window !== "undefined") {
         return sessionStorage.getItem("adminSession") || "";
@@ -775,25 +756,23 @@ function Admin({
     setLoggingIn(true);
     setStatus("Connexion au serveur en cours...");
     try {
-      const cleanPass = password.trim();
+      const userToSend = credentials.username.trim() || "admin";
       const data = await request("/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          password: cleanPass,
+          username: userToSend,
+          password: credentials.password,
         }),
       });
       setAdminSession(data.token);
       if (typeof window !== "undefined") {
         sessionStorage.setItem("adminSession", data.token);
-        localStorage.setItem("adminSession", data.token);
       }
-      onLoginSuccess(data.token);
       await load(data.token);
       setStatus("Connecté avec succès");
-      setPassword("");
     } catch (e) {
-      setStatus((e as Error).message || "Mot de passe incorrect");
+      setStatus((e as Error).message || "Identifiants administrateur incorrects");
     } finally {
       setLoggingIn(false);
     }
@@ -974,7 +953,13 @@ function Admin({
               type="button"
               className="danger-link"
               style={{ marginLeft: ".8rem", fontSize: ".75rem" }}
-              onClick={onLogout}
+              onClick={() => {
+                setAdminSession("");
+                if (typeof window !== "undefined") {
+                  sessionStorage.removeItem("adminSession");
+                }
+                setStatus("Déconnecté de l'Admin studio");
+              }}
             >
               Déconnexion
             </button>
@@ -984,18 +969,26 @@ function Admin({
       <div className="admin-auth grid-two">
         {!adminSession ? (
           <form className="admin-card" onSubmit={login}>
-            <p className="eyebrow">01 / Accès studio</p>
-            <h2>Connexion</h2>
+            <p className="eyebrow">01 / Access</p>
+            <h2>Sign in to studio</h2>
+            <input
+              value={credentials.username}
+              onChange={(e) =>
+                setCredentials({ ...credentials, username: e.target.value })
+              }
+              placeholder="Nom d'utilisateur (défaut: admin)"
+            />
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={credentials.password}
+              onChange={(e) =>
+                setCredentials({ ...credentials, password: e.target.value })
+              }
               placeholder="Mot de passe administrateur"
               required
-              autoFocus
             />
             <button className="button primary full" disabled={loggingIn}>
-              {loggingIn ? "Connexion en cours..." : "Déverrouiller le studio →"}
+              {loggingIn ? "Connexion en cours..." : "Connect with password"}
             </button>
           </form>
         ) : (
@@ -1293,80 +1286,21 @@ function Admin({
 
 export default function Page() {
   const [admin, setAdmin] = useState(false);
-  const [hasAdminAccess, setHasAdminAccess] = useState(false);
 
   useEffect(() => {
     // Ping health in the background on visit to keep backend warm
     request("/health").catch(() => {});
-
-    // Détecter l'accès admin via URL direct (?admin ou ?admin=true) ou session active
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const hasStoredSession = Boolean(
-        sessionStorage.getItem("adminSession") || localStorage.getItem("adminSession")
-      );
-      if (params.has("admin") || hasStoredSession) {
-        setAdmin(true);
-        setHasAdminAccess(true);
-      }
-    }
   }, []);
-
-  const handleLogout = () => {
-    if (typeof window !== "undefined") {
-      sessionStorage.removeItem("adminSession");
-      localStorage.removeItem("adminSession");
-      const url = new URL(window.location.href);
-      url.searchParams.delete("admin");
-      window.history.replaceState({}, "", url.pathname);
-    }
-    setAdmin(false);
-    setHasAdminAccess(false);
-  };
-
-  const handleLoginSuccess = () => {
-    setHasAdminAccess(true);
-    setAdmin(true);
-  };
 
   return (
     <div className="app-shell">
       <Brand
         admin={admin}
-        hasAdminAccess={hasAdminAccess || admin}
         onNavigate={setAdmin}
-        onLogout={handleLogout}
       />
-      {admin ? (
-        <Admin
-          onLogout={handleLogout}
-          onLoginSuccess={handleLoginSuccess}
-        />
-      ) : (
-        <Store />
-      )}
-      <footer style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "12px", flexWrap: "wrap", padding: "1.5rem" }}>
-        <span>StoreDeutsch · Study seriously. Order simply.</span>
-        <button
-          type="button"
-          onClick={() => {
-            setAdmin(true);
-            setHasAdminAccess(true);
-          }}
-          style={{
-            background: "rgba(255,255,255,0.06)",
-            border: "1px solid rgba(255,255,255,0.15)",
-            borderRadius: "6px",
-            color: "inherit",
-            opacity: 0.6,
-            cursor: "pointer",
-            fontSize: "12px",
-            padding: "4px 8px"
-          }}
-          aria-label="Accès administration"
-        >
-          Espace Admin 🔒
-        </button>
+      {admin ? <Admin /> : <Store />}
+      <footer>
+        StoreDeutsch <span>· Study seriously. Order simply.</span>
       </footer>
     </div>
   );
