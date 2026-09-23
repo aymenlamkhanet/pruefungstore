@@ -25,12 +25,35 @@ async function proxy(req: NextRequest, { params }: { params: Promise<{ path: str
   const body = ["GET", "HEAD"].includes(req.method) ? undefined : await req.arrayBuffer();
 
   try {
-    const res = await fetch(targetUrl, {
-      method: req.method,
-      headers,
-      body,
-      cache: "no-store",
-    });
+    let res: Response | null = null;
+    const maxRetries = 3;
+    const retryDelay = 2500;
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        res = await fetch(targetUrl, {
+          method: req.method,
+          headers,
+          body,
+          cache: "no-store",
+        });
+
+        // If Render returns 502 or 503 while the container is waking up, wait and retry
+        if ([502, 503, 504].includes(res.status) && attempt < maxRetries) {
+          await new Promise((r) => setTimeout(r, retryDelay));
+          continue;
+        }
+        break;
+      } catch (networkErr: any) {
+        if (attempt < maxRetries) {
+          await new Promise((r) => setTimeout(r, retryDelay));
+          continue;
+        }
+        throw networkErr;
+      }
+    }
+
+    if (!res) throw new Error("No response from backend");
 
     const hasNoBody = [204, 205, 304].includes(res.status);
     const data = hasNoBody ? null : await res.arrayBuffer();

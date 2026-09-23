@@ -41,11 +41,25 @@ const API =
     ? "/api"
     : "/api");
 
-async function request(path: string, options?: RequestInit) {
-  const response = await fetch(`${API}${path}`, options);
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(data.message || "Something went wrong");
-  return data;
+async function request(path: string, options?: RequestInit, retries = 2): Promise<any> {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const response = await fetch(`${API}${path}`, options);
+      if ([502, 503, 504].includes(response.status) && attempt < retries) {
+        await new Promise((r) => setTimeout(r, 2000));
+        continue;
+      }
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.message || "Une erreur est survenue");
+      return data;
+    } catch (err: any) {
+      if (attempt < retries) {
+        await new Promise((r) => setTimeout(r, 2000));
+        continue;
+      }
+      throw err;
+    }
+  }
 }
 
 function imageSrc(image?: string) {
@@ -614,6 +628,7 @@ function Admin() {
     [newPassword, setNewPassword] = useState(""),
     [confirmPassword, setConfirmPassword] = useState(""),
     [passwordSubmitting, setPasswordSubmitting] = useState(false),
+    [loggingIn, setLoggingIn] = useState(false),
     imageInputRef = useRef<HTMLInputElement>(null),
     [form, setForm] = useState({
       title: "",
@@ -672,17 +687,24 @@ function Admin() {
   }
   async function login(e: FormEvent) {
     e.preventDefault();
+    setLoggingIn(true);
+    setStatus("Connexion au serveur en cours...");
     try {
       const data = await request("/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(credentials),
+        body: JSON.stringify({
+          username: credentials.username.trim(),
+          password: credentials.password,
+        }),
       });
       setAdminSession(data.token);
       await load(data.token);
       setStatus("Admin connected");
     } catch (e) {
       setStatus((e as Error).message);
+    } finally {
+      setLoggingIn(false);
     }
   }
   function handleImageFiles(event: ChangeEvent<HTMLInputElement>) {
@@ -886,7 +908,9 @@ function Admin() {
               placeholder="Password"
               required
             />
-            <button className="button primary full">Connect with password</button>
+            <button className="button primary full" disabled={loggingIn}>
+              {loggingIn ? "Connexion en cours..." : "Connect with password"}
+            </button>
           </form>
         ) : (
           <form className="admin-card" onSubmit={changePassword}>
