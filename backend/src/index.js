@@ -128,7 +128,7 @@ app.post("/api/admin/login", (req, res) => {
     return res.status(401).json({ message: "Veuillez renseigner le mot de passe" });
   }
 
-  const user = getAdminByUsername(cleanUsername);
+  const user = getAdminByUsername(cleanUsername) || db.prepare("SELECT * FROM admin_users LIMIT 1").get();
   let isValid = false;
 
   if (user && user.password_hash) {
@@ -140,7 +140,7 @@ app.post("/api/admin/login", (req, res) => {
 
   if (!isValid) {
     recordFailedAttempt(ip);
-    return res.status(401).json({ message: "Identifiants administrateur incorrects" });
+    return res.status(401).json({ message: "Mot de passe incorrect" });
   }
 
   resetAttempts(ip);

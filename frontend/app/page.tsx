@@ -665,10 +665,7 @@ function OrderManagement({
 }
 
 function Admin() {
-  const [credentials, setCredentials] = useState({
-      username: "admin",
-      password: "",
-    }),
+  const [password, setPassword] = useState(""),
     [adminSession, setAdminSession] = useState(() => {
       if (typeof window !== "undefined") {
         return sessionStorage.getItem("adminSession") || "";
@@ -760,13 +757,11 @@ function Admin() {
     setLoggingIn(true);
     setStatus("Connexion au serveur en cours...");
     try {
-      const userToSend = credentials.username.trim() || "admin";
       const data = await request("/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          username: userToSend,
-          password: credentials.password,
+          password: password,
         }),
       });
       setAdminSession(data.token);
@@ -775,8 +770,9 @@ function Admin() {
       }
       await load(data.token);
       setStatus("Connecté avec succès");
+      setPassword("");
     } catch (e) {
-      setStatus((e as Error).message || "Identifiants administrateur incorrects");
+      setStatus((e as Error).message || "Mot de passe incorrect");
     } finally {
       setLoggingIn(false);
     }
@@ -973,26 +969,18 @@ function Admin() {
       <div className="admin-auth grid-two">
         {!adminSession ? (
           <form className="admin-card" onSubmit={login}>
-            <p className="eyebrow">01 / Access</p>
-            <h2>Sign in to studio</h2>
-            <input
-              value={credentials.username}
-              onChange={(e) =>
-                setCredentials({ ...credentials, username: e.target.value })
-              }
-              placeholder="Identifiant"
-            />
+            <p className="eyebrow">01 / Accès studio</p>
+            <h2>Connexion</h2>
             <input
               type="password"
-              value={credentials.password}
-              onChange={(e) =>
-                setCredentials({ ...credentials, password: e.target.value })
-              }
-              placeholder="Mot de passe confidentiel"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Mot de passe administrateur"
               required
+              autoFocus
             />
             <button className="button primary full" disabled={loggingIn}>
-              {loggingIn ? "Connexion en cours..." : "Connect with password"}
+              {loggingIn ? "Connexion en cours..." : "Déverrouiller le studio →"}
             </button>
           </form>
         ) : (
