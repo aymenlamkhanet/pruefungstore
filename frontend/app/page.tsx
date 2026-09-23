@@ -44,7 +44,10 @@ const API =
 async function request(path: string, options?: RequestInit, retries = 2): Promise<any> {
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      const response = await fetch(`${API}${path}`, options);
+      const response = await fetch(`${API}${path}`, {
+        cache: "no-store",
+        ...options,
+      });
       if ([502, 503, 504].includes(response.status) && attempt < retries) {
         await new Promise((r) => setTimeout(r, 2000));
         continue;

@@ -68,6 +68,7 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.get("/api/products", (req, res) => {
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate");
   const { search = "", level = "", examType = "" } = req.query;
   const rows = db
     .prepare(
