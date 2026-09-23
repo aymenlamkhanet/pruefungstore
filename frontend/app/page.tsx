@@ -893,7 +893,6 @@ function Admin() {
                 <p className="eyebrow">01 / Sécurité</p>
                 <h2>Changer le mot de passe</h2>
               </div>
-              <span className="counter">Base SQLite</span>
             </div>
             <input
               type="password"
