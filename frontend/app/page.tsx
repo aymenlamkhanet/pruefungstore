@@ -508,8 +508,8 @@ function Store() {
                           {p.stock > 0 ? "In stock" : "Sold out"}
                         </span>
                       </div>
-                      <h3>{p.title}</h3>
-                      <p>
+                      <h3 dir="auto">{p.title}</h3>
+                      <p dir="auto">
                         {p.description ||
                           "Official preparation material for focused practice."}
                       </p>
@@ -560,7 +560,7 @@ function Store() {
               {cart.map((item) => (
                 <div className="cart-item" key={item.id}>
                   <div>
-                    <strong>{item.title}</strong>
+                    <strong dir="auto">{item.title}</strong>
                     <span>{item.priceDh} DH each</span>
                   </div>
                   <div className="qty">
@@ -619,11 +619,28 @@ function Store() {
               </div>
             </div>
             <div className="detail-copy">
-              <span className="eyebrow">{selectedProduct.examType} · {selectedProduct.level}</span>
-              <h2 id="product-detail-title">{selectedProduct.title}</h2>
-              <p>{selectedProduct.description || "Official preparation material for focused practice."}</p>
-              <strong className="detail-price">{selectedProduct.priceDh} <small>DH</small></strong>
-              <button className="button primary full" disabled={selectedProduct.stock <= 0} onClick={() => { add(selectedProduct); setSelectedProduct(null); }}>Add to cart →</button>
+              <div className="detail-header">
+                <span className="eyebrow">{selectedProduct.examType} · {selectedProduct.level}</span>
+                <h2 id="product-detail-title" dir="auto">{selectedProduct.title}</h2>
+              </div>
+              <div className="detail-body">
+                <p className="detail-description" dir="auto">
+                  {selectedProduct.description || "Official preparation material for focused practice."}
+                </p>
+              </div>
+              <div className="detail-footer">
+                <div className="detail-price-box">
+                  <span className="detail-price-label">Prix / السعر</span>
+                  <strong className="detail-price">{selectedProduct.priceDh} <small>DH</small></strong>
+                </div>
+                <button
+                  className="button primary detail-add-btn"
+                  disabled={selectedProduct.stock <= 0}
+                  onClick={() => { add(selectedProduct); setSelectedProduct(null); }}
+                >
+                  {selectedProduct.stock > 0 ? "Ajouter au panier + Add" : "Sold out"} <span>→</span>
+                </button>
+              </div>
             </div>
           </section>
         </div>
@@ -1323,7 +1340,7 @@ function Admin({ onLogout }: { onLogout?: () => void }) {
                 <div className="inventory-product">
                   <img src={imageSrc(p.imageUrl)} alt="" />
                   <div>
-                    <strong>{p.title}</strong>
+                    <strong dir="auto">{p.title}</strong>
                     <span>
                       {p.level} · {p.examType} · {p.priceDh} DH
                     </span>
