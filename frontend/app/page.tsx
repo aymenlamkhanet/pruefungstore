@@ -699,7 +699,7 @@ function OrderManagement({
   );
 }
 
-function Admin() {
+function Admin({ onLogout }: { onLogout?: () => void }) {
   const getStoredSession = () => {
     if (typeof window === "undefined") return "";
     try {
@@ -723,7 +723,7 @@ function Admin() {
   };
 
   const [credentials, setCredentials] = useState({
-      username: "admin",
+      username: "",
       password: "",
     }),
     [adminSession, setAdminSession] = useState(() => getStoredSession()),
@@ -814,7 +814,7 @@ function Admin() {
     setLoggingIn(true);
     setStatus("Connexion au serveur en cours...");
     try {
-      const userToSend = credentials.username.trim() || "admin";
+      const userToSend = credentials.username.trim();
       const passToSend = credentials.password.trim();
       const data = await request("/admin/login", {
         method: "POST",
@@ -828,6 +828,7 @@ function Admin() {
       saveStoredSession(data.token);
       await load(data.token);
       setStatus("Connecté avec succès");
+      setCredentials({ username: "", password: "" });
     } catch (e) {
       setStatus((e as Error).message || "Identifiants administrateur incorrects");
     } finally {
@@ -1030,6 +1031,7 @@ function Admin() {
                 setAdminSession("");
                 saveStoredSession("");
                 setStatus("Déconnecté de l'Admin studio");
+                if (onLogout) onLogout();
               }}
             >
               Déconnexion
@@ -1047,10 +1049,11 @@ function Admin() {
               onChange={(e) =>
                 setCredentials({ ...credentials, username: e.target.value })
               }
-              placeholder="Nom d'utilisateur (défaut: admin)"
+              placeholder="Nom d'utilisateur"
               autoCapitalize="none"
               autoCorrect="off"
               spellCheck={false}
+              required
             />
             <input
               type="password"
@@ -1058,7 +1061,7 @@ function Admin() {
               onChange={(e) =>
                 setCredentials({ ...credentials, password: e.target.value })
               }
-              placeholder="Mot de passe administrateur"
+              placeholder="Mot de passe"
               autoCapitalize="none"
               autoCorrect="off"
               spellCheck={false}
@@ -1384,13 +1387,33 @@ export default function Page() {
     }
   }, []);
 
+  const handleNavigate = (toAdmin: boolean) => {
+    if (!toAdmin) {
+      // Déconnexion automatique lors du retour au catalogue
+      if (typeof window !== "undefined") {
+        try {
+          sessionStorage.removeItem("adminSession");
+          localStorage.removeItem("adminSession");
+          const url = new URL(window.location.href);
+          if (url.searchParams.has("admin")) {
+            url.searchParams.delete("admin");
+            window.history.replaceState({}, "", url.pathname);
+          }
+        } catch {}
+      }
+      setAdmin(false);
+    } else {
+      setAdmin(true);
+    }
+  };
+
   return (
     <div className="app-shell">
       <Brand
         admin={admin}
-        onNavigate={setAdmin}
+        onNavigate={handleNavigate}
       />
-      {admin ? <Admin /> : <Store />}
+      {admin ? <Admin onLogout={() => handleNavigate(false)} /> : <Store />}
       <footer>
         StoreDeutsch <span>· Study seriously. Order simply.</span>
       </footer>
