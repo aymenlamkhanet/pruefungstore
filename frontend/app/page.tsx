@@ -596,6 +596,7 @@ function Store() {
                 placeholder={placeholder}
                 value={form[key as keyof typeof form]}
                 onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                dir="auto"
               />
             ))}
             <button className="button primary full order-submit" type="submit" disabled={submitting}>
@@ -688,10 +689,10 @@ function OrderManagement({
       {orders.map((order) => (
         <div className="order-management-row" key={order.id}>
           <div>
-            <strong>
+            <strong dir="auto">
               #{order.id} · {order.customerName}
             </strong>
-            <span>
+            <span dir="auto">
               {order.items
                 .map((item) => `${item.title} ×${item.qty}`)
                 .join(", ")}
@@ -1173,8 +1174,8 @@ function Admin({ onLogout }: { onLogout?: () => void }) {
                   <div className="activity-row" key={order.id}>
                     <span className="activity-index">#{order.id}</span>
                     <div>
-                      <strong>{order.customerName}</strong>
-                      <small>
+                      <strong dir="auto">{order.customerName}</strong>
+                      <small dir="auto">
                         {order.customerCity} · {order.items.length} title
                         {order.items.length === 1 ? "" : "s"}
                       </small>
@@ -1206,7 +1207,7 @@ function Admin({ onLogout }: { onLogout?: () => void }) {
                 .map((product) => (
                   <div className="activity-row" key={product.id}>
                     <div>
-                      <strong>{product.title}</strong>
+                      <strong dir="auto">{product.title}</strong>
                       <small>
                         {product.level} · {product.examType}
                       </small>
@@ -1243,6 +1244,7 @@ function Admin({ onLogout }: { onLogout?: () => void }) {
             placeholder="Title"
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
+            dir="auto"
           />
           <div className="form-row">
             <select
@@ -1311,6 +1313,7 @@ function Admin({ onLogout }: { onLogout?: () => void }) {
             placeholder="Description"
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
+            dir="auto"
           />
           <button
             className="button primary full"
@@ -1373,12 +1376,12 @@ function Admin({ onLogout }: { onLogout?: () => void }) {
           <article className="order-row" key={o.id}>
             <strong>#{o.id}</strong>
             <div>
-              <b>{o.customerName}</b>
-              <span>
+              <b dir="auto">{o.customerName}</b>
+              <span dir="auto">
                 {o.customerCity} · {o.customerPhone}
               </span>
             </div>
-            <span>{o.items.map((i) => `${i.title} ×${i.qty}`).join(", ")}</span>
+            <span dir="auto">{o.items.map((i) => `${i.title} ×${i.qty}`).join(", ")}</span>
             <b>{o.totalDh} DH</b>
           </article>
         ))}
