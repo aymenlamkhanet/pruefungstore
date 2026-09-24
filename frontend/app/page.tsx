@@ -465,7 +465,9 @@ function Store() {
           >
             <option value="">All exams</option>
             <option value="telc">TELC</option>
-            <option value="goethe">Goethe / ÖSD</option>
+            <option value="goethe">Goethe</option>
+            <option value="ÖSD">ÖSD</option>
+            <option value="others">Others</option>
           </select>
         </div>
       </section>
@@ -1240,6 +1242,8 @@ function Admin() {
             >
               <option value="telc">telc</option>
               <option value="goethe">goethe</option>
+              <option value="ÖSD">ÖSD</option>
+              <option value="others">others</option>
             </select>
           </div>
           <div className="form-row">
@@ -1371,6 +1375,13 @@ export default function Page() {
   useEffect(() => {
     // Ping health in the background on visit to keep backend warm
     request("/health").catch(() => {});
+
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has("admin")) {
+        setAdmin(true);
+      }
+    }
   }, []);
 
   return (

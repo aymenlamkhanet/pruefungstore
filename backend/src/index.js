@@ -83,15 +83,25 @@ app.get("/api/health", (_req, res) => {
 app.get("/api/products", (req, res) => {
   res.set("Cache-Control", "no-store, no-cache, must-revalidate");
   const { search = "", level = "", examType = "" } = req.query;
+  const cleanExamType = String(examType || "").trim();
   const rows = db
     .prepare(
       `SELECT * FROM products
        WHERE (LOWER(title) LIKE LOWER(?) OR LOWER(description) LIKE LOWER(?))
        AND (? = '' OR LOWER(level) LIKE LOWER(?))
-       AND (? = '' OR LOWER(exam_type) = LOWER(?))
+       AND (? = '' OR exam_type = ? OR LOWER(exam_type) = LOWER(?) OR (LOWER(?) IN ('ösd', 'osd', 'Ösd', 'ÖSD') AND LOWER(exam_type) IN ('ösd', 'osd', 'Ösd', 'ÖSD')))
        ORDER BY id DESC`
     )
-    .all(`%${search}%`, `%${search}%`, String(level), `%${level}%`, String(examType), String(examType));
+    .all(
+      `%${search}%`,
+      `%${search}%`,
+      String(level),
+      `%${level}%`,
+      cleanExamType,
+      cleanExamType,
+      cleanExamType,
+      cleanExamType
+    );
 
   res.json(rows.map(mapProduct));
 });
