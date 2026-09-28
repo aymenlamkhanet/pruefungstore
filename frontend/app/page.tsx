@@ -41,6 +41,14 @@ const API =
     ? "/api"
     : "/api");
 
+function trackPixel(eventName: string, params: Record<string, any> = {}) {
+  if (typeof window !== "undefined" && (window as any).fbq) {
+    try {
+      (window as any).fbq("track", eventName, params);
+    } catch {}
+  }
+}
+
 async function request(path: string, options?: RequestInit, retries = 2): Promise<any> {
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
@@ -286,6 +294,13 @@ function Store() {
         : [...prev, { id: p.id, title: p.title, priceDh: p.priceDh, qty: 1 }];
     });
     setSelectedProduct(null);
+    trackPixel("AddToCart", {
+      content_name: p.title,
+      content_ids: [String(p.id)],
+      content_type: "product",
+      value: p.priceDh,
+      currency: "MAD",
+    });
     requestAnimationFrame(() => {
       setTimeout(() => scrollToCheckout(false), 60);
     });
@@ -312,6 +327,12 @@ function Store() {
         }),
       });
       setStatus(`Order #${created.id} created. Opening WhatsApp...`);
+      trackPixel("Purchase", {
+        content_type: "product",
+        value: total,
+        currency: "MAD",
+        num_items: cart.reduce((s, it) => s + it.qty, 0),
+      });
       if (whatsappWindow) whatsappWindow.location.href = created.whatsappUrl;
       else setStatus("Order created. Please allow pop-ups to open WhatsApp.");
       setCart([]);
@@ -486,7 +507,7 @@ function Store() {
                   <div className="product-card skeleton" key={i} />
                 ))
               : products.map((p, index) => (
-                  <article className="product-card" key={p.id} onClick={() => { setSelectedProduct(p); setSelectedImage(0); }} tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter") { setSelectedProduct(p); setSelectedImage(0); } }}>
+                  <article className="product-card" key={p.id} onClick={() => { setSelectedProduct(p); setSelectedImage(0); trackPixel("ViewContent", { content_name: p.title, content_ids: [String(p.id)], content_type: "product", value: p.priceDh, currency: "MAD" }); }} tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter") { setSelectedProduct(p); setSelectedImage(0); trackPixel("ViewContent", { content_name: p.title, content_ids: [String(p.id)], content_type: "product", value: p.priceDh, currency: "MAD" }); } }}>
 
                     <div className="product-visual">
                       <img
