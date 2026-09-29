@@ -606,8 +606,8 @@ input, textarea, select {
 /* Floating WhatsApp Direct Button */
 .floating-whatsapp-btn {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  bottom: 28px;
+  left: 28px;
   z-index: 998;
   width: 56px;
   height: 56px;
@@ -631,7 +631,7 @@ input, textarea, select {
 }
 .floating-whatsapp-tooltip {
   position: absolute;
-  right: 66px;
+  left: 68px;
   background: #173d35;
   color: #ffffff;
   padding: 0.45rem 0.85rem;
@@ -642,7 +642,7 @@ input, textarea, select {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
   pointer-events: none;
   opacity: 0;
-  transform: translateX(10px);
+  transform: translateX(-10px);
   transition: opacity 0.2s ease, transform 0.2s ease;
   border: 1px solid rgba(240, 186, 120, 0.35);
 }
@@ -659,7 +659,7 @@ input, textarea, select {
 @media (max-width: 680px) {
   .floating-whatsapp-btn {
     bottom: 84px;
-    right: 16px;
+    left: 18px;
     width: 50px;
     height: 50px;
   }
