@@ -226,6 +226,28 @@ function Brand({
   );
 }
 
+function WhatsAppIcon({
+  size = 18,
+  className = "",
+}: {
+  size?: number;
+  className?: string;
+}) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden="true"
+      style={{ display: "inline-block", verticalAlign: "middle", flexShrink: 0 }}
+    >
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2ZM12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.81 13.47 3.81 11.91C3.81 7.37 7.5 3.67 12.05 3.67ZM8.53 7.33C8.37 7.33 8.1 7.39 7.87 7.64C7.65 7.89 7.02 8.48 7.02 9.68C7.02 10.88 7.9 12.04 8.02 12.21C8.14 12.37 9.73 14.83 12.16 15.88C12.74 16.13 13.19 16.28 13.54 16.39C14.12 16.57 14.65 16.55 15.07 16.49C15.54 16.42 16.51 15.9 16.71 15.33C16.92 14.75 16.92 14.26 16.86 14.16C16.8 14.05 16.63 13.99 16.39 13.87C16.14 13.74 14.93 13.15 14.7 13.07C14.48 12.98 14.31 12.94 14.15 13.19C13.98 13.43 13.51 13.99 13.37 14.16C13.22 14.32 13.08 14.34 12.83 14.22C12.59 14.09 11.79 13.83 10.84 12.99C10.1 12.33 9.6 11.52 9.46 11.27C9.31 11.03 9.44 10.89 9.57 10.77C9.68 10.66 9.81 10.48 9.93 10.34C10.06 10.19 10.1 10.09 10.18 9.93C10.26 9.76 10.22 9.62 10.16 9.5C10.1 9.37 9.61 8.17 9.4 7.68C9.21 7.2 9 7.26 8.85 7.25C8.71 7.25 8.54 7.25 8.38 7.25L8.53 7.33Z" />
+    </svg>
+  );
+}
+
 function Store() {
   const [products, setProducts] = useState<Product[]>([]),
     [cart, setCart] = useState<CartItem[]>([]),
@@ -539,11 +561,21 @@ function Store() {
                           {p.priceDh} <small>DH</small>
                         </strong>
                         <button
-                          className="add-button"
+                          className="add-button whatsapp-order-btn"
                           disabled={p.stock <= 0}
-                          onClick={(e) => { e.stopPropagation(); add(p); }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            add(p);
+                          }}
+                          title={
+                            p.stock > 0
+                              ? "طلب هذا الكتاب عبر واتساب / Commander via WhatsApp"
+                              : "نفد من المخزون"
+                          }
+                          aria-label={`طلب ${p.title} عبر واتساب`}
                         >
-                          + Add
+                          <WhatsAppIcon size={16} />
+                          <span>{p.stock > 0 ? "طلب عبر واتساب" : "Sold out"}</span>
                         </button>
                       </div>
                     </div>
@@ -620,12 +652,21 @@ function Store() {
                 dir="auto"
               />
             ))}
-            <button className="button primary full order-submit" type="submit" disabled={submitting}>
-              {submitting ? "جار إرسال الطلب..." : "أكد الطلب Bestellung aufgeben"} <span>{submitting ? "" : "→"}</span>
+            <div className="checkout-quick-info">
+              <span>✓ تأكيد فوري عبر واتساب</span>
+              <span>✓ الدفع عند الاستلام</span>
+            </div>
+            <button className="button primary full order-submit whatsapp-order-submit" type="submit" disabled={submitting}>
+              <WhatsAppIcon size={20} />
+              <span>{submitting ? "جار فتح واتساب..." : "تأكيد الطلب عبر واتساب · Confirmer via WhatsApp"}</span>
+              <span>{submitting ? "" : "→"}</span>
             </button>
           </form>
           {status && <div className={`toast ${status.startsWith("Order #") ? "success" : "error"}`} role="status"><span>{status.startsWith("Order #") ? "✓" : "!"}</span><p>{status}</p><button type="button" onClick={() => setStatus("")} aria-label="Dismiss message">×</button></div>}
-          <p className="secure">Secure ordering · Confirmation via WhatsApp</p>
+          <p className="secure">
+            <WhatsAppIcon size={14} />
+            <span>طلب فوري ومؤكد عبر واتساب · الدفع عند استلام الكتب</span>
+          </p>
         </aside>
       </div>
       {selectedProduct && (
@@ -656,11 +697,14 @@ function Store() {
                   <strong className="detail-price">{selectedProduct.priceDh} <small>DH</small></strong>
                 </div>
                 <button
-                  className="button primary detail-add-btn"
+                  className="button primary detail-add-btn whatsapp-detail-btn"
                   disabled={selectedProduct.stock <= 0}
                   onClick={() => { add(selectedProduct); setSelectedProduct(null); }}
+                  aria-label={`طلب ${selectedProduct.title} عبر واتساب`}
                 >
-                  {selectedProduct.stock > 0 ? "Ajouter au panier + Add" : "Sold out"} <span>→</span>
+                  <WhatsAppIcon size={20} />
+                  <span>{selectedProduct.stock > 0 ? "طلب عبر واتساب · Commander" : "نفد من المخزون · Sold out"}</span>
+                  <span>→</span>
                 </button>
               </div>
             </div>
@@ -682,9 +726,23 @@ function Store() {
           }}
         >
           <span>🛒 طلبك ({cart.length}) · {total} DH</span>
-          <b>إتمام الطلب ←</b>
+          <b style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+            <WhatsAppIcon size={18} />
+            <span>إتمام الطلب عبر واتساب ←</span>
+          </b>
         </div>
       )}
+      <a
+        href="https://wa.me/212632017446?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D9%83%D8%AA%D8%A8%20%D8%A7%D9%84%D8%A3%D9%84%D9%85%D8%A7%D9%86%D9%8A%D8%A9"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="floating-whatsapp-btn"
+        aria-label="تواصل معنا مباشرة عبر واتساب"
+        title="تواصل معنا مباشرة عبر واتساب"
+      >
+        <WhatsAppIcon size={30} />
+        <span className="floating-whatsapp-tooltip">تواصل عبر واتساب</span>
+      </a>
     </main>
   );
 }
